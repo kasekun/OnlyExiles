@@ -49,6 +49,43 @@
 }
 
 :root {
+	/* ── Planner design tokens (Ember Palette) ──────────── */
+	--planner-bg: oklch(11.5% 0.008 55);
+	--planner-bg-surface: oklch(15.5% 0.008 55);
+	--planner-bg-inset: oklch(13% 0.007 55);
+	--planner-bg-act-hd: oklch(15% 0.018 62);
+	--planner-bg-area-hd: oklch(18.5% 0.01 58);
+	--planner-bg-row-odd: oklch(14% 0.007 55);
+	--planner-bg-row-even: oklch(12.5% 0.006 55);
+	--planner-bg-th: oklch(17.5% 0.009 56);
+	--planner-border: oklch(26% 0.008 55);
+	--planner-border-subtle: oklch(20% 0.007 55);
+	--planner-text: oklch(88% 0.008 75);
+	--planner-text-2: oklch(66% 0.008 70);
+	--planner-text-muted: oklch(44% 0.006 60);
+	--planner-text-skip: oklch(33% 0.004 55);
+	--planner-amber: oklch(76% 0.158 65);
+	--planner-amber-dim: oklch(54% 0.1 65);
+	--planner-amber-bg: oklch(76% 0.158 65 / 0.1);
+	--planner-amber-bd: oklch(54% 0.1 65 / 0.25);
+	--planner-green: oklch(70% 0.13 148);
+	--planner-green-bg: oklch(21% 0.042 148);
+	--planner-green-bd: oklch(33% 0.07 148);
+	--planner-blue: oklch(70% 0.11 258);
+	--planner-blue-bg: oklch(20% 0.048 258);
+	--planner-blue-bd: oklch(30% 0.072 258);
+	--planner-error: oklch(64% 0.2 25);
+	--planner-radius: 5px;
+	--planner-font:
+		system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+	--planner-mono: "SF Mono", "Fira Code", "Fira Mono", ui-monospace, monospace;
+	--planner-fs-xs: 0.6875rem;
+	--planner-fs-sm: 0.8125rem;
+	--planner-fs-base: 0.9375rem;
+	--planner-fs-md: 1.0625rem;
+	--planner-fs-lg: 1.1875rem;
+
+	/* ── shadcn tokens ──────────────────────────────────── */
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
 	--card: oklch(1 0 0);
@@ -125,4 +162,51 @@
 		@apply bg-background text-foreground;
 		@apply font-sans;
 	}
+}
+
+/* ── Planner dropdown (portal-rendered, can't use scoped CSS) ──────────
+   These rules are outside any @layer, so they cascade above Tailwind's
+   @layer utilities automatically — no !important needed.              */
+.planner-dropdown {
+	background: var(--planner-bg-surface);
+	border-color: var(--planner-border);
+	border-radius: 5px;
+	padding: 0;
+	box-shadow: none;
+	min-width: 240px;
+	width: auto;
+	color: var(--planner-text);
+	font-family: var(--planner-font);
+}
+
+.planner-dd-item {
+	border-radius: 0;
+	padding: 0;
+	gap: 0;
+	display: flex;
+	cursor: pointer;
+	border-bottom: 1px solid var(--planner-border-subtle);
+}
+.planner-dd-item:last-child {
+	border-bottom: none;
+}
+.planner-dd-item[data-highlighted] {
+	background: var(--planner-bg-area-hd);
+	color: var(--planner-text);
+}
+
+/* ── Planner tooltip (portal-rendered) ──────────────────────────────── */
+.planner-tooltip {
+	background: var(--planner-bg-surface);
+	color: var(--planner-text-2);
+	border: 1px solid var(--planner-border);
+	border-radius: 4px;
+	font-family: var(--planner-font);
+	font-size: var(--planner-fs-xs);
+	box-shadow: none;
+	padding: 0.2rem 0.5rem;
+}
+/* Hide arrow — not needed for the flat planner aesthetic */
+.planner-tooltip > svg {
+	display: none;
 }

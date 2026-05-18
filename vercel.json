@@ -1,0 +1,12 @@
+{
+	"rewrites": [
+		{
+			"source": "/koguma.js",
+			"destination": "https://plausible.io/js/script.js"
+		},
+		{
+			"source": "/koguma",
+			"destination": "https://plausible.io/api/event"
+		}
+	]
+}

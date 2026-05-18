@@ -1,4 +1,4 @@
-.PHONY: format lint lint\:fix
+.PHONY: format lint lint\:fix typecheck
 
 format:
 	bun run format
@@ -8,3 +8,6 @@ lint:
 
 lint\:fix:
 	bun run lint:fix
+
+typecheck:
+	bun run typecheck

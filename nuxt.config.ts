@@ -6,6 +6,15 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	css: ["~/assets/css/tailwind.css"],
 
+	runtimeConfig: {
+		public: {
+			plausibleDomain: process.env.PLAUSIBLE_DOMAIN ?? "",
+		},
+	},
+
+	// /guide/:id route scaffolded for next plan (save/share backend)
+	// router: { routes: [{ path: '/guide/:id', component: '~/pages/guide/[id].vue' }] },
+
 	vite: {
 		optimizeDeps: {
 			include: [
