@@ -11,6 +11,9 @@
 		"generate": "nuxt generate",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write .",
+		"biome:check": "biome check --write .",
+		"format:classes": "prettier --write \"**/*.vue\"",
+		"canonicalize": "bash scripts/canonicalize-classes.sh",
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare",
 		"prepare": "husky"
@@ -35,6 +38,8 @@
 		"@tailwindcss/vite": "^4.3.0",
 		"@types/node": "^25.8.0",
 		"husky": "^9.1.7",
+		"prettier": "^3.8.3",
+		"prettier-plugin-tailwindcss": "^0.8.0",
 		"tailwindcss": "^4.3.0"
 	}
 }

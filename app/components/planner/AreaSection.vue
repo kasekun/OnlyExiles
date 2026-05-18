@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from "vue";
 import { EyeOff, GripVertical } from "lucide-vue-next";
+import { computed, nextTick, onMounted, ref } from "vue";
+import {
+	areaKey,
+	pickKey,
+	usePlannerState,
+} from "~/composables/usePlannerState";
 import type { Area } from "~/data/campaign";
-import { usePlannerState, areaKey, pickKey } from "~/composables/usePlannerState";
 
 const props = defineProps<{
 	actId: string;
@@ -94,51 +98,74 @@ const shouldShow = computed(() => {
 </script>
 
 <template>
-  <div v-if="shouldShow" class="area-section" :class="{ collapsed: isCollapsed }">
+  <!-- group/area enables hover-reveal of drag handle and hide button -->
+  <div
+    v-if="shouldShow"
+    class="border border-p-subtle rounded-[4px] overflow-hidden bg-p-surface group/area"
+  >
 
     <!-- Compact strip shown when user has hidden this zone -->
-    <div v-if="isHidden" class="area-hidden-strip">
-      <span class="drag-handle" title="Drag to reorder">
+    <div v-if="isHidden" class="flex items-center gap-2 py-[0.3rem] pr-2 pl-0 bg-p-area">
+      <span
+        class="drag-handle flex items-center px-[0.4rem] text-p-muted opacity-0 cursor-grab shrink-0 transition-opacity duration-120 group-hover/area:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
+        title="Drag to reorder"
+      >
         <GripVertical :size="14" />
       </span>
-      <span class="area-hidden-name">{{ area.name }}</span>
-      <button class="area-restore-btn" @click.stop="toggleHide" title="Show this zone">
+      <span class="flex-1 min-w-0 text-p-sm text-p-muted truncate italic">
+        {{ area.name }}
+      </span>
+      <button class="planner-btn-act" @click.stop="toggleHide" title="Show this zone">
         Show zone
       </button>
     </div>
 
     <!-- Full area when visible -->
     <template v-else>
-      <div class="area-header">
+      <div class="flex items-stretch bg-p-area">
+
         <!-- Drag handle -->
-        <span class="drag-handle" title="Drag to reorder">
+        <span
+          class="drag-handle flex items-center px-[0.4rem] text-p-muted opacity-0 cursor-grab shrink-0 transition-opacity duration-120 group-hover/area:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
+          title="Drag to reorder"
+        >
           <GripVertical :size="14" />
         </span>
 
         <!-- Toggle + name + level badge -->
-        <div class="area-toggle" @click="toggleCollapse" role="button" tabindex="0"
-          @keydown.enter="toggleCollapse" @keydown.space.prevent="toggleCollapse"
+        <div
+          class="flex items-center gap-2 py-2 pr-3 pl-1 flex-1 min-w-0 cursor-pointer select-none transition-[background] duration-120 hover:bg-[oklch(21%_0.010_57)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[-2px]"
+          @click="toggleCollapse"
+          role="button"
+          tabindex="0"
+          @keydown.enter="toggleCollapse"
+          @keydown.space.prevent="toggleCollapse"
           :aria-expanded="!isCollapsed"
         >
-          <svg class="chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="2,4 6,8 10,4"/>
-          </svg>
-          <span class="area-name-group">
-            <span class="area-name">{{ area.name }}</span>
+          <PlannerChevron :collapsed="isCollapsed" class="text-p-muted opacity-70" />
+
+          <span class="flex items-center gap-[0.45rem] flex-1 min-w-0 overflow-hidden">
+            <span class="text-p-base font-semibold text-p-text whitespace-nowrap overflow-hidden text-ellipsis shrink min-w-0">
+              {{ area.name }}
+            </span>
+
             <!-- Level badge: editable on click -->
             <span
               v-if="!levelEditing"
-              class="rec-lv"
+              class="inline-flex items-center shrink-0 text-p-xs text-p-amber-dim bg-p-amber-bg border border-p-amber-bd py-[0.07rem] px-[0.38rem] rounded-[3px] whitespace-nowrap tracking-[0.02em] font-p-mono cursor-pointer transition-[border-color,color] duration-120 hover:border-p-amber-dim hover:text-p-amber"
               title="Click to edit recommended level"
               @click.stop="startEditLevel"
             >
-              Char&nbsp;level:&nbsp;<span class="rec-lv-number">{{ displayLevel }}</span>
+              Char&nbsp;level:&nbsp;<span class="font-p-mono">{{ displayLevel }}</span>
             </span>
-            <span v-else class="rec-lv rec-lv-editing" @click.stop>
+            <span
+              v-else
+              class="inline-flex items-center shrink-0 text-p-xs text-p-amber-dim bg-p-amber-bg border border-p-amber-bd py-[0.07rem] pr-[0.2rem] pl-[0.38rem] rounded-[3px] whitespace-nowrap tracking-[0.02em] font-p-mono cursor-default"
+              @click.stop
+            >
               Char&nbsp;level:&nbsp;<input
                 ref="levelInputRef"
-                class="level-input"
+                class="bg-transparent border-0 text-p-amber font-p-mono text-p-xs w-14 p-0 outline-none"
                 type="text"
                 :value="displayLevel"
                 @blur="commitLevel"
@@ -149,9 +176,9 @@ const shouldShow = computed(() => {
           </span>
         </div>
 
-        <!-- Hide toggle: revealed on header hover -->
+        <!-- Hide button: revealed on parent hover or own focus -->
         <button
-          class="area-hide-btn"
+          class="flex items-center justify-center px-2 bg-transparent border-0 cursor-pointer text-p-muted opacity-0 shrink-0 transition-[opacity,color] duration-120 group-hover/area:opacity-100 hover:text-p-text2 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2 focus-visible:opacity-100"
           @click.stop="toggleHide"
           title="Hide this zone"
           aria-label="Hide this zone"
@@ -160,13 +187,15 @@ const shouldShow = computed(() => {
         </button>
       </div>
 
-      <div class="area-body">
+      <!-- Area body -->
+      <div v-show="!isCollapsed" class="p-3 px-4 flex flex-col gap-4 max-sm:px-3 max-sm:py-2">
+
         <!-- Notes -->
         <div>
-          <span class="slabel">Notes</span>
+          <span class="planner-eyebrow mb-1">Notes</span>
           <textarea
             ref="notesRef"
-            class="notes-textarea"
+            class="planner-textarea"
             placeholder="Add notes for this zone..."
             :value="notesValue"
             @input="onNotesInput"
@@ -176,261 +205,10 @@ const shouldShow = computed(() => {
 
         <!-- Pickups -->
         <div>
-          <span class="slabel">Pickups</span>
+          <span class="planner-eyebrow mb-1">Pickups</span>
           <PlannerPickupTable :act-id="actId" :area="area" />
         </div>
       </div>
     </template>
   </div>
 </template>
-
-<style scoped>
-.area-section {
-  border: 1px solid var(--planner-border-subtle);
-  border-radius: 4px;
-  overflow: hidden;
-  background: var(--planner-bg-surface);
-}
-
-/* ── Area header ────────────────────────────── */
-.area-header {
-  display: flex;
-  align-items: stretch;
-  background: var(--planner-bg-area-hd);
-}
-
-.drag-handle {
-  display: flex;
-  align-items: center;
-  padding: 0 0.4rem;
-  color: var(--planner-text-muted);
-  opacity: 0;
-  cursor: grab;
-  flex-shrink: 0;
-  transition: opacity 0.12s;
-}
-.area-section:hover .drag-handle,
-.drag-handle:focus-visible {
-  opacity: 1;
-}
-.drag-handle:active { cursor: grabbing; }
-
-.area-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem 0.5rem 0.25rem;
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.12s;
-}
-.area-toggle:hover { background: oklch(21% 0.010 57); }
-.area-toggle:focus-visible {
-  outline: 1px solid var(--planner-amber-dim);
-  outline-offset: -2px;
-}
-
-.chevron {
-  flex-shrink: 0;
-  width: 13px;
-  height: 13px;
-  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--planner-text-muted);
-  opacity: 0.7;
-}
-.area-section.collapsed .area-toggle .chevron { transform: rotate(-90deg); }
-
-.area-name-group {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.area-name {
-  font-size: var(--planner-fs-base);
-  font-weight: 600;
-  color: var(--planner-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-  min-width: 0;
-}
-
-.rec-lv {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  font-size: var(--planner-fs-xs);
-  color: var(--planner-amber-dim);
-  background: var(--planner-amber-bg);
-  border: 1px solid var(--planner-amber-bd);
-  padding: 0.07rem 0.38rem;
-  border-radius: 3px;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  font-family: var(--planner-mono);
-  cursor: pointer;
-  transition: border-color 0.12s, color 0.12s;
-}
-.rec-lv:hover {
-  border-color: var(--planner-amber-dim);
-  color: var(--planner-amber);
-}
-.rec-lv-editing {
-  cursor: default;
-  padding-right: 0.2rem;
-}
-
-.rec-lv-number {
-  font-family: var(--planner-mono);
-}
-
-.level-input {
-  background: transparent;
-  border: none;
-  color: var(--planner-amber);
-  font-family: var(--planner-mono);
-  font-size: var(--planner-fs-xs);
-  width: 3.5rem;
-  padding: 0;
-  outline: none;
-}
-
-/* ── Hide button (revealed on header hover) ─────── */
-.area-hide-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--planner-text-muted);
-  opacity: 0;
-  flex-shrink: 0;
-  transition: opacity 0.12s, color 0.12s;
-}
-.area-section:hover .area-hide-btn {
-  opacity: 1;
-}
-.area-hide-btn:hover {
-  color: var(--planner-text-2);
-}
-.area-hide-btn:focus-visible {
-  outline: 1px solid var(--planner-amber-dim);
-  outline-offset: 2px;
-  opacity: 1;
-}
-
-/* ── Hidden zone strip ──────────────────────────── */
-.area-hidden-strip {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.3rem 0.5rem 0.3rem 0;
-  background: var(--planner-bg-area-hd);
-}
-
-.area-hidden-name {
-  flex: 1;
-  min-width: 0;
-  font-size: var(--planner-fs-sm);
-  color: var(--planner-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-style: italic;
-}
-
-.area-restore-btn {
-  flex-shrink: 0;
-  background: transparent;
-  border: 1px solid var(--planner-amber-bd);
-  color: var(--planner-amber-dim);
-  font-size: var(--planner-fs-xs);
-  font-family: var(--planner-font);
-  padding: 0.15rem 0.45rem;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: border-color 0.13s, color 0.13s, background 0.13s;
-  white-space: nowrap;
-}
-.area-restore-btn:hover {
-  border-color: var(--planner-amber-dim);
-  color: var(--planner-amber);
-  background: var(--planner-amber-bg);
-}
-.area-restore-btn:focus-visible {
-  outline: 1px solid var(--planner-amber-dim);
-  outline-offset: 2px;
-}
-
-/* ── Area body ──────────────────────────────── */
-.area-body {
-  padding: 0.75rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.area-section.collapsed .area-body { display: none; }
-
-/* ── Eyebrow label ──────────────────────────── */
-.slabel {
-  display: block;
-  font-size: var(--planner-fs-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: oklch(58% 0.007 62);
-  margin-bottom: 0.25rem;
-}
-
-/* ── Notes textarea ─────────────────────────── */
-.notes-textarea {
-  width: 100%;
-  background: var(--planner-bg-inset);
-  border: 1px solid var(--planner-border-subtle);
-  border-radius: 3px;
-  color: var(--planner-text);
-  font-size: var(--planner-fs-base);
-  font-family: var(--planner-font);
-  line-height: 1.6;
-  padding: 0.25rem 0.5rem;
-  resize: none;
-  overflow: hidden;
-  min-height: 2rem;
-  transition: border-color 0.12s;
-  display: block;
-}
-.notes-textarea:focus {
-  outline: none;
-  border-color: var(--planner-border);
-}
-.notes-textarea::placeholder {
-  color: var(--planner-text-muted);
-  font-style: italic;
-  opacity: 0.5;
-}
-
-@media (max-width: 640px) {
-  .area-body { padding: 0.5rem 0.75rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .chevron,
-  .area-toggle,
-  .rec-lv,
-  .notes-textarea,
-  .drag-handle,
-  .area-hide-btn,
-  .area-restore-btn {
-    transition: none;
-  }
-}
-</style>

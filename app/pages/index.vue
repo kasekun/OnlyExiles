@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { DATA } from "~/data/campaign";
 import { usePlausible } from "~/composables/usePlausible";
+import { DATA } from "~/data/campaign";
 
 const { trackPageview } = usePlausible();
 const router = useRouter();
@@ -16,9 +16,9 @@ router.afterEach(() => {
 </script>
 
 <template>
-  <div class="planner-root">
+  <div class="bg-p-bg text-p-text font-p text-p-base leading-relaxed min-h-screen">
     <PlannerHeader />
-    <main class="planner-main">
+    <main class="max-w-[1020px] mx-auto px-6 pt-6 pb-24 flex flex-col gap-6 sm:px-4 sm:pt-4 sm:pb-20 sm:gap-4">
       <PlannerActSection
         v-for="act in DATA"
         :key="act.id"
@@ -27,30 +27,3 @@ router.afterEach(() => {
     </main>
   </div>
 </template>
-
-<style scoped>
-.planner-root {
-  background: var(--planner-bg);
-  color: var(--planner-text);
-  font-family: var(--planner-font);
-  font-size: var(--planner-fs-base);
-  line-height: 1.6;
-  min-height: 100vh;
-}
-
-.planner-main {
-  max-width: 1020px;
-  margin: 0 auto;
-  padding: 1.5rem 1.5rem 6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-@media (max-width: 640px) {
-  .planner-main {
-    padding: 1rem 1rem 5rem;
-    gap: 1rem;
-  }
-}
-</style>

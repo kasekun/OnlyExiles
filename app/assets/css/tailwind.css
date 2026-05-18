@@ -46,6 +46,45 @@
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+
+	/* ── Planner palette → Tailwind utilities ───────────────────────────
+	   bg-p-bg / text-p-text / border-p-border / border-p-subtle etc.  */
+	--color-p-bg: var(--planner-bg);
+	--color-p-surface: var(--planner-bg-surface);
+	--color-p-inset: var(--planner-bg-inset);
+	--color-p-act: var(--planner-bg-act-hd);
+	--color-p-area: var(--planner-bg-area-hd);
+	--color-p-row-odd: var(--planner-bg-row-odd);
+	--color-p-row-even: var(--planner-bg-row-even);
+	--color-p-th: var(--planner-bg-th);
+	--color-p-border: var(--planner-border);
+	--color-p-subtle: var(--planner-border-subtle);
+	--color-p-text: var(--planner-text);
+	--color-p-text2: var(--planner-text-2);
+	--color-p-muted: var(--planner-text-muted);
+	--color-p-skip: var(--planner-text-skip);
+	--color-p-amber: var(--planner-amber);
+	--color-p-amber-dim: var(--planner-amber-dim);
+	--color-p-amber-bg: var(--planner-amber-bg);
+	--color-p-amber-bd: var(--planner-amber-bd);
+	--color-p-green: var(--planner-green);
+	--color-p-green-bg: var(--planner-green-bg);
+	--color-p-green-bd: var(--planner-green-bd);
+	--color-p-blue: var(--planner-blue);
+	--color-p-blue-bg: var(--planner-blue-bg);
+	--color-p-blue-bd: var(--planner-blue-bd);
+	--color-p-error: var(--planner-error);
+
+	/* ── Planner type scale → text-p-xs / text-p-sm / text-p-base etc. */
+	--text-p-xs: var(--planner-fs-xs);
+	--text-p-sm: var(--planner-fs-sm);
+	--text-p-base: var(--planner-fs-base);
+	--text-p-md: var(--planner-fs-md);
+	--text-p-lg: var(--planner-fs-lg);
+
+	/* ── Planner font stacks → font-p / font-p-mono ─────────────────── */
+	--font-p: var(--planner-font);
+	--font-p-mono: var(--planner-mono);
 }
 
 :root {
@@ -161,6 +200,127 @@
 	body {
 		@apply bg-background text-foreground;
 		@apply font-sans;
+	}
+}
+
+/* ── Planner shared component classes ───────────────────────────────────
+   Patterns used in two or more components. Components import these by
+   class name rather than re-declaring the same CSS block locally.      */
+@layer components {
+	/* Eyebrow label: section headers, table column labels */
+	.planner-eyebrow {
+		display: block;
+		font-size: var(--planner-fs-xs);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.09em;
+		color: oklch(58% 0.007 62);
+	}
+
+	/* Auto-resizing notes / regex textarea */
+	.planner-textarea {
+		display: block;
+		width: 100%;
+		background: var(--planner-bg-inset);
+		border: 1px solid var(--planner-border-subtle);
+		border-radius: 3px;
+		color: var(--planner-text);
+		font-size: var(--planner-fs-base);
+		font-family: var(--planner-font);
+		line-height: 1.6;
+		padding: 0.25rem 0.5rem;
+		resize: none;
+		overflow: hidden;
+		min-height: 2rem;
+		transition: border-color 0.12s;
+
+		&:focus {
+			outline: none;
+			border-color: var(--planner-border);
+		}
+		&::placeholder {
+			color: var(--planner-text-muted);
+			font-style: italic;
+			opacity: 0.5;
+		}
+	}
+
+	/* Ghost button: header chrome (Reset, Copy Markdown, GitHub link…) */
+	.planner-btn-ghost {
+		background: transparent;
+		border: 1px solid var(--planner-border-subtle);
+		color: var(--planner-text-muted);
+		font-size: var(--planner-fs-sm);
+		font-family: var(--planner-font);
+		padding: 0.28rem 0.6rem;
+		border-radius: 4px;
+		cursor: pointer;
+		transition:
+			border-color 0.13s,
+			color 0.13s;
+		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		line-height: 1.5;
+		text-decoration: none;
+
+		&:hover {
+			border-color: var(--planner-border);
+			color: var(--planner-text-2);
+		}
+		&:focus-visible {
+			outline: 1px solid var(--planner-amber-dim);
+			outline-offset: 2px;
+		}
+	}
+
+	/* Amber ghost button: act-level contextual actions and restore buttons */
+	.planner-btn-act {
+		background: transparent;
+		border: 1px solid var(--planner-amber-bd);
+		color: var(--planner-amber-dim);
+		font-size: var(--planner-fs-xs);
+		font-family: var(--planner-font);
+		padding: 0.2rem 0.48rem;
+		border-radius: 3px;
+		cursor: pointer;
+		transition:
+			border-color 0.13s,
+			color 0.13s,
+			background 0.13s;
+		white-space: nowrap;
+
+		&:hover {
+			border-color: var(--planner-amber-dim);
+			color: var(--planner-amber);
+			background: var(--planner-amber-bg);
+		}
+		&:focus-visible {
+			outline: 1px solid var(--planner-amber-dim);
+			outline-offset: 2px;
+		}
+		&:disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
+	}
+}
+
+/* ── Global drag ghost (used by vue-draggable-plus, can't be scoped) ── */
+.drag-ghost {
+	opacity: 0.4;
+}
+
+/* ── Reduced-motion: one rule to cover all planner transitions ────────
+   Overrides transition on every element rather than listing selectors
+   per-component. Safe for this app: no motion-dependent layout logic.  */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 1ms;
+		animation-duration: 1ms;
 	}
 }
 

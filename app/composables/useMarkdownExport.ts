@@ -1,9 +1,9 @@
-import { DATA } from "~/data/campaign";
 import {
-	usePlannerState,
 	areaKey,
 	pickKey,
+	usePlannerState,
 } from "~/composables/usePlannerState";
+import { DATA } from "~/data/campaign";
 
 function buildMarkdown(): string {
 	const { state } = usePlannerState();
