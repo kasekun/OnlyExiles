@@ -5,7 +5,7 @@ const REPO = "https://github.com/kasekun/poe2drops";
 </script>
 
 <template>
-  <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-[0.625rem] max-sm:bottom-4 max-sm:right-4">
+  <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 max-sm:bottom-4 max-sm:right-4">
 
     <!-- Utility links: quiet pair -->
     <div class="flex flex-col items-end gap-1">
@@ -35,7 +35,7 @@ const REPO = "https://github.com/kasekun/poe2drops";
       href="https://www.buymeacoffee.com/jesseswan"
       target="_blank"
       rel="noreferrer noopener"
-      class="inline-flex items-center gap-[0.4rem] h-8 pl-1.5 pr-[0.625rem] bg-p-area text-p-text2 text-p-xs font-p font-medium leading-none whitespace-nowrap no-underline border border-p-border rounded-lg transition-[border-color,color] duration-130 hover:border-p-amber-dim hover:text-p-text focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[3px]"
+      class="inline-flex items-center gap-[0.4rem] h-8 pl-1.5 pr-2.5 bg-p-area text-p-text2 text-p-xs font-p font-medium leading-none whitespace-nowrap no-underline border border-p-border rounded-lg transition-[border-color,color] duration-130 hover:border-p-amber-dim hover:text-p-text focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[3px]"
       aria-label="Buy me a coffee — support this project"
     >
       <img

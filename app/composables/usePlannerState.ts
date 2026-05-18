@@ -1,4 +1,5 @@
 import { reactive, watch } from "vue";
+import { toast } from "vue-sonner";
 import { DATA } from "~/data/campaign";
 import type { Template } from "~/data/templates";
 
@@ -11,7 +12,6 @@ export interface PlannerState {
 	levels: Record<string, string>; // areaKey → custom level string
 	actNotes: Record<string, string>; // actId → freetext note
 	actRegex: Record<string, string>; // actId → regex string
-	hideEmptyZones: boolean;
 }
 
 export function areaKey(actId: string, areaId: string): string {
@@ -20,6 +20,18 @@ export function areaKey(actId: string, areaId: string): string {
 
 export function pickKey(actId: string, areaId: string, i: number): string {
 	return `${actId}|${areaId}|${i}`;
+}
+
+export function getOrderedAreas(
+	state: Pick<PlannerState, "areaOrder">,
+	actId: string,
+	defaultOrder: string[],
+): string[] {
+	const custom = state.areaOrder[actId];
+	if (!custom || custom.length === 0) return defaultOrder;
+	const customSet = new Set(custom);
+	const extra = defaultOrder.filter((id) => !customSet.has(id));
+	return [...custom, ...extra];
 }
 
 const STORAGE_KEY = "poe2-planner-v1";
@@ -42,8 +54,24 @@ function buildDefaultState(): PlannerState {
 		levels: {},
 		actNotes: {},
 		actRegex: {},
-		hideEmptyZones: false,
 	};
+}
+
+// Seed state with campaign defaults for any keys not already persisted.
+// This makes state the single source of truth for both the UI and the export,
+// so neither needs to fall back to campaign.ts at read-time.
+function hydrateDefaults(state: PlannerState): void {
+	for (const act of DATA) {
+		for (const area of act.areas) {
+			const key = areaKey(act.id, area.id);
+			if (!(key in state.notes)) {
+				state.notes[key] = area.notes;
+			}
+			if (!(key in state.levels)) {
+				state.levels[key] = area.recLevel;
+			}
+		}
+	}
 }
 
 let _state: PlannerState | null = null;
@@ -55,6 +83,8 @@ export function usePlannerState() {
 			...buildDefaultState(),
 			...saved,
 		});
+
+		hydrateDefaults(_state);
 
 		if (import.meta.client) {
 			watch(
@@ -71,15 +101,18 @@ export function usePlannerState() {
 
 	function resetAll() {
 		if (!_state) return;
-		if (
-			!confirm(
-				"Reset everything? All notes, skipped items, custom levels, and collapse states will be cleared.",
-			)
-		)
-			return;
+		const snapshot = JSON.parse(JSON.stringify(_state)) as PlannerState;
 		if (import.meta.client) localStorage.removeItem(STORAGE_KEY);
-		const fresh = buildDefaultState();
-		Object.assign(_state, fresh);
+		Object.assign(_state, buildDefaultState());
+		toast("Route reset.", {
+			action: {
+				label: "Undo",
+				onClick: () => {
+					if (!_state) return;
+					Object.assign(_state, snapshot);
+				},
+			},
+		});
 	}
 
 	function expandAll() {
@@ -124,26 +157,47 @@ export function usePlannerState() {
 		});
 	}
 
+	function collapseEmptyAreas(actId: string) {
+		if (!_state) return;
+		const s = _state;
+		const act = DATA.find((a) => a.id === actId);
+		if (!act) return;
+		act.areas.forEach((area) => {
+			const isEmpty =
+				area.pickups.length === 0 ||
+				area.pickups.every((_, i) => !!s.skipped[pickKey(actId, area.id, i)]);
+			if (isEmpty) {
+				s.areasCollapsed[areaKey(actId, area.id)] = true;
+			}
+		});
+	}
+
 	function applyTemplate(template: Template) {
 		if (!_state) return;
-		if (
-			!confirm(
-				`Apply "${template.label}"? This will replace your current skip selections.`,
-			)
-		)
-			return;
+		const previousSkipped = { ..._state.skipped };
 		_state.skipped = { ...template.skipped };
+		toast(`Applied "${template.label}".`, {
+			action: {
+				label: "Undo",
+				onClick: () => {
+					if (!_state) return;
+					_state.skipped = previousSkipped;
+				},
+			},
+		});
 	}
 
 	return {
 		state: _state,
 		areaKey,
+		getOrderedAreas,
 		pickKey,
 		resetAll,
 		expandAll,
 		collapseAll,
 		expandActAreas,
 		collapseActAreas,
+		collapseEmptyAreas,
 		applyTemplate,
 	};
 }

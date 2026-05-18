@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { usePlausible } from "~/composables/usePlausible";
 import { DATA } from "~/data/campaign";
 
 const { trackPageview } = usePlausible();
 const router = useRouter();
+const unregisterAfterEach = router.afterEach(() => {
+	trackPageview();
+});
 
 onMounted(() => {
 	trackPageview();
 });
 
-router.afterEach(() => {
-	trackPageview();
+onUnmounted(() => {
+	unregisterAfterEach();
 });
 </script>
 

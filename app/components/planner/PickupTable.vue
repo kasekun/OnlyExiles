@@ -32,28 +32,20 @@ function isSkipped(key: string): boolean {
       <col />
     </colgroup>
 
-    <thead>
-      <tr>
-        <th class="px-2 py-1 bg-p-th text-p-muted text-p-xs font-bold uppercase tracking-widest text-center border-b border-p-border w-[2.2rem]"></th>
-        <th class="px-2 py-1 bg-p-th text-p-muted text-p-xs font-bold uppercase tracking-widest text-left border-b border-p-border">Item</th>
-        <th class="px-2 py-1 bg-p-th text-p-muted text-p-xs font-bold uppercase tracking-widest text-left border-b border-p-border">Type</th>
-        <th class="px-2 py-1 bg-p-th text-p-muted text-p-xs font-bold uppercase tracking-widest text-left border-b border-p-border">Source</th>
-      </tr>
-    </thead>
-
     <tbody>
       <tr
         v-for="(pickup, i) in area.pickups"
         :key="i"
         class="last:[&>td]:border-b-0"
         :class="i % 2 === 0 ? '[&>td]:bg-p-row-even' : '[&>td]:bg-p-row-odd'"
+        :data-skipped="isSkipped(pickKey(actId, area.id, i)) || undefined"
       >
         <!-- Skip toggle -->
         <td class="px-2 py-1.5 border-b border-p-subtle align-middle leading-[1.45] text-center">
           <!-- group/skip enables icon swap on hover without JS -->
           <button
-            class="group/skip bg-transparent border border-p-subtle rounded-[3px] w-[22px] h-[22px] p-0 cursor-pointer inline-flex items-center justify-center text-[oklch(36%_0.005_55)] transition-[border-color,color] duration-130 shrink-0 hover:border-p-amber-dim hover:text-p-amber-dim focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2"
-            :class="{ 'border-p-amber-dim text-p-amber-dim': isSkipped(pickKey(actId, area.id, i)) }"
+            class="group/skip bg-transparent border border-p-subtle rounded-[3px] w-[22px] h-[22px] p-0 cursor-pointer inline-flex items-center justify-center text-[oklch(36%_0.005_55)] transition-[border-color,color,background-color] duration-130 shrink-0 hover:border-p-amber-dim hover:text-p-amber-dim hover:bg-[oklch(76%_0.158_65/0.08)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2"
+            :class="{ 'text-p-skip': isSkipped(pickKey(actId, area.id, i)) }"
             :aria-pressed="isSkipped(pickKey(actId, area.id, i))"
             :aria-label="isSkipped(pickKey(actId, area.id, i)) ? 'Unmark skipped' : 'Mark as skipped'"
             @click="toggleSkip(pickKey(actId, area.id, i))"
@@ -85,8 +77,8 @@ function isSkipped(key: string): boolean {
         <!-- Item name -->
         <td class="px-2 py-1.5 border-b border-p-subtle align-middle leading-[1.45]">
           <span
-            class="text-p-text block"
-            :class="{ 'line-through text-p-skip': isSkipped(pickKey(actId, area.id, i)) }"
+            class="font-p font-normal text-foreground block"
+            :class="{ 'line-through': isSkipped(pickKey(actId, area.id, i)) }"
           >{{ pickup.item }}</span>
         </td>
 
@@ -94,19 +86,25 @@ function isSkipped(key: string): boolean {
         <td class="px-2 py-1.5 border-b border-p-subtle align-middle leading-[1.45]">
           <span
             v-if="pickup.type === 'Drop'"
-            class="inline-flex items-center px-[0.38rem] py-[0.1rem] rounded-[3px] text-p-xs font-semibold tracking-[0.04em] whitespace-nowrap border text-p-green bg-p-green-bg border-p-green-bd"
+            class="inline-flex items-center px-[0.38rem] py-[0.1rem] rounded-[3px] text-p-xs font-medium tracking-[0.04em] whitespace-nowrap border transition-[color,background-color,border-color] duration-130"
+            :class="isSkipped(pickKey(actId, area.id, i))
+              ? 'text-p-skip bg-transparent border-p-subtle'
+              : 'text-p-green bg-p-green-bg border-p-green-bd'"
           >Drop</span>
           <span
             v-else-if="pickup.type === 'Hand-In'"
-            class="inline-flex items-center px-[0.38rem] py-[0.1rem] rounded-[3px] text-p-xs font-semibold tracking-[0.04em] whitespace-nowrap border text-p-blue bg-p-blue-bg border-p-blue-bd"
+            class="inline-flex items-center px-[0.38rem] py-[0.1rem] rounded-[3px] text-p-xs font-medium tracking-[0.04em] whitespace-nowrap border transition-[color,background-color,border-color] duration-130"
+            :class="isSkipped(pickKey(actId, area.id, i))
+              ? 'text-p-skip bg-transparent border-p-subtle'
+              : 'text-p-blue bg-p-blue-bg border-p-blue-bd'"
           >Hand&#8209;In</span>
         </td>
 
         <!-- Source -->
         <td class="px-2 py-1.5 border-b border-p-subtle align-middle leading-[1.45]">
           <span
-            class="text-p-text2 text-p-sm block"
-            :class="{ 'line-through text-p-skip': isSkipped(pickKey(actId, area.id, i)) }"
+            class="text-muted-foreground text-p-sm block"
+            :class="{ 'line-through': isSkipped(pickKey(actId, area.id, i)) }"
           >{{ pickup.source }}</span>
         </td>
       </tr>

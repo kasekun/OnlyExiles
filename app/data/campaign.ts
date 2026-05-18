@@ -20,8 +20,8 @@ export interface Act {
 
 export const DATA: Act[] = [
 	{
-		id: "act-1-locations-island-of-ogham",
-		title: "Act 1 Locations: Island of Ogham",
+		id: "act-1--island-of-ogham",
+		title: "Act 1: Island of Ogham",
 		areas: [
 			{
 				id: "the-riverbank",
@@ -354,8 +354,8 @@ export const DATA: Act[] = [
 		],
 	},
 	{
-		id: "act-2-locations-the-vastiri-desert-keth",
-		title: "Act 2 Locations: The Vastiri Desert / Keth",
+		id: "act-2--the-vastiri-desert-keth",
+		title: "Act 2: The Vastiri Desert / Keth",
 		areas: [
 			{
 				id: "vastiri-outskirts",
@@ -469,7 +469,7 @@ export const DATA: Act[] = [
 						source: "Open the Effigy",
 					},
 					{
-						item: "Regal Orb, Abyss Currency",
+						item: "Regal Orb+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -580,7 +580,7 @@ export const DATA: Act[] = [
 							'Deliver the Sun and Kabala Clan Relics to the Altar ("Ancient Vows" quest)',
 					},
 					{
-						item: "Unique Item, Abyss Currency",
+						item: "Unique Item+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -680,8 +680,8 @@ export const DATA: Act[] = [
 		],
 	},
 	{
-		id: "act-3-locations-the-jungles-machinarium",
-		title: "Act 3 Locations: The Jungles / Machinarium",
+		id: "act-3--the-jungles-machinarium",
+		title: "Act 3: The Jungles / Machinarium",
 		areas: [
 			{
 				id: "sandswept-marsh",
@@ -746,7 +746,7 @@ export const DATA: Act[] = [
 						source: "Find the Venom Vial and deliver it to Servi",
 					},
 					{
-						item: "Magic Ring, Abyss Currency",
+						item: "Magic Ring+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -999,8 +999,8 @@ export const DATA: Act[] = [
 		],
 	},
 	{
-		id: "act-4-locations-karui-archipelago",
-		title: "Act 4 Locations: Karui Archipelago",
+		id: "act-4--karui-archipelago",
+		title: "Act 4: Karui Archipelago",
 		areas: [
 			{
 				id: "journey-s-end",
@@ -1321,8 +1321,8 @@ export const DATA: Act[] = [
 		],
 	},
 	{
-		id: "interlude-locations",
-		title: "Interlude Locations",
+		id: "interludes",
+		title: "Interludes",
 		areas: [
 			{
 				id: "scorched-farmlands",
@@ -1344,7 +1344,7 @@ export const DATA: Act[] = [
 				notes: "",
 				pickups: [
 					{
-						item: "Exalted Orb, Abyss Currency",
+						item: "Exalted Orb+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1480,7 +1480,7 @@ export const DATA: Act[] = [
 				notes: "",
 				pickups: [
 					{
-						item: "Greater Orb of Augmentation, Abyss Currency",
+						item: "Greater Orb of Augmentation+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1552,7 +1552,7 @@ export const DATA: Act[] = [
 						source: "Kill Lythara, The Wayward Spear in Kriar Village",
 					},
 					{
-						item: "Greater Rune, Abyss Currency",
+						item: "Greater Rune+ Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
