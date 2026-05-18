@@ -1,0 +1,433 @@
+{
+	"schemaVersion": 2,
+	"generatedAt": "2026-05-18T02:30:00Z",
+	"title": "Design System: PoE2 Campaign Planner",
+	"extensions": {
+		"colorMeta": {
+			"bg": {
+				"role": "neutral",
+				"displayName": "Base Canvas",
+				"canonical": "oklch(11.5% 0.008 55)",
+				"tonalRamp": [
+					"oklch(11.5% 0.008 55)",
+					"oklch(18% 0.008 55)",
+					"oklch(26% 0.008 55)",
+					"oklch(36% 0.007 55)",
+					"oklch(48% 0.007 55)",
+					"oklch(62% 0.007 55)",
+					"oklch(76% 0.007 55)",
+					"oklch(90% 0.006 55)"
+				]
+			},
+			"bg-surface": {
+				"role": "neutral",
+				"displayName": "Surface",
+				"canonical": "oklch(15.5% 0.008 55)",
+				"tonalRamp": [
+					"oklch(13% 0.008 55)",
+					"oklch(16% 0.008 55)",
+					"oklch(21% 0.008 55)",
+					"oklch(30% 0.008 55)",
+					"oklch(42% 0.007 55)",
+					"oklch(58% 0.007 55)",
+					"oklch(74% 0.007 55)",
+					"oklch(90% 0.006 55)"
+				]
+			},
+			"bg-inset": {
+				"role": "neutral",
+				"displayName": "Inset Background",
+				"canonical": "oklch(13% 0.007 55)",
+				"tonalRamp": [
+					"oklch(11% 0.007 55)",
+					"oklch(14% 0.007 55)",
+					"oklch(19% 0.007 55)",
+					"oklch(28% 0.007 55)",
+					"oklch(40% 0.006 55)",
+					"oklch(56% 0.006 55)",
+					"oklch(72% 0.006 55)",
+					"oklch(88% 0.005 55)"
+				]
+			},
+			"bg-layer-act": {
+				"role": "neutral",
+				"displayName": "Act Layer",
+				"canonical": "oklch(15% 0.018 62)",
+				"tonalRamp": [
+					"oklch(12% 0.018 62)",
+					"oklch(16% 0.018 62)",
+					"oklch(22% 0.016 62)",
+					"oklch(32% 0.014 62)",
+					"oklch(44% 0.012 62)",
+					"oklch(58% 0.012 62)",
+					"oklch(74% 0.010 62)",
+					"oklch(90% 0.008 62)"
+				]
+			},
+			"bg-layer-area": {
+				"role": "neutral",
+				"displayName": "Area Layer",
+				"canonical": "oklch(18.5% 0.010 58)",
+				"tonalRamp": [
+					"oklch(14% 0.010 58)",
+					"oklch(19% 0.010 58)",
+					"oklch(25% 0.010 58)",
+					"oklch(34% 0.009 58)",
+					"oklch(46% 0.008 58)",
+					"oklch(60% 0.008 58)",
+					"oklch(76% 0.007 58)",
+					"oklch(91% 0.006 58)"
+				]
+			},
+			"border": {
+				"role": "neutral",
+				"displayName": "Border",
+				"canonical": "oklch(26% 0.008 55)",
+				"tonalRamp": [
+					"oklch(14% 0.008 55)",
+					"oklch(20% 0.008 55)",
+					"oklch(26% 0.008 55)",
+					"oklch(34% 0.008 55)",
+					"oklch(46% 0.007 55)",
+					"oklch(60% 0.007 55)",
+					"oklch(75% 0.007 55)",
+					"oklch(90% 0.006 55)"
+				]
+			},
+			"border-subtle": {
+				"role": "neutral",
+				"displayName": "Border Subtle",
+				"canonical": "oklch(20% 0.007 55)",
+				"tonalRamp": [
+					"oklch(12% 0.007 55)",
+					"oklch(17% 0.007 55)",
+					"oklch(22% 0.007 55)",
+					"oklch(30% 0.007 55)",
+					"oklch(42% 0.006 55)",
+					"oklch(57% 0.006 55)",
+					"oklch(73% 0.006 55)",
+					"oklch(89% 0.005 55)"
+				]
+			},
+			"text-primary": {
+				"role": "neutral",
+				"displayName": "Text Primary",
+				"canonical": "oklch(88% 0.008 75)",
+				"tonalRamp": [
+					"oklch(20% 0.008 75)",
+					"oklch(32% 0.008 75)",
+					"oklch(44% 0.008 75)",
+					"oklch(56% 0.008 75)",
+					"oklch(66% 0.008 75)",
+					"oklch(76% 0.008 75)",
+					"oklch(84% 0.008 75)",
+					"oklch(92% 0.007 75)"
+				]
+			},
+			"text-secondary": {
+				"role": "neutral",
+				"displayName": "Text Secondary",
+				"canonical": "oklch(66% 0.008 70)",
+				"tonalRamp": [
+					"oklch(18% 0.008 70)",
+					"oklch(28% 0.008 70)",
+					"oklch(40% 0.008 70)",
+					"oklch(52% 0.008 70)",
+					"oklch(62% 0.008 70)",
+					"oklch(72% 0.008 70)",
+					"oklch(82% 0.007 70)",
+					"oklch(91% 0.007 70)"
+				]
+			},
+			"text-muted": {
+				"role": "neutral",
+				"displayName": "Text Muted",
+				"canonical": "oklch(44% 0.006 60)",
+				"tonalRamp": [
+					"oklch(16% 0.006 60)",
+					"oklch(24% 0.006 60)",
+					"oklch(34% 0.006 60)",
+					"oklch(44% 0.006 60)",
+					"oklch(56% 0.006 60)",
+					"oklch(68% 0.006 60)",
+					"oklch(80% 0.005 60)",
+					"oklch(91% 0.005 60)"
+				]
+			},
+			"text-skip": {
+				"role": "neutral",
+				"displayName": "Text Skip",
+				"canonical": "oklch(33% 0.004 55)",
+				"tonalRamp": [
+					"oklch(14% 0.004 55)",
+					"oklch(22% 0.004 55)",
+					"oklch(30% 0.004 55)",
+					"oklch(40% 0.004 55)",
+					"oklch(52% 0.004 55)",
+					"oklch(64% 0.004 55)",
+					"oklch(78% 0.004 55)",
+					"oklch(90% 0.003 55)"
+				]
+			},
+			"ember-gold": {
+				"role": "primary",
+				"displayName": "Ember Gold",
+				"canonical": "oklch(76% 0.158 65)",
+				"tonalRamp": [
+					"oklch(22% 0.080 65)",
+					"oklch(32% 0.100 65)",
+					"oklch(42% 0.120 65)",
+					"oklch(54% 0.130 65)",
+					"oklch(64% 0.148 65)",
+					"oklch(76% 0.158 65)",
+					"oklch(85% 0.140 65)",
+					"oklch(93% 0.100 65)"
+				]
+			},
+			"ember-gold-dim": {
+				"role": "primary",
+				"displayName": "Ember Gold (dim)",
+				"canonical": "oklch(54% 0.100 65)",
+				"tonalRamp": [
+					"oklch(18% 0.060 65)",
+					"oklch(28% 0.078 65)",
+					"oklch(38% 0.090 65)",
+					"oklch(48% 0.096 65)",
+					"oklch(54% 0.100 65)",
+					"oklch(64% 0.120 65)",
+					"oklch(76% 0.150 65)",
+					"oklch(88% 0.110 65)"
+				]
+			},
+			"signal-green": {
+				"role": "secondary",
+				"displayName": "Signal Green",
+				"canonical": "oklch(70% 0.130 148)",
+				"tonalRamp": [
+					"oklch(16% 0.042 148)",
+					"oklch(24% 0.060 148)",
+					"oklch(33% 0.080 148)",
+					"oklch(44% 0.100 148)",
+					"oklch(56% 0.115 148)",
+					"oklch(68% 0.128 148)",
+					"oklch(78% 0.120 148)",
+					"oklch(88% 0.090 148)"
+				]
+			},
+			"signal-blue": {
+				"role": "tertiary",
+				"displayName": "Signal Blue",
+				"canonical": "oklch(70% 0.110 258)",
+				"tonalRamp": [
+					"oklch(15% 0.048 258)",
+					"oklch(22% 0.060 258)",
+					"oklch(30% 0.075 258)",
+					"oklch(42% 0.090 258)",
+					"oklch(54% 0.100 258)",
+					"oklch(66% 0.108 258)",
+					"oklch(76% 0.100 258)",
+					"oklch(87% 0.072 258)"
+				]
+			},
+			"error-red": {
+				"role": "error",
+				"displayName": "Error Red",
+				"canonical": "oklch(64% 0.200 25)",
+				"tonalRamp": [
+					"oklch(20% 0.120 25)",
+					"oklch(30% 0.150 25)",
+					"oklch(40% 0.170 25)",
+					"oklch(50% 0.185 25)",
+					"oklch(60% 0.196 25)",
+					"oklch(68% 0.195 25)",
+					"oklch(76% 0.175 25)",
+					"oklch(86% 0.130 25)"
+				]
+			}
+		},
+		"typographyMeta": {
+			"headline": {
+				"displayName": "Headline",
+				"purpose": "Page title only. Appears once. Rendered in Ember Gold."
+			},
+			"title": {
+				"displayName": "Title",
+				"purpose": "Act section headers. Most prominent repeated typographic element."
+			},
+			"body": {
+				"displayName": "Body",
+				"purpose": "Area names (600 weight), pickup item names, notes, act-level text. Primary reading copy."
+			},
+			"label": {
+				"displayName": "Label",
+				"purpose": "Column headers, section eyebrows. Uppercase, wide tracking. The only uppercase text in the system."
+			},
+			"mono": {
+				"displayName": "Mono",
+				"purpose": "Level badge numerals, regex code-boxes, copyable technical strings."
+			}
+		},
+		"shadows": [],
+		"motion": [
+			{
+				"name": "ease-standard",
+				"value": "cubic-bezier(0.4, 0, 0.2, 1)",
+				"purpose": "Collapse chevron rotation, hover transitions."
+			},
+			{
+				"name": "duration-fast",
+				"value": "130ms",
+				"purpose": "Color transitions on buttons, borders, text."
+			},
+			{
+				"name": "duration-mid",
+				"value": "180ms",
+				"purpose": "Chevron rotation for collapse/expand."
+			}
+		],
+		"breakpoints": [
+			{
+				"name": "sm",
+				"value": "640px",
+				"purpose": "Single-column layout below this width."
+			},
+			{
+				"name": "md",
+				"value": "768px",
+				"purpose": "Table column widths compress."
+			},
+			{
+				"name": "max",
+				"value": "1020px",
+				"purpose": "Main content max-width. Centered beyond this."
+			}
+		]
+	},
+	"components": [
+		{
+			"name": "Ghost Button (Chrome)",
+			"kind": "button",
+			"refersTo": "button-ghost",
+			"description": "Header-level actions like Copy Markdown and Reset. Quiet at rest, confirms on hover.",
+			"html": "<button class=\"ds-btn-ghost\">Copy Markdown</button>",
+			"css": ".ds-btn-ghost { background: transparent; border: 1px solid oklch(20% 0.007 55); color: oklch(44% 0.006 60); font-size: 0.8125rem; font-family: system-ui, -apple-system, sans-serif; padding: 0.28rem 0.6rem; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: border-color 130ms, color 130ms; } .ds-btn-ghost:hover { border-color: oklch(26% 0.008 55); color: oklch(66% 0.008 70); } .ds-btn-ghost:focus-visible { outline: 1px solid oklch(54% 0.100 65); outline-offset: 2px; }"
+		},
+		{
+			"name": "Ghost Button (Danger)",
+			"kind": "button",
+			"refersTo": "button-ghost-danger",
+			"description": "Destructive variant of the ghost button. Danger state is hover-only — never shown at rest.",
+			"html": "<button class=\"ds-btn-ghost ds-btn-ghost--danger\">Reset All</button>",
+			"css": ".ds-btn-ghost { background: transparent; border: 1px solid oklch(20% 0.007 55); color: oklch(44% 0.006 60); font-size: 0.8125rem; font-family: system-ui, -apple-system, sans-serif; padding: 0.28rem 0.6rem; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: border-color 130ms, color 130ms; } .ds-btn-ghost--danger:hover { border-color: oklch(64% 0.200 25); color: oklch(64% 0.200 25); } .ds-btn-ghost--danger:focus-visible { outline: 1px solid oklch(64% 0.200 25); outline-offset: 2px; }"
+		},
+		{
+			"name": "Act Button",
+			"kind": "button",
+			"refersTo": "button-act",
+			"description": "Contextual actions inside an act header (e.g. Add note, collapse all areas). Ember-tinted at rest, reveals gold on hover.",
+			"html": "<button class=\"ds-btn-act\">Add note</button>",
+			"css": ".ds-btn-act { background: transparent; border: 1px solid oklch(54% 0.100 65 / 0.25); color: oklch(54% 0.100 65); font-size: 0.6875rem; font-family: system-ui, -apple-system, sans-serif; padding: 0.2rem 0.48rem; border-radius: 3px; cursor: pointer; white-space: nowrap; transition: border-color 130ms, color 130ms, background 130ms; } .ds-btn-act:hover { border-color: oklch(54% 0.100 65); color: oklch(76% 0.158 65); background: oklch(76% 0.158 65 / 0.10); } .ds-btn-act:focus-visible { outline: 1px solid oklch(54% 0.100 65); outline-offset: 2px; }"
+		},
+		{
+			"name": "Skip Toggle",
+			"kind": "button",
+			"refersTo": "button-ghost",
+			"description": "22×22 icon button in each pickup table row. Strikethrough icon at rest; X icon on hover and when skipped. State persists.",
+			"html": "<button class=\"ds-skip-btn\" aria-label=\"Skip pickup\" aria-pressed=\"false\"><svg class=\"ds-icon-strike\" width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\"><line x1=\"2\" y1=\"6\" x2=\"10\" y2=\"6\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg><svg class=\"ds-icon-x\" width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\" style=\"display:none\"><line x1=\"3\" y1=\"3\" x2=\"9\" y2=\"9\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/><line x1=\"9\" y1=\"3\" x2=\"3\" y2=\"9\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg></button>",
+			"css": ".ds-skip-btn { background: none; border: 1px solid oklch(20% 0.007 55); border-radius: 3px; width: 22px; height: 22px; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: oklch(36% 0.005 55); transition: border-color 130ms, color 130ms; } .ds-skip-btn:hover { border-color: oklch(54% 0.100 65); color: oklch(54% 0.100 65); } .ds-skip-btn:hover .ds-icon-strike { display: none; } .ds-skip-btn:hover .ds-icon-x { display: block !important; } .ds-skip-btn[aria-pressed=true] { } .ds-skip-btn[aria-pressed=true] .ds-icon-strike { display: none; } .ds-skip-btn[aria-pressed=true] .ds-icon-x { display: block !important; color: oklch(54% 0.100 65); } .ds-skip-btn:focus-visible { outline: 1px solid oklch(54% 0.100 65); outline-offset: 2px; }"
+		},
+		{
+			"name": "Badge (Ember)",
+			"kind": "chip",
+			"refersTo": "button-act",
+			"description": "Level recommendation badge. Mono font, amber tint. Non-interactive.",
+			"html": "<span class=\"ds-badge ds-badge--amber\"><span class=\"ds-badge-label\">Lv</span><span class=\"ds-badge-num\">32</span></span>",
+			"css": ".ds-badge { display: inline-flex; align-items: center; gap: 2px; padding: 0.07rem 0.38rem; border-radius: 3px; font-size: 0.6875rem; font-weight: 700; white-space: nowrap; letter-spacing: 0.02em; } .ds-badge--amber { background: oklch(76% 0.158 65 / 0.10); border: 1px solid oklch(54% 0.100 65 / 0.25); color: oklch(54% 0.100 65); } .ds-badge-num { font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace; }"
+		},
+		{
+			"name": "Badge (Signal Green)",
+			"kind": "chip",
+			"refersTo": "button-act",
+			"description": "Quest-reward type badge. Non-interactive. Signal Green only.",
+			"html": "<span class=\"ds-badge ds-badge--green\">Quest</span>",
+			"css": ".ds-badge { display: inline-flex; align-items: center; padding: 0.1rem 0.38rem; border-radius: 3px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; } .ds-badge--green { background: oklch(21% 0.042 148); border: 1px solid oklch(33% 0.070 148); color: oklch(70% 0.130 148); }"
+		},
+		{
+			"name": "Badge (Signal Blue)",
+			"kind": "chip",
+			"refersTo": "button-act",
+			"description": "Passive-reward type badge. Non-interactive. Signal Blue only.",
+			"html": "<span class=\"ds-badge ds-badge--blue\">Passive</span>",
+			"css": ".ds-badge { display: inline-flex; align-items: center; padding: 0.1rem 0.38rem; border-radius: 3px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; } .ds-badge--blue { background: oklch(20% 0.048 258); border: 1px solid oklch(30% 0.072 258); color: oklch(70% 0.110 258); }"
+		},
+		{
+			"name": "Act Section Header",
+			"kind": "custom",
+			"refersTo": "button-ghost",
+			"description": "Collapsible act container header. Amber title, chevron toggle, contextual action buttons. The typographic peak of each page section.",
+			"html": "<div class=\"ds-act-header\"><button class=\"ds-act-toggle\"><svg class=\"ds-chevron\" width=\"13\" height=\"13\" viewBox=\"0 0 13 13\" fill=\"none\"><polyline points=\"2,4 6.5,9 11,4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/></svg>Act I — Lioneye's Watch</button><div class=\"ds-act-btns\"><button class=\"ds-btn-act\">Add note</button></div></div>",
+			"css": ".ds-act-header { display: flex; align-items: stretch; background: oklch(15% 0.018 62); } .ds-act-toggle { display: flex; align-items: center; gap: 8px; padding: 12px 16px; flex: 1; min-width: 0; background: transparent; border: none; cursor: pointer; text-align: left; color: oklch(76% 0.158 65); font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.01em; font-family: system-ui, -apple-system, sans-serif; transition: background 120ms; user-select: none; } .ds-act-toggle:hover { background: oklch(17.5% 0.022 62); } .ds-chevron { flex-shrink: 0; width: 13px; height: 13px; color: inherit; opacity: 0.7; transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-act-header--collapsed .ds-chevron { transform: rotate(-90deg); } .ds-act-btns { display: flex; align-items: center; gap: 4px; padding: 0 12px; border-left: 1px solid oklch(54% 0.100 65 / 0.25); } .ds-btn-act { background: transparent; border: 1px solid oklch(54% 0.100 65 / 0.25); color: oklch(54% 0.100 65); font-size: 0.6875rem; font-family: system-ui, -apple-system, sans-serif; padding: 0.2rem 0.48rem; border-radius: 3px; cursor: pointer; white-space: nowrap; transition: border-color 130ms, color 130ms, background 130ms; } .ds-btn-act:hover { border-color: oklch(54% 0.100 65); color: oklch(76% 0.158 65); background: oklch(76% 0.158 65 / 0.10); }"
+		}
+	],
+	"narrative": {
+		"northStar": "The Cartographer's Companion",
+		"overview": "This is a dense field guide rendered on-screen — the kind of annotated map a veteran player would hand you before a run, confident and warm without being flashy. Every interface decision starts from that image: trusted, legible, purposeful. The surface is as dark as charcoal paper, the accent is the color of a lantern through a tent wall. Information fills the space because the journey is complex, not because the interface failed to edit itself.\n\nThe system is restrained by design. One accent — Ember Gold — does all the emotional lifting: act headers, interactive affordances, level badges, hover states. Everything else is a discipline of near-blacks and warm grays that recede behind the content.\n\nWhat this system explicitly rejects: atmospheric overload (textured fantasy backgrounds, glow halos, particle effects), generic SaaS patterns, the MediaWiki wall-of-text aesthetic, and the mid-gray Discord-clone dark theme.",
+		"keyCharacteristics": [
+			"Tonal layering, not shadows — depth through OKLCH lightness steps, no box-shadows",
+			"One accent (Ember Gold), used sparingly — act headers, badges, and interactive elements only",
+			"Major second type scale (~1.125 ratio) — compact without feeling small",
+			"4pt base spacing — disciplined rhythm, not generous whitespace",
+			"System font stack — no web font loading, no latency, no FOIT",
+			"All colors in OKLCH with warm-brown hue bias (h≈55-75); neutrals are never truly gray"
+		],
+		"rules": [
+			{
+				"name": "The One Accent Rule",
+				"body": "Ember Gold is the only accent. Signal Green and Signal Blue are semantic only, confined to pickup-type badges. Never add a second decorative accent. If Ember Gold does not solve it, solve it with lightness contrast instead.",
+				"section": "colors"
+			},
+			{
+				"name": "The Warm Neutral Rule",
+				"body": "Every neutral — including the darkest background — carries hue h≈55 with chroma ≥0.004. Pure grays are prohibited. The warmth should be felt, not named.",
+				"section": "colors"
+			},
+			{
+				"name": "The Amber Type Rule",
+				"body": "Ember Gold appears on type only at the Headline and Title levels (act headers, page title). Body copy in amber is prohibited — it would dilute the accent's signal. If an item needs to be highlighted, use a badge rather than coloring the text.",
+				"section": "typography"
+			},
+			{
+				"name": "The No-Display Rule",
+				"body": "There is no display or hero font. The first typographic element the eye lands on is an act header — 17px, 700 weight, amber. That is the maximum. Nothing should feel editorial or expressive.",
+				"section": "typography"
+			},
+			{
+				"name": "The Shadow-Free Rule",
+				"body": "No box-shadow. No drop-shadow. No filter: blur() used decoratively. If a new component needs to feel above the surface, raise its OKLCH lightness by 2-4% and add border: 1px solid {colors.border}. That is the only permitted elevation gesture.",
+				"section": "elevation"
+			}
+		],
+		"dos": [
+			"Do use OKLCH for all color declarations. Every neutral carries h≈55 and chroma ≥0.004.",
+			"Do confine Ember Gold to act headers, level badges, and interactive hover reveals.",
+			"Do use tonal layering for depth — raise lightness by 2-4% and add a 1px border. Never add box-shadow.",
+			"Do keep the type scale tight. The five steps (11px → 13px → 15px → 17px → 19px) cover every case.",
+			"Do use the Label style (0.6875rem, 700, uppercase, ls 0.09em) for all section eyebrows and table column headers.",
+			"Do treat Signal Green and Signal Blue as badge-only semantic tokens.",
+			"Do ensure all interactive elements have visible :focus-visible treatment — a 1px amber-dim outline offset by 2px.",
+			"Do respect prefers-reduced-motion — set all transition durations to 0ms when the media query matches."
+		],
+		"donts": [
+			"Don't add atmospheric overload: no textured backgrounds, glow halos around icons, ambient particle effects.",
+			"Don't use generic SaaS patterns: no white or light-mode backgrounds, no gradient cards, no metric dashboards.",
+			"Don't create a wiki dump: no unstructured walls of text, no tables without typographic hierarchy.",
+			"Don't use a Discord-clone dark theme: no mid-gray surfaces, no saturated purple or blue accent colors.",
+			"Don't use gradient text (background-clip: text). Emphasis is weight or size.",
+			"Don't use border-left or border-right greater than 1px as a colored accent stripe.",
+			"Don't add a second decorative accent color. Ember Gold is singular.",
+			"Don't add shadows. The design tests clean if no box-shadow keyword appears anywhere.",
+			"Don't use pure grays. Minimum chroma is 0.004 on all neutrals.",
+			"Don't animate layout properties. Collapse is display: none; transitions use opacity and transform only."
+		]
+	}
+}
