@@ -113,7 +113,7 @@ function autoResize(el: HTMLTextAreaElement) {
 
       <div
         v-show="!isCollapsed"
-        class="flex items-center gap-1 px-3 max-sm:px-1.5 max-sm:gap-0 shrink-0 border-l border-p-amber-bd"
+        class="flex items-center gap-1 px-3 max-sm:px-1.5 max-sm:gap-0 shrink-0 border-p-amber-bd"
       >
         <button
           class="planner-btn-act flex items-center gap-1 max-sm:px-2"

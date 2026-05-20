@@ -102,11 +102,12 @@ useHead({
       :guide-version="guide.version"
       :on-discard-local-edits="discardLocalEditsAndReload"
     />
+    <PlannerGuideBar />
 
     <!-- Version mismatch banner -->
     <div
       v-if="versionMismatch && !versionBannerDismissed"
-      class="max-w-[1020px] mx-auto px-6 pt-4 max-sm:px-4"
+      class="max-w-[1020px] mx-auto px-6 pb-2 max-sm:px-4"
     >
       <div class="flex items-start justify-between gap-3 bg-p-surface border border-p-border rounded-[4px] px-4 py-2.5">
         <p class="text-p-xs text-p-muted leading-normal">
@@ -120,7 +121,7 @@ useHead({
       </div>
     </div>
 
-    <main class="max-w-[1020px] mx-auto px-6 pt-6 pb-24 flex flex-col gap-6 sm:px-4 sm:pt-4 sm:pb-20 sm:gap-4">
+    <main class="max-w-[1020px] mx-auto px-6 pt-2 pb-24 flex flex-col gap-6 sm:px-4 sm:pt-2 sm:pb-20 sm:gap-4">
       <PlannerActSection
         v-for="act in DATA"
         :key="act.id"

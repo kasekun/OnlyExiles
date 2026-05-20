@@ -31,7 +31,8 @@ onUnmounted(() => {
 <template>
   <div class="bg-p-bg text-p-text font-p text-p-base leading-relaxed min-h-screen">
     <PlannerHeader />
-    <main class="max-w-[1020px] mx-auto px-6 pt-6 pb-24 flex flex-col gap-6 sm:px-4 sm:pt-4 sm:pb-20 sm:gap-4">
+    <PlannerGuideBar />
+    <main class="max-w-[1020px] mx-auto px-6 pt-2 pb-24 flex flex-col gap-6 sm:px-4 sm:pt-2 sm:pb-20 sm:gap-4">
       <template v-if="!mounted">
         <div class="text-p-xs text-p-muted py-2 opacity-60">Loading saved route…</div>
       </template>
