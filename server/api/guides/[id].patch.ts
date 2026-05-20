@@ -44,8 +44,15 @@ export default defineEventHandler(async (event) => {
 	const now = new Date();
 	const window10m = new Date(now.getTime() - 10 * 60 * 1000);
 
-	// Update throttle
-	await db.delete(apiAttempts).where(lt(apiAttempts.attemptedAt, window10m));
+	// Update throttle cleanup must not delete create attempts used by the 24h cap.
+	await db
+		.delete(apiAttempts)
+		.where(
+			and(
+				eq(apiAttempts.action, "update-guide"),
+				lt(apiAttempts.attemptedAt, window10m),
+			),
+		);
 
 	const [guideUpdateCount] = await db
 		.select({ c: count() })
