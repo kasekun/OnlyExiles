@@ -1,0 +1,300 @@
+{
+	"id": "a69aefa4-7872-4bf7-abbe-29e02f552f1e",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"public.api_attempts": {
+			"name": "api_attempts",
+			"schema": "",
+			"columns": {
+				"ip": {
+					"name": "ip",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"action": {
+					"name": "action",
+					"type": "varchar(32)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"guide_id": {
+					"name": "guide_id",
+					"type": "varchar(14)",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"attempted_at": {
+					"name": "attempted_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {
+				"api_attempts_ip_action_idx": {
+					"name": "api_attempts_ip_action_idx",
+					"columns": [
+						{
+							"expression": "ip",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						},
+						{
+							"expression": "action",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						},
+						{
+							"expression": "attempted_at",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				},
+				"api_attempts_guide_idx": {
+					"name": "api_attempts_guide_idx",
+					"columns": [
+						{
+							"expression": "guide_id",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						},
+						{
+							"expression": "attempted_at",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.auth_attempts": {
+			"name": "auth_attempts",
+			"schema": "",
+			"columns": {
+				"ip": {
+					"name": "ip",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"guide_id": {
+					"name": "guide_id",
+					"type": "varchar(14)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"attempted_at": {
+					"name": "attempted_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.edit_sessions": {
+			"name": "edit_sessions",
+			"schema": "",
+			"columns": {
+				"guide_id": {
+					"name": "guide_id",
+					"type": "varchar(14)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"session_id": {
+					"name": "session_id",
+					"type": "varchar(14)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"secret_hash": {
+					"name": "secret_hash",
+					"type": "varchar(72)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"last_used_at": {
+					"name": "last_used_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {
+				"edit_sessions_last_used_idx": {
+					"name": "edit_sessions_last_used_idx",
+					"columns": [
+						{
+							"expression": "last_used_at",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {
+				"edit_sessions_guide_id_session_id_pk": {
+					"name": "edit_sessions_guide_id_session_id_pk",
+					"columns": ["guide_id", "session_id"]
+				}
+			},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		},
+		"public.guides": {
+			"name": "guides",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "varchar(14)",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"passphrase_hash": {
+					"name": "passphrase_hash",
+					"type": "varchar(72)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'Untitled guide'"
+				},
+				"version": {
+					"name": "version",
+					"type": "varchar(50)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"state": {
+					"name": "state",
+					"type": "jsonb",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"last_viewed_at": {
+					"name": "last_viewed_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				}
+			},
+			"indexes": {
+				"guides_last_viewed_idx": {
+					"name": "guides_last_viewed_idx",
+					"columns": [
+						{
+							"expression": "last_viewed_at",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				},
+				"guides_version_idx": {
+					"name": "guides_version_idx",
+					"columns": [
+						{
+							"expression": "version",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"policies": {},
+			"checkConstraints": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}
