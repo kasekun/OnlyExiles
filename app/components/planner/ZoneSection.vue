@@ -119,7 +119,7 @@ onMounted(() => {
               :class="readonly ? 'cursor-default' : 'cursor-pointer hover:text-p-amber hover:border-p-amber-dim hover:bg-p-amber-bg'"
               :title="readonly ? undefined : 'Click to edit recommended level'"
               @click.stop="!readonly && startEditLevel($event)"
-            >Char lvl&nbsp;{{ displayLevel }}</span>
+            >Target char level:&nbsp;{{ displayLevel }}</span>
             <span
               v-if="!readonly"
               class="flex items-center ml-[0.2rem] opacity-0 group-hover/level:opacity-100 transition-opacity duration-120"
@@ -139,7 +139,7 @@ onMounted(() => {
             v-else
             class="inline-flex items-center shrink-0 text-p-xs text-p-amber bg-p-amber-bg border border-p-amber-dim py-[0.07rem] pr-[0.2rem] pl-[0.35rem] rounded-[3px] whitespace-nowrap tracking-[0.02em] font-p-mono cursor-default"
             @click.stop
-          >Char lvl&nbsp;<input
+          >Target char level:&nbsp;<input
               ref="levelInputRef"
               class="bg-transparent border-0 text-p-amber font-p-mono text-p-xs w-10 p-0 outline-none"
               type="text"

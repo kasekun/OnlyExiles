@@ -125,13 +125,17 @@ async function publishGuide() {
 // ── Update guide ─────────────────────────────────────────────────────────────
 
 const updating = ref(false);
+const updateState = ref<"idle" | "success">("idle");
 
 async function updateGuide() {
 	if (!props.guideId) return;
 	updating.value = true;
 	try {
 		await guideStore.updateGuide(props.guideId, context);
-		toast("Guide updated");
+		updateState.value = "success";
+		setTimeout(() => {
+			updateState.value = "idle";
+		}, 1500); // TODO: make this a real check, db query?
 	} catch (err: unknown) {
 		const status = (err as { status?: number })?.status;
 		if (status === 401) {
@@ -464,7 +468,8 @@ function doReset() {
         @click="updateGuide"
       >
         <Loader2 v-if="updating" :size="11" class="animate-spin" aria-hidden="true" />
-        {{ updating ? 'Saving…' : 'Update guide' }}
+        <Check v-else-if="updateState === 'success'" :size="11" aria-hidden="true" />
+        {{ updating ? 'Saving…' : updateState === 'success' ? 'Saved' : 'Update guide' }}
       </button>
       <button
         v-else-if="mode === 'viewer'"

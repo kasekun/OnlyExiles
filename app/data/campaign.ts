@@ -436,6 +436,18 @@ export const DATA: Act[] = [
 				],
 			},
 			{
+				id: "trial-of-sekhemas",
+				name: "Trial of Sekhemas",
+				recLevel: "18",
+				pickups: [
+					{
+						item: "First two Ascendancy points",
+						type: "Hand-In",
+						source: "Complete the Trial",
+					},
+				],
+			},
+			{
 				id: "mastodon-badlands",
 				name: "Mastodon Badlands",
 				recLevel: "18.5",
@@ -751,6 +763,18 @@ export const DATA: Act[] = [
 						item: "Rune",
 						type: "Drop",
 						source: "League event",
+					},
+				],
+			},
+			{
+				id: "trial-of-chaos",
+				name: "Trial of Chaos",
+				recLevel: "32",
+				pickups: [
+					{
+						item: "First four Ascendancy points",
+						type: "Hand-In",
+						source: "Complete the Trial",
 					},
 				],
 			},
