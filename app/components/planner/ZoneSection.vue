@@ -13,7 +13,7 @@ const props = defineProps<{
 	area: Area;
 }>();
 
-const { state } = usePlannerState();
+const { state, readonly } = usePlannerState();
 
 const akey = computed(() => areaKey(props.actId, props.area.id));
 
@@ -36,6 +36,10 @@ function startEditLevel(e: Event) {
 }
 
 function commitLevel(e: Event) {
+	if (readonly.value) {
+		levelEditing.value = false;
+		return;
+	}
 	const val = (e.target as HTMLInputElement).value.trim();
 	state.levels[akey.value] = val || props.area.recLevel;
 	levelEditing.value = false;
@@ -54,6 +58,7 @@ const notesValue = computed({
 		return state.notes[akey.value] ?? "";
 	},
 	set(v: string) {
+		if (readonly.value) return;
 		state.notes[akey.value] = v;
 	},
 });
@@ -78,9 +83,10 @@ onMounted(() => {
   <div class="border border-p-subtle rounded-[4px] overflow-hidden bg-p-surface group/area">
     <div class="flex items-stretch bg-p-area">
 
-      <!-- Drag handle -->
+      <!-- Drag handle — hidden in readonly mode -->
       <span
         class="drag-handle flex items-center px-1.5 text-p-muted opacity-0 cursor-grab shrink-0 transition-opacity duration-120 group-hover/area:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
+        :class="{ 'invisible pointer-events-none': readonly }"
         title="Drag to reorder"
       >
         <GripVertical :size="14" />
@@ -103,17 +109,21 @@ onMounted(() => {
             {{ area.name }}
           </span>
 
-          <!-- Level badge: editable on click, pencil reveals on hover -->
+          <!-- Level badge: editable on click (disabled in readonly) -->
           <span
             v-if="!levelEditing"
             class="inline-flex items-center shrink-0 group/level"
           >
             <span
-              class="inline-flex items-center text-p-xs text-p-text2 bg-p-surface border border-p-border py-[0.07rem] px-[0.35rem] rounded-[3px] whitespace-nowrap tracking-[0.02em] font-p-mono cursor-pointer transition-[border-color,color,background-color] duration-120 hover:text-p-amber hover:border-p-amber-dim hover:bg-p-amber-bg"
-              title="Click to edit recommended level"
-              @click.stop="startEditLevel"
+              class="inline-flex items-center text-p-xs text-p-text2 bg-p-surface border border-p-border py-[0.07rem] px-[0.35rem] rounded-[3px] whitespace-nowrap tracking-[0.02em] font-p-mono transition-[border-color,color,background-color] duration-120"
+              :class="readonly ? 'cursor-default' : 'cursor-pointer hover:text-p-amber hover:border-p-amber-dim hover:bg-p-amber-bg'"
+              :title="readonly ? undefined : 'Click to edit recommended level'"
+              @click.stop="!readonly && startEditLevel($event)"
             >Char lvl&nbsp;{{ displayLevel }}</span>
-            <span class="flex items-center ml-[0.2rem] opacity-0 group-hover/level:opacity-100 transition-opacity duration-120">
+            <span
+              v-if="!readonly"
+              class="flex items-center ml-[0.2rem] opacity-0 group-hover/level:opacity-100 transition-opacity duration-120"
+            >
               <span class="block w-px h-[0.6em] bg-p-subtle mx-[0.15rem]" aria-hidden="true" />
               <button
                 class="inline-flex items-center justify-center p-[0.12rem] rounded-[2px] text-p-amber-dim hover:text-p-amber transition-colors duration-120 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:opacity-100"
@@ -153,6 +163,8 @@ onMounted(() => {
           class="planner-textarea"
           placeholder="Add notes for this zone..."
           :value="notesValue"
+          :readonly="readonly"
+          :class="{ 'opacity-60 cursor-default': readonly }"
           @input="onNotesInput"
           rows="1"
         />

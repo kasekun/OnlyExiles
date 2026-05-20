@@ -1,18 +1,43 @@
-import { reactive, watch } from "vue";
+import {
+	type InjectionKey,
+	inject,
+	provide,
+	type Ref,
+	reactive,
+	ref,
+	watch,
+} from "vue";
 import { toast } from "vue-sonner";
 import { DATA } from "~/data/campaign";
-import type { Template } from "~/data/templates";
+import { CAMPAIGN_DEFAULT, type Template } from "~/data/templates";
+import type { PlannerState } from "~/lib/plannerState";
+import {
+	buildDefaultPlannerState,
+	normalizePlannerState,
+} from "~/lib/plannerState";
 
-export interface PlannerState {
-	actsCollapsed: Record<string, boolean>;
-	areasCollapsed: Record<string, boolean>;
-	areaOrder: Record<string, string[]>; // actId → ordered area IDs
-	skipped: Record<string, boolean>; // pickKey → boolean
-	notes: Record<string, string>; // areaKey → user note
-	levels: Record<string, string>; // areaKey → custom level string
-	actNotes: Record<string, string>; // actId → freetext note
-	actRegex: Record<string, string>; // actId → regex string
+export type { PlannerState };
+export { buildDefaultPlannerState, normalizePlannerState };
+
+export interface PlannerContext {
+	state: PlannerState;
+	readonly: Ref<boolean>;
+	guideName: Ref<string>;
+	persistenceKey?: string;
+	setReadonly(value: boolean): void;
+	hydrateFromStorage?(): void;
+	replaceState(next: PlannerState, name?: string): void;
+	resetAll(): void;
+	expandAll(): void;
+	collapseAll(): void;
+	expandActAreas(actId: string): void;
+	collapseActAreas(actId: string): void;
+	collapseEmptyAreas(actId: string): void;
+	applyTemplate(template: Template): void;
 }
+
+const PLANNER_CONTEXT_KEY: InjectionKey<PlannerContext> =
+	Symbol("plannerContext");
 
 export function areaKey(actId: string, areaId: string): string {
 	return `${actId}|${areaId}`;
@@ -34,38 +59,15 @@ export function getOrderedAreas(
 	return [...custom, ...extra];
 }
 
-const STORAGE_KEY = "poe2-planner-v1";
-
-function loadFromStorage(): Partial<PlannerState> {
-	try {
-		const raw = localStorage.getItem(STORAGE_KEY);
-		if (raw) return JSON.parse(raw) as Partial<PlannerState>;
-	} catch {}
-	return {};
-}
-
-function buildDefaultState(): PlannerState {
-	return {
-		actsCollapsed: {},
-		areasCollapsed: {},
-		areaOrder: {},
-		skipped: {},
-		notes: {},
-		levels: {},
-		actNotes: {},
-		actRegex: {},
-	};
-}
-
-// Seed state with campaign defaults for any keys not already persisted.
-// This makes state the single source of truth for both the UI and the export,
-// so neither needs to fall back to campaign.ts at read-time.
-function hydrateDefaults(state: PlannerState): void {
+function hydrateDefaults(
+	state: PlannerState,
+	templateNotes?: Record<string, string>,
+): void {
 	for (const act of DATA) {
 		for (const area of act.areas) {
 			const key = areaKey(act.id, area.id);
 			if (!(key in state.notes)) {
-				state.notes[key] = area.notes;
+				state.notes[key] = templateNotes?.[key] ?? "";
 			}
 			if (!(key in state.levels)) {
 				state.levels[key] = area.recLevel;
@@ -74,124 +76,194 @@ function hydrateDefaults(state: PlannerState): void {
 	}
 }
 
-let _state: PlannerState | null = null;
+export function createPlannerContext(options: {
+	initialState?: Partial<PlannerState>;
+	persistenceKey?: string;
+	readonly?: boolean;
+	initialName?: string;
+}): PlannerContext {
+	const normalizedInitial = normalizePlannerState(options.initialState ?? {});
+	const state = reactive<PlannerState>(normalizedInitial);
+	const readonlyRef = ref(options.readonly ?? false);
+	const guideName = ref(options.initialName ?? "");
 
-export function usePlannerState() {
-	if (!_state) {
-		const saved = import.meta.client ? loadFromStorage() : {};
-		_state = reactive<PlannerState>({
-			...buildDefaultState(),
-			...saved,
+	hydrateDefaults(state, CAMPAIGN_DEFAULT.notes);
+
+	let watcherStarted = false;
+
+	function startPersistenceWatcher() {
+		if (watcherStarted || !options.persistenceKey) return;
+		watcherStarted = true;
+		watch(
+			() => JSON.stringify(state),
+			(json) => {
+				try {
+					localStorage.setItem(options.persistenceKey ?? "", json);
+				} catch {}
+			},
+			{ deep: true },
+		);
+		watch(guideName, (name) => {
+			try {
+				localStorage.setItem(
+					`${options.persistenceKey ?? ""}-name`,
+					JSON.stringify(name),
+				);
+			} catch {}
 		});
+	}
 
-		hydrateDefaults(_state);
+	function hydrateFromStorage() {
+		if (!options.persistenceKey || typeof window === "undefined") return;
+		try {
+			const raw = localStorage.getItem(options.persistenceKey);
+			if (raw) {
+				const parsed = normalizePlannerState(JSON.parse(raw));
+				Object.assign(state, parsed);
+				hydrateDefaults(state, CAMPAIGN_DEFAULT.notes);
+			}
+			const nameRaw = localStorage.getItem(`${options.persistenceKey}-name`);
+			if (nameRaw) {
+				const parsed = JSON.parse(nameRaw);
+				if (typeof parsed === "string" && parsed.trim()) {
+					guideName.value = parsed.trim();
+				}
+			}
+		} catch {}
+		startPersistenceWatcher();
+	}
 
-		if (import.meta.client) {
-			watch(
-				() => JSON.stringify(_state),
-				(json) => {
-					try {
-						localStorage.setItem(STORAGE_KEY, json);
-					} catch {}
-				},
-				{ deep: true },
-			);
-		}
+	function setReadonly(value: boolean) {
+		readonlyRef.value = value;
+	}
+
+	function replaceState(next: PlannerState, name?: string) {
+		const normalized = normalizePlannerState(next);
+		Object.assign(state, normalized);
+		hydrateDefaults(state, CAMPAIGN_DEFAULT.notes);
+		if (name !== undefined) guideName.value = name;
 	}
 
 	function resetAll() {
-		if (!_state) return;
-		const snapshot = JSON.parse(JSON.stringify(_state)) as PlannerState;
-		if (import.meta.client) localStorage.removeItem(STORAGE_KEY);
-		Object.assign(_state, buildDefaultState());
+		if (readonlyRef.value) return;
+		const snapshot = JSON.parse(JSON.stringify(state)) as PlannerState;
+		const prevName = guideName.value;
+		if (options.persistenceKey && typeof window !== "undefined") {
+			try {
+				localStorage.removeItem(options.persistenceKey);
+				localStorage.removeItem(`${options.persistenceKey}-name`);
+			} catch {}
+		}
+		Object.assign(state, buildDefaultPlannerState());
+		guideName.value = "";
+		hydrateDefaults(state, CAMPAIGN_DEFAULT.notes);
 		toast("Route reset.", {
 			action: {
 				label: "Undo",
 				onClick: () => {
-					if (!_state) return;
-					Object.assign(_state, snapshot);
+					Object.assign(state, snapshot);
+					guideName.value = prevName;
 				},
 			},
 		});
 	}
 
 	function expandAll() {
-		if (!_state) return;
-		const s = _state;
+		if (readonlyRef.value) return;
 		DATA.forEach((act) => {
-			s.actsCollapsed[act.id] = false;
+			state.actsCollapsed[act.id] = false;
 			act.areas.forEach((area) => {
-				s.areasCollapsed[areaKey(act.id, area.id)] = false;
+				state.areasCollapsed[areaKey(act.id, area.id)] = false;
 			});
 		});
 	}
 
 	function collapseAll() {
-		if (!_state) return;
-		const s = _state;
+		if (readonlyRef.value) return;
 		DATA.forEach((act) => {
-			s.actsCollapsed[act.id] = true;
+			state.actsCollapsed[act.id] = true;
 			act.areas.forEach((area) => {
-				s.areasCollapsed[areaKey(act.id, area.id)] = true;
+				state.areasCollapsed[areaKey(act.id, area.id)] = true;
 			});
 		});
 	}
 
 	function expandActAreas(actId: string) {
-		if (!_state) return;
-		const s = _state;
+		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {
-			s.areasCollapsed[areaKey(actId, area.id)] = false;
+			state.areasCollapsed[areaKey(actId, area.id)] = false;
 		});
 	}
 
 	function collapseActAreas(actId: string) {
-		if (!_state) return;
-		const s = _state;
+		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {
-			s.areasCollapsed[areaKey(actId, area.id)] = true;
+			state.areasCollapsed[areaKey(actId, area.id)] = true;
 		});
 	}
 
 	function collapseEmptyAreas(actId: string) {
-		if (!_state) return;
-		const s = _state;
+		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {
 			const isEmpty =
 				area.pickups.length === 0 ||
-				area.pickups.every((_, i) => !!s.skipped[pickKey(actId, area.id, i)]);
+				area.pickups.every(
+					(_, i) => !!state.skipped[pickKey(actId, area.id, i)],
+				);
 			if (isEmpty) {
-				s.areasCollapsed[areaKey(actId, area.id)] = true;
+				state.areasCollapsed[areaKey(actId, area.id)] = true;
 			}
 		});
 	}
 
 	function applyTemplate(template: Template) {
-		if (!_state) return;
-		const previousSkipped = { ..._state.skipped };
-		_state.skipped = { ...template.skipped };
+		if (readonlyRef.value) return;
+		const previousSkipped = { ...state.skipped };
+		const previousNotes = { ...state.notes };
+		const previousActNotes = { ...state.actNotes };
+
+		state.skipped = { ...template.skipped };
+
+		if (template.notes !== undefined) {
+			for (const act of DATA) {
+				for (const area of act.areas) {
+					const key = areaKey(act.id, area.id);
+					state.notes[key] = template.notes[key] ?? "";
+				}
+			}
+		}
+		if (template.actNotes !== undefined) {
+			for (const act of DATA) {
+				state.actNotes[act.id] = template.actNotes[act.id] ?? "";
+			}
+		}
+
 		toast(`Applied "${template.label}".`, {
 			action: {
 				label: "Undo",
 				onClick: () => {
-					if (!_state) return;
-					_state.skipped = previousSkipped;
+					state.skipped = previousSkipped;
+					state.notes = previousNotes;
+					state.actNotes = previousActNotes;
 				},
 			},
 		});
 	}
 
 	return {
-		state: _state,
-		areaKey,
-		getOrderedAreas,
-		pickKey,
+		state,
+		readonly: readonlyRef,
+		guideName,
+		persistenceKey: options.persistenceKey,
+		setReadonly,
+		hydrateFromStorage,
+		replaceState,
 		resetAll,
 		expandAll,
 		collapseAll,
@@ -200,4 +272,18 @@ export function usePlannerState() {
 		collapseEmptyAreas,
 		applyTemplate,
 	};
+}
+
+export function providePlannerContext(context: PlannerContext): void {
+	provide(PLANNER_CONTEXT_KEY, context);
+}
+
+export function usePlannerState(): PlannerContext {
+	const context = inject(PLANNER_CONTEXT_KEY);
+	if (!context) {
+		throw new Error(
+			"[PlannerContext] No planner context provided. Wrap the route in a component that calls providePlannerContext().",
+		);
+	}
+	return context;
 }

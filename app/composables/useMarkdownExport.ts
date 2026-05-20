@@ -9,9 +9,12 @@ import { DATA } from "~/data/campaign";
 
 function buildMarkdown(
 	state: PlannerState,
+	guideName: string,
 	includeEmptyZones: boolean,
+	version?: string,
 ): string {
-	const lines: string[] = ["# PoE2 Campaign Planner — My Route", ""];
+	const title = guideName.trim() || "Untitled guide";
+	const lines: string[] = [`# ${title} — PoE2 Campaign Route`, ""];
 
 	for (const act of DATA) {
 		const actAreas = getOrderedAreas(
@@ -65,22 +68,41 @@ function buildMarkdown(
 		}
 	}
 
-	return lines.join("\n").trim();
+	const body = lines.join("\n").trim();
+
+	if (version) {
+		return `${body}\n\n---\n*Guide version: ${version}*`;
+	}
+	return body;
 }
 
 export function useMarkdownExport() {
-	const { state } = usePlannerState();
+	const { state, guideName } = usePlannerState();
 
-	function getMarkdown(options: { includeEmptyZones: boolean }): string {
-		return buildMarkdown(state, options.includeEmptyZones);
+	function getMarkdown(options: {
+		includeEmptyZones: boolean;
+		version?: string;
+	}): string {
+		return buildMarkdown(
+			state,
+			guideName.value,
+			options.includeEmptyZones,
+			options.version,
+		);
 	}
 
 	async function copyMarkdown(options: {
 		includeEmptyZones: boolean;
+		version?: string;
 	}): Promise<boolean> {
 		try {
 			await navigator.clipboard.writeText(
-				buildMarkdown(state, options.includeEmptyZones),
+				buildMarkdown(
+					state,
+					guideName.value,
+					options.includeEmptyZones,
+					options.version,
+				),
 			);
 			return true;
 		} catch {

@@ -8,9 +8,10 @@ const props = defineProps<{
 	area: Area;
 }>();
 
-const { state } = usePlannerState();
+const { state, readonly } = usePlannerState();
 
 function toggleSkip(key: string) {
+	if (readonly.value) return;
 	state.skipped[key] = !state.skipped[key];
 }
 
@@ -44,10 +45,14 @@ function isSkipped(key: string): boolean {
         <td class="px-2 py-1.5 border-b border-p-subtle align-middle leading-[1.45] text-center">
           <!-- group/skip enables icon swap on hover without JS -->
           <button
-            class="group/skip bg-transparent border border-p-subtle rounded-[3px] w-[22px] h-[22px] p-0 cursor-pointer inline-flex items-center justify-center text-[oklch(36%_0.005_55)] transition-[border-color,color,background-color] duration-130 shrink-0 hover:border-p-amber-dim hover:text-p-amber-dim hover:bg-[oklch(76%_0.158_65/0.08)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2"
-            :class="{ 'text-p-skip': isSkipped(pickKey(actId, area.id, i)) }"
+            class="group/skip bg-transparent border border-p-subtle rounded-[3px] w-[22px] h-[22px] p-0 inline-flex items-center justify-center text-[oklch(36%_0.005_55)] transition-[border-color,color,background-color] duration-130 shrink-0 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2"
+            :class="[
+              isSkipped(pickKey(actId, area.id, i)) ? 'text-p-skip' : '',
+              readonly ? 'cursor-default opacity-40' : 'cursor-pointer hover:border-p-amber-dim hover:text-p-amber-dim hover:bg-[oklch(76%_0.158_65/0.08)]',
+            ]"
             :aria-pressed="isSkipped(pickKey(actId, area.id, i))"
             :aria-label="isSkipped(pickKey(actId, area.id, i)) ? 'Unmark skipped' : 'Mark as skipped'"
+            :disabled="readonly"
             @click="toggleSkip(pickKey(actId, area.id, i))"
           >
             <!-- Strikethrough: shown at rest, hidden on hover or when skipped -->

@@ -9,17 +9,20 @@ import {
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import { VueDraggable } from "vue-draggable-plus";
-import { usePlannerState } from "~/composables/usePlannerState";
-import type { Act } from "~/data/campaign";
+import {
+	getOrderedAreas,
+	usePlannerState,
+} from "~/composables/usePlannerState";
+import type { Act, Area } from "~/data/campaign";
 
 const props = defineProps<{ act: Act }>();
 
 const {
 	state,
+	readonly,
 	expandActAreas,
 	collapseActAreas,
 	collapseEmptyAreas,
-	getOrderedAreas,
 } = usePlannerState();
 
 const isCollapsed = computed(() => !!state.actsCollapsed[props.act.id]);
@@ -38,14 +41,15 @@ const orderedAreaIds = computed({
 		);
 	},
 	set(newOrder: string[]) {
+		if (readonly.value) return;
 		state.areaOrder[props.act.id] = newOrder;
 	},
 });
 
-const orderedAreas = computed(() =>
+const orderedAreas = computed((): Area[] =>
 	orderedAreaIds.value
-		.map((id) => props.act.areas.find((a) => a.id === id))
-		.filter((a) => a !== undefined),
+		.map((id: string) => props.act.areas.find((a: Area) => a.id === id))
+		.filter((a): a is Area => a !== undefined),
 );
 
 // Act note
@@ -54,6 +58,7 @@ const actNote = computed({
 		return state.actNotes[props.act.id] ?? "";
 	},
 	set(v: string) {
+		if (readonly.value) return;
 		state.actNotes[props.act.id] = v;
 	},
 });
@@ -63,6 +68,7 @@ const actRegex = computed({
 		return state.actRegex[props.act.id] ?? "";
 	},
 	set(v: string) {
+		if (readonly.value) return;
 		state.actRegex[props.act.id] = v;
 	},
 });
@@ -150,6 +156,8 @@ function autoResize(el: HTMLTextAreaElement) {
             class="planner-textarea"
             placeholder="Notes for this act..."
             :value="actNote"
+            :readonly="readonly"
+            :class="{ 'opacity-60 cursor-default': readonly }"
             @input="actNote = ($event.target as HTMLTextAreaElement).value; autoResize($event.target as HTMLTextAreaElement)"
             rows="2"
           />
@@ -170,8 +178,10 @@ function autoResize(el: HTMLTextAreaElement) {
             <input
               type="text"
               class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.35rem] text-p-text2 placeholder:text-p-muted placeholder:not-italic outline-none"
+              :class="{ 'opacity-60 cursor-default': readonly }"
               placeholder='e.g., "\d+% i.+mov|ph.*da|\d cfl.+da"'
               :value="actRegex"
+              :readonly="readonly"
               @input="actRegex = ($event.target as HTMLInputElement).value"
               spellcheck="false"
               autocomplete="off"
@@ -201,7 +211,7 @@ function autoResize(el: HTMLTextAreaElement) {
       <VueDraggable
         v-model="orderedAreaIds"
         :animation="150"
-        handle=".drag-handle"
+        :handle="readonly ? undefined : '.drag-handle'"
         ghost-class="drag-ghost"
         class="flex flex-col gap-2"
         tag="div"

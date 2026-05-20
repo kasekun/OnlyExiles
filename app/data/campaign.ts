@@ -8,7 +8,7 @@ export interface Area {
 	id: string;
 	name: string;
 	recLevel: string;
-	notes: string;
+	notes?: string;
 	pickups: Pickup[];
 }
 
@@ -27,7 +27,6 @@ export const DATA: Act[] = [
 				id: "the-riverbank",
 				name: "The Riverbank",
 				recLevel: "1",
-				notes: "XP is bad here, skip mobs",
 				pickups: [
 					{
 						item: "Class specific skill gem",
@@ -40,7 +39,6 @@ export const DATA: Act[] = [
 				id: "clearfell",
 				name: "Clearfell",
 				recLevel: "1",
-				notes: "XP is bad here, skip mobs",
 				pickups: [
 					{
 						item: "Permanent +10% Cold Resistance",
@@ -63,7 +61,6 @@ export const DATA: Act[] = [
 				id: "the-mud-burrow",
 				name: "The Mud Burrow",
 				recLevel: "1",
-				notes: "XP is bad here, skip mobs",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 2)",
@@ -86,7 +83,6 @@ export const DATA: Act[] = [
 				id: "the-grelwood",
 				name: "The Grelwood",
 				recLevel: "2",
-				notes: "XP is bad here, skip mobs",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 2)",
@@ -109,7 +105,6 @@ export const DATA: Act[] = [
 				id: "the-red-vale",
 				name: "The Red Vale",
 				recLevel: "2",
-				notes: "Great XP zone",
 				pickups: [
 					{
 						item: "Weapon upgrade (Lvl 5)",
@@ -132,7 +127,6 @@ export const DATA: Act[] = [
 				id: "the-grim-tangle",
 				name: "The Grim Tangle",
 				recLevel: "4",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem",
@@ -150,8 +144,6 @@ export const DATA: Act[] = [
 				id: "cemetery-of-the-eternals",
 				name: "Cemetery of the Eternals",
 				recLevel: "5",
-				notes:
-					"Great XP\nAfter finding the keys and opening the gates for Lachlann, immediately restart at checkpoint to skip his long story animation.",
 				pickups: [
 					{
 						item: "Iron Ring or Lazuli Ring",
@@ -174,7 +166,6 @@ export const DATA: Act[] = [
 				id: "tomb-of-the-consort",
 				name: "Tomb of the Consort",
 				recLevel: "6",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 1)",
@@ -192,7 +183,6 @@ export const DATA: Act[] = [
 				id: "mausoleum-of-the-praetor",
 				name: "Mausoleum of the Praetor",
 				recLevel: "7",
-				notes: "Skip mobs if at lvl 7",
 				pickups: [
 					{
 						item: "Gold + a Rare item",
@@ -210,7 +200,6 @@ export const DATA: Act[] = [
 				id: "the-hunting-grounds",
 				name: "The Hunting Grounds",
 				recLevel: "7",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -238,7 +227,6 @@ export const DATA: Act[] = [
 				id: "freythorn",
 				name: "Freythorn",
 				recLevel: "8",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +30 to Maximum Spirit + Uncut Spirit Gem (Lvl 4)",
@@ -262,7 +250,6 @@ export const DATA: Act[] = [
 				id: "ogham-farmlands",
 				name: "Ogham Farmlands",
 				recLevel: "9",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -285,7 +272,6 @@ export const DATA: Act[] = [
 				id: "ogham-village",
 				name: "Ogham Village",
 				recLevel: "10",
-				notes: "",
 				pickups: [
 					{
 						item: "Salvage Bench Unlock",
@@ -318,7 +304,6 @@ export const DATA: Act[] = [
 				id: "the-manor-ramparts",
 				name: "The Manor Ramparts",
 				recLevel: "11",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "Uncut Support Gem",
@@ -336,8 +321,6 @@ export const DATA: Act[] = [
 				id: "ogham-manor",
 				name: "Ogham Manor",
 				recLevel: "12",
-				notes:
-					"Hit lvl 14 before Count Geonor if you need to use a level 5 skill gem\nTP out instead of waiting ~30s for Count Geonor loot (not great loot)",
 				pickups: [
 					{
 						item: "Permanent +20 to Maximum Life",
@@ -361,7 +344,6 @@ export const DATA: Act[] = [
 				id: "vastiri-outskirts",
 				name: "Vastiri Outskirts",
 				recLevel: "13",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 2)",
@@ -384,7 +366,6 @@ export const DATA: Act[] = [
 				id: "mawdun-quarry",
 				name: "Mawdun Quarry",
 				recLevel: "14",
-				notes: "",
 				pickups: [
 					{
 						item: "Artificer's Orb",
@@ -402,7 +383,6 @@ export const DATA: Act[] = [
 				id: "mawdun-mine",
 				name: "Mawdun Mine",
 				recLevel: "15.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Level 2)",
@@ -415,7 +395,6 @@ export const DATA: Act[] = [
 				id: "traitor-s-passage",
 				name: "Traitor's Passage",
 				recLevel: "16.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Ascendancy Trial Key (Djinn Barya)",
@@ -438,7 +417,6 @@ export const DATA: Act[] = [
 				id: "the-halani-gates",
 				name: "The Halani Gates",
 				recLevel: "17.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 7)",
@@ -461,7 +439,6 @@ export const DATA: Act[] = [
 				id: "mastodon-badlands",
 				name: "Mastodon Badlands",
 				recLevel: "18.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 2)",
@@ -479,7 +456,6 @@ export const DATA: Act[] = [
 				id: "the-bone-pits",
 				name: "The Bone Pits",
 				recLevel: "19",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 2)",
@@ -497,7 +473,6 @@ export const DATA: Act[] = [
 				id: "keth",
 				name: "Keth",
 				recLevel: "19.5",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -520,7 +495,6 @@ export const DATA: Act[] = [
 				id: "the-lost-city",
 				name: "The Lost City",
 				recLevel: "20.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Jewel",
@@ -543,7 +517,6 @@ export const DATA: Act[] = [
 				id: "buried-shrines",
 				name: "Buried Shrines",
 				recLevel: "21.5",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "Uncut Support Gem",
@@ -571,7 +544,6 @@ export const DATA: Act[] = [
 				id: "valley-of-the-titans",
 				name: "Valley of the Titans",
 				recLevel: "22.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +1 Charm Slot and Choice of Buff",
@@ -590,7 +562,6 @@ export const DATA: Act[] = [
 				id: "titan-grotto",
 				name: "Titan Grotto",
 				recLevel: "23.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 2)",
@@ -613,7 +584,6 @@ export const DATA: Act[] = [
 				id: "deshar",
 				name: "Deshar",
 				recLevel: "24",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -636,7 +606,6 @@ export const DATA: Act[] = [
 				id: "path-of-mourning",
 				name: "Path of Mourning",
 				recLevel: "25",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 2)",
@@ -649,7 +618,6 @@ export const DATA: Act[] = [
 				id: "the-spires-of-deshar",
 				name: "The Spires of Deshar",
 				recLevel: "25",
-				notes: "Great XP",
 				pickups: [
 					{
 						item: "Permanent +10% Lightning Resistance",
@@ -667,14 +635,12 @@ export const DATA: Act[] = [
 				id: "the-dreadnought",
 				name: "The Dreadnought",
 				recLevel: "26",
-				notes: "Great XP",
 				pickups: [],
 			},
 			{
 				id: "dreadnought-vanguard",
 				name: "Dreadnought Vanguard",
 				recLevel: "27",
-				notes: "Great XP",
 				pickups: [],
 			},
 		],
@@ -687,7 +653,6 @@ export const DATA: Act[] = [
 				id: "sandswept-marsh",
 				name: "Sandswept Marsh",
 				recLevel: "28.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 9)",
@@ -715,7 +680,6 @@ export const DATA: Act[] = [
 				id: "jungle-ruins",
 				name: "Jungle Ruins",
 				recLevel: "28.5",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -738,7 +702,6 @@ export const DATA: Act[] = [
 				id: "the-venom-crypts",
 				name: "The Venom Crypts",
 				recLevel: "28.5",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent Buff Choice + Artificer's Orb",
@@ -756,7 +719,6 @@ export const DATA: Act[] = [
 				id: "infested-barrens",
 				name: "Infested Barrens",
 				recLevel: "30",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem",
@@ -774,8 +736,6 @@ export const DATA: Act[] = [
 				id: "the-azak-bog",
 				name: "The Azak Bog",
 				recLevel: "32",
-				notes:
-					"Great XP zone\nGreat farming zone - can reset at checkpoint to farm mobs multiple times",
 				pickups: [
 					{
 						item: "Permanent +30 Maximum Spirit + Uncut Spirit Gem (Lvl 10)",
@@ -798,7 +758,6 @@ export const DATA: Act[] = [
 				id: "chimeral-wetlands",
 				name: "Chimeral Wetlands",
 				recLevel: "32",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 9) + Inscribed Ultimatum",
@@ -826,7 +785,6 @@ export const DATA: Act[] = [
 				id: "jiquani-s-machinarium",
 				name: "Jiquani's Machinarium",
 				recLevel: "32",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +10% Fire Resistance",
@@ -844,7 +802,6 @@ export const DATA: Act[] = [
 				id: "jiquani-s-sanctum",
 				name: "Jiquani's Sanctum",
 				recLevel: "32",
-				notes: "",
 				pickups: [
 					{
 						item: 'Free "Vaal Orb" usage',
@@ -862,7 +819,6 @@ export const DATA: Act[] = [
 				id: "the-matlan-waterways",
 				name: "The Matlan Waterways",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Rare Weapon",
@@ -880,7 +836,6 @@ export const DATA: Act[] = [
 				id: "the-drowned-city",
 				name: "The Drowned City",
 				recLevel: "36",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Level 3)",
@@ -893,7 +848,6 @@ export const DATA: Act[] = [
 				id: "the-molten-vault",
 				name: "The Molten Vault",
 				recLevel: "32",
-				notes: "",
 				pickups: [
 					{
 						item: "Reforging Bench Unlock + Uncut Skill Gem (Lvl 10) + Artificer's Orb",
@@ -912,7 +866,6 @@ export const DATA: Act[] = [
 				id: "apex-of-filth",
 				name: "Apex of Filth",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Life and Mana Flask",
@@ -931,7 +884,6 @@ export const DATA: Act[] = [
 				id: "temple-of-kopec",
 				name: "Temple of Kopec",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Spirit Gem (Level 11)",
@@ -944,7 +896,6 @@ export const DATA: Act[] = [
 				id: "utzaal-past",
 				name: "Utzaal (Past)",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Inscribed Ultimatum",
@@ -967,8 +918,6 @@ export const DATA: Act[] = [
 				id: "aggorat",
 				name: "Aggorat",
 				recLevel: "32",
-				notes:
-					"Sacrificial hearts drop from ... and are in exactly one enemy, not a drop chance. you must kill that enemy to drop the heart.",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -987,7 +936,6 @@ export const DATA: Act[] = [
 				id: "the-black-chambers-past",
 				name: "The Black Chambers (Past)",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Vaal Orb",
@@ -1006,7 +954,6 @@ export const DATA: Act[] = [
 				id: "journey-s-end",
 				name: "Journey's End",
 				recLevel: "40",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points + Uncut Skill Gem (Lvl 13)",
@@ -1024,7 +971,6 @@ export const DATA: Act[] = [
 				id: "isle-of-kin",
 				name: "Isle of Kin",
 				recLevel: "41",
-				notes: "",
 				pickups: [
 					{
 						item: "Blank Greater Rune",
@@ -1067,7 +1013,6 @@ export const DATA: Act[] = [
 				id: "volcanic-warrens",
 				name: "Volcanic Warrens",
 				recLevel: "41",
-				notes: "",
 				pickups: [
 					{
 						item: "Magic or Rare Ring",
@@ -1085,7 +1030,6 @@ export const DATA: Act[] = [
 				id: "whakapanu-island",
 				name: "Whakapanu Island",
 				recLevel: "42",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Lvl 4)",
@@ -1113,7 +1057,6 @@ export const DATA: Act[] = [
 				id: "singing-caverns",
 				name: "Singing Caverns",
 				recLevel: "42",
-				notes: "",
 				pickups: [
 					{
 						item: "Rare Pearlescent Amulet",
@@ -1131,7 +1074,6 @@ export const DATA: Act[] = [
 				id: "abandoned-prison",
 				name: "Abandoned Prison",
 				recLevel: "42",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +30% Life/Mana Flask Recovery",
@@ -1154,7 +1096,6 @@ export const DATA: Act[] = [
 				id: "solitary-confinement",
 				name: "Solitary Confinement",
 				recLevel: "42",
-				notes: "",
 				pickups: [
 					{
 						item: "Rune",
@@ -1167,7 +1108,6 @@ export const DATA: Act[] = [
 				id: "kedge-bay",
 				name: "Kedge Bay",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Torn Map Piece",
@@ -1190,7 +1130,6 @@ export const DATA: Act[] = [
 				id: "shrike-island",
 				name: "Shrike Island",
 				recLevel: "43",
-				notes: "Contains the Matiki quest reward",
 				pickups: [
 					{
 						item: "Torn Map Piece",
@@ -1213,7 +1152,6 @@ export const DATA: Act[] = [
 				id: "eye-of-hinekora",
 				name: "Eye of Hinekora",
 				recLevel: "44",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +5% Maximum Mana",
@@ -1231,7 +1169,6 @@ export const DATA: Act[] = [
 				id: "halls-of-the-dead",
 				name: "Halls of the Dead",
 				recLevel: "44",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -1255,7 +1192,6 @@ export const DATA: Act[] = [
 				id: "arastas",
 				name: "Arastas",
 				recLevel: "46",
-				notes: "",
 				pickups: [
 					{
 						item: "3 Regal Orbs",
@@ -1278,7 +1214,6 @@ export const DATA: Act[] = [
 				id: "the-excavation",
 				name: "The Excavation",
 				recLevel: "46",
-				notes: "Great XP zone",
 				pickups: [
 					{
 						item: "Rare Amulet",
@@ -1291,7 +1226,6 @@ export const DATA: Act[] = [
 				id: "ngakanu",
 				name: "Ngakanu",
 				recLevel: "47",
-				notes: "",
 				pickups: [
 					{
 						item: "Greater Jeweller's Orb, Abyssal Depths",
@@ -1304,7 +1238,6 @@ export const DATA: Act[] = [
 				id: "heart-of-the-tribe",
 				name: "Heart of the Tribe",
 				recLevel: "47",
-				notes: "",
 				pickups: [
 					{
 						item: "Random loot",
@@ -1328,7 +1261,6 @@ export const DATA: Act[] = [
 				id: "scorched-farmlands",
 				name: "Scorched Farmlands",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Support Gem (Level 4)",
@@ -1341,7 +1273,6 @@ export const DATA: Act[] = [
 				id: "stones-of-serle",
 				name: "Stones of Serle",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Exalted Orb+ Abyss Currency",
@@ -1354,7 +1285,6 @@ export const DATA: Act[] = [
 				id: "the-blackwood",
 				name: "The Blackwood",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Random Omen",
@@ -1372,8 +1302,6 @@ export const DATA: Act[] = [
 				id: "holten",
 				name: "Holten",
 				recLevel: "0",
-				notes:
-					"Can buy cheap Greater Runes from Soul of the Ferryman standing by the docks",
 				pickups: [
 					{
 						item: "Armourer's Scrap, magic and rare loot",
@@ -1391,7 +1319,6 @@ export const DATA: Act[] = [
 				id: "wolvenhold",
 				name: "Wolvenhold",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -1409,7 +1336,6 @@ export const DATA: Act[] = [
 				id: "holten-estate",
 				name: "Holten Estate",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Artificer's Orb",
@@ -1422,7 +1348,6 @@ export const DATA: Act[] = [
 				id: "the-khari-crossing",
 				name: "The Khari Crossing",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -1445,7 +1370,6 @@ export const DATA: Act[] = [
 				id: "pools-of-khatal",
 				name: "Pools of Khatal",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Orb of Alchemy",
@@ -1458,7 +1382,6 @@ export const DATA: Act[] = [
 				id: "sel-khari-sanctuary",
 				name: "Sel Khari Sanctuary",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "2 out of 3 reward: Rare Ring, Rare Amulet, Rare Jewel",
@@ -1477,7 +1400,6 @@ export const DATA: Act[] = [
 				id: "the-galai-gates",
 				name: "The Galai Gates",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Greater Orb of Augmentation+ Abyss Currency",
@@ -1490,7 +1412,6 @@ export const DATA: Act[] = [
 				id: "qimah",
 				name: "Qimah",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Choice of 1 of 7 Buffs",
@@ -1508,7 +1429,6 @@ export const DATA: Act[] = [
 				id: "qimah-reservoir",
 				name: "Qimah Reservoir",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Random currency item",
@@ -1526,7 +1446,6 @@ export const DATA: Act[] = [
 				id: "ashen-forest",
 				name: "Ashen Forest",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Uncut Skill Gem (Lvl 14)",
@@ -1544,7 +1463,6 @@ export const DATA: Act[] = [
 				id: "kriar-village",
 				name: "Kriar Village",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Permanent +40 Maximum Spirit + Uncut Spirit Gem (Lvl 14)",
@@ -1562,7 +1480,6 @@ export const DATA: Act[] = [
 				id: "glacial-tarn",
 				name: "Glacial Tarn",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Greater Orb of Augmentation",
@@ -1575,7 +1492,6 @@ export const DATA: Act[] = [
 				id: "howling-caves",
 				name: "Howling Caves",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",
@@ -1594,7 +1510,6 @@ export const DATA: Act[] = [
 				id: "kriar-peaks",
 				name: "Kriar Peaks",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Choose Unique Item",
@@ -1612,7 +1527,6 @@ export const DATA: Act[] = [
 				id: "etched-ravine",
 				name: "Etched Ravine",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Exalted Orb",
@@ -1625,7 +1539,6 @@ export const DATA: Act[] = [
 				id: "the-cuachic-vault",
 				name: "The Cuachic Vault",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "Vaal Orb",
@@ -1638,7 +1551,6 @@ export const DATA: Act[] = [
 				id: "interlude-finale-kingsmarch-hub",
 				name: "Interlude Finale (Kingsmarch Hub)",
 				recLevel: "0",
-				notes: "",
 				pickups: [
 					{
 						item: "2 Weapon Set Passive Skill Points",

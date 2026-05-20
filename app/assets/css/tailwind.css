@@ -301,6 +301,9 @@
 			color 0.13s,
 			background 0.13s;
 		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
 
 		&:hover {
 			border-color: var(--planner-amber-dim);
@@ -314,6 +317,31 @@
 		&:disabled {
 			opacity: 0.4;
 			cursor: default;
+		}
+	}
+
+	/* Inline panel text input (save/share/passphrase panels) */
+	.planner-input {
+		display: block;
+		width: 100%;
+		background: var(--planner-bg-inset);
+		border: 1px solid var(--planner-border-subtle);
+		border-radius: 3px;
+		color: var(--planner-text);
+		font-size: var(--planner-fs-base);
+		font-family: var(--planner-font);
+		line-height: 1.5;
+		padding: 0.3rem 0.55rem;
+		transition: border-color 0.12s;
+		outline: none;
+
+		&:focus {
+			border-color: var(--planner-border);
+		}
+		&::placeholder {
+			color: var(--planner-text-muted);
+			font-style: italic;
+			opacity: 0.55;
 		}
 	}
 }

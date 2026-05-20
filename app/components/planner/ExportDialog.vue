@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useMarkdownExport } from "~/composables/useMarkdownExport";
 
-defineProps<{ open: boolean }>();
+const props = defineProps<{ open: boolean; version?: string }>();
 const emit = defineEmits<{ "update:open": [value: boolean] }>();
 
 const includeEmpty = ref(true);
@@ -14,11 +14,17 @@ const copyState = ref<CopyState>("idle");
 const { getMarkdown, copyMarkdown } = useMarkdownExport();
 
 const preview = computed(() =>
-	getMarkdown({ includeEmptyZones: includeEmpty.value }),
+	getMarkdown({
+		includeEmptyZones: includeEmpty.value,
+		version: props.version,
+	}),
 );
 
 async function handleCopy() {
-	const ok = await copyMarkdown({ includeEmptyZones: includeEmpty.value });
+	const ok = await copyMarkdown({
+		includeEmptyZones: includeEmpty.value,
+		version: props.version,
+	});
 	copyState.value = ok ? "success" : "error";
 	setTimeout(
 		() => {
