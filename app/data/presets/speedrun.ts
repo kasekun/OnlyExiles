@@ -1,121 +1,246 @@
+import { buildPreset } from "./build-preset";
 import {
 	campaignDefaultLevels,
 	campaignDefaultNotes,
 } from "./campaign-default";
-import type { Preset } from "./index";
 
-export const SPEEDRUN: Preset = {
+export const SPEEDRUN = buildPreset({
 	id: "speedrun",
 	label: "I want to go fast",
 	description:
 		"Only quest-blocking rewards and powerful permanents. Skip everything optional.",
-	skippedPickups: {
-		// Act 1 — keep only mandatory / highest-value stops
-		"act-1--island-of-ogham|clearfell|uncut-skill-gem-lvl-1": true,
-		"act-1--island-of-ogham|clearfell|orb-of-transmutation": true,
-		"act-1--island-of-ogham|the-mud-burrow|orb-of-augmentation": true,
-		"act-1--island-of-ogham|the-grelwood|uncut-skill-gem-lvl-2": true,
-		"act-1--island-of-ogham|the-grelwood|uncut-support-gem-plus-medium-life-mana-flasks": true,
-		"act-1--island-of-ogham|the-grelwood|orb-of-transmutation": true,
-		"act-1--island-of-ogham|the-red-vale|weapon-upgrade-lvl-5": true,
-		"act-1--island-of-ogham|the-red-vale|uncut-skill-gem-level-2": true,
-		"act-1--island-of-ogham|the-grim-tangle|uncut-support-gem": true,
-		"act-1--island-of-ogham|the-grim-tangle|uncut-skill-gem-level-3": true,
-		"act-1--island-of-ogham|cemetery-of-the-eternals|iron-ring-or-lazuli-ring": true,
-		"act-1--island-of-ogham|cemetery-of-the-eternals|regal-orb": true,
-		"act-1--island-of-ogham|tomb-of-the-consort|normal-amulet": true,
-		"act-1--island-of-ogham|mausoleum-of-the-praetor|gold-plus-a-rare-item": true,
-		"act-1--island-of-ogham|mausoleum-of-the-praetor|lesser-rune": true,
-		"act-1--island-of-ogham|the-hunting-grounds|uncut-skill-gem-lvl-4": true,
-		"act-1--island-of-ogham|the-hunting-grounds|uncut-support-gem-lvl-1": true,
-		"act-1--island-of-ogham|the-hunting-grounds|exalted-orb": true,
-		"act-1--island-of-ogham|freythorn|uncut-support-gem-level-1": true,
-		"act-1--island-of-ogham|ogham-farmlands|uncut-skill-gem-lvl-4": true,
-		"act-1--island-of-ogham|ogham-farmlands|uncut-skill-gem-level-4": true,
-		"act-1--island-of-ogham|ogham-village|artificer-s-orb-plus-lesser-blank-rune": true,
-		"act-1--island-of-ogham|ogham-village|uncut-support-gem": true,
-		"act-1--island-of-ogham|ogham-village|artificer-s-orb": true,
-		"act-1--island-of-ogham|the-manor-ramparts|uncut-skill-gem-level-5": true,
-		"act-1--island-of-ogham|ogham-manor|orb-of-alchemy": true,
-		// Act 2 — keep quest hand-ins and ascendancy key; skip most currency
-		"act-2--the-vastiri-desert-keth|vastiri-outskirts|uncut-support-gem-lvl-2": true,
-		"act-2--the-vastiri-desert-keth|vastiri-outskirts|exalted-orb": true,
-		"act-2--the-vastiri-desert-keth|mawdun-quarry|artificer-s-orb": true,
-		"act-2--the-vastiri-desert-keth|mawdun-quarry|uncut-spirit-gem-level-5": true,
-		"act-2--the-vastiri-desert-keth|mawdun-mine|uncut-support-gem-level-2": true,
-		"act-2--the-vastiri-desert-keth|the-halani-gates|uncut-skill-gem-lvl-6": true,
-		"act-2--the-vastiri-desert-keth|the-halani-gates|exalted-orb": true,
-		"act-2--the-vastiri-desert-keth|mastodon-badlands|uncut-support-gem-lvl-2": true,
-		"act-2--the-vastiri-desert-keth|mastodon-badlands|regal-orb-plus-abyss-currency": true,
-		"act-2--the-vastiri-desert-keth|the-bone-pits|exalted-orb": true,
-		"act-2--the-vastiri-desert-keth|keth|magic-amulet": true,
-		"act-2--the-vastiri-desert-keth|keth|gemcutter-s-prism": true,
-		"act-2--the-vastiri-desert-keth|the-lost-city|jewel": true,
-		"act-2--the-vastiri-desert-keth|the-lost-city|orb-of-alchemy": true,
-		"act-2--the-vastiri-desert-keth|buried-shrines|uncut-support-gem": true,
-		"act-2--the-vastiri-desert-keth|buried-shrines|magic-ruby-sapphire-or-topaz-ring": true,
-		"act-2--the-vastiri-desert-keth|buried-shrines|lesser-jeweller-s-orb": true,
-		"act-2--the-vastiri-desert-keth|valley-of-the-titans|unique-item-plus-abyss-currency": true,
-		"act-2--the-vastiri-desert-keth|titan-grotto|lesser-rune": true,
-		"act-2--the-vastiri-desert-keth|titan-grotto|chance-shard": true,
-		"act-2--the-vastiri-desert-keth|deshar|artificer-s-orb": true,
-		"act-2--the-vastiri-desert-keth|deshar|lesser-rune": true,
-		"act-2--the-vastiri-desert-keth|path-of-mourning|uncut-support-gem-lvl-2": true,
-		"act-2--the-vastiri-desert-keth|the-spires-of-deshar|gemcutter-s-prism": true,
-		// Act 3 — keep permanents and major quest rewards
-		"act-3--the-jungles-machinarium|sandswept-marsh|uncut-skill-gem-lvl-9": true,
-		"act-3--the-jungles-machinarium|sandswept-marsh|magic-ring": true,
-		"act-3--the-jungles-machinarium|sandswept-marsh|lesser-jeweller-s-orb": true,
-		"act-3--the-jungles-machinarium|sandswept-marsh|uncut-support-gem-level-3": true,
-		"act-3--the-jungles-machinarium|jungle-ruins|2-weapon-set-passive-skill-points": true,
-		"act-3--the-jungles-machinarium|jungle-ruins|orb-of-alchemy": true,
-		"act-3--the-jungles-machinarium|infested-barrens|uncut-support-gem": true,
-		"act-3--the-jungles-machinarium|infested-barrens|exalted-orb": true,
-		"act-3--the-jungles-machinarium|chimeral-wetlands|uncut-skill-gem-lvl-9-plus-inscribed-ultimatum": true,
-		"act-3--the-jungles-machinarium|chimeral-wetlands|magic-amulet": true,
-		"act-3--the-jungles-machinarium|chimeral-wetlands|uncut-skill-gem-level-9": true,
-		"act-3--the-jungles-machinarium|jiquani-s-machinarium|artificer-s-orb": true,
-		"act-3--the-jungles-machinarium|jiquani-s-sanctum|exalted-orb": true,
-		"act-3--the-jungles-machinarium|the-matlan-waterways|rare-weapon": true,
-		"act-3--the-jungles-machinarium|the-matlan-waterways|uncut-spirit-gem-level-10": true,
-		"act-3--the-jungles-machinarium|the-drowned-city|uncut-support-gem-level-3": true,
-		"act-3--the-jungles-machinarium|apex-of-filth|vaal-orb": true,
-		"act-3--the-jungles-machinarium|temple-of-kopec|uncut-spirit-gem-level-11": true,
-		"act-3--the-jungles-machinarium|utzaal-past|inscribed-ultimatum": true,
-		"act-3--the-jungles-machinarium|utzaal-past|golden-idols": true,
-		"act-3--the-jungles-machinarium|utzaal-past|random-jewel-or-time-lost-jewel": true,
-		"act-3--the-jungles-machinarium|the-black-chambers-past|vaal-orb": true,
-		// Act 4 — keep permanents, ascendancies, unique item rewards
-		"act-4--karui-archipelago|isle-of-kin|uncut-skill-gem-lvl-11-12": true,
-		"act-4--karui-archipelago|isle-of-kin|uncut-support-gem-lvl-4": true,
-		"act-4--karui-archipelago|isle-of-kin|lesser-jeweller-s-orb": true,
-		"act-4--karui-archipelago|isle-of-kin|sulphite-infusion-buff": true,
-		"act-4--karui-archipelago|isle-of-kin|torn-map-piece": true,
-		"act-4--karui-archipelago|isle-of-kin|gemcutter-s-prism": true,
-		"act-4--karui-archipelago|volcanic-warrens|rare-ring-ruby-or-topaz": true,
-		"act-4--karui-archipelago|volcanic-warrens|uncut-support-gem-lvl-4": true,
-		"act-4--karui-archipelago|whakapanu-island|uncut-support-gem-lvl-4": true,
-		"act-4--karui-archipelago|whakapanu-island|torn-map-piece": true,
-		"act-4--karui-archipelago|whakapanu-island|artificer-s-orb": true,
-		"act-4--karui-archipelago|singing-caverns|magic-charm": true,
-		"act-4--karui-archipelago|abandoned-prison|exalted-orb": true,
-		"act-4--karui-archipelago|solitary-confinement|rune": true,
-		"act-4--karui-archipelago|kedge-bay|torn-map-piece": true,
-		"act-4--karui-archipelago|kedge-bay|lesser-jeweller-s-orb": true,
-		"act-4--karui-archipelago|kedge-bay|exalted-orb": true,
-		"act-4--karui-archipelago|shrike-island|torn-map-piece": true,
-		"act-4--karui-archipelago|shrike-island|uncut-support-gem-lvl-4": true,
-		"act-4--karui-archipelago|eye-of-hinekora|chaos-orb": true,
-		"act-4--karui-archipelago|halls-of-the-dead|random-items": true,
-		"act-4--karui-archipelago|arastas|3-regal-orbs": true,
-		"act-4--karui-archipelago|arastas|3-exalted-orbs": true,
-		"act-4--karui-archipelago|arastas|uncut-skill-gem-level-12": true,
-		"act-4--karui-archipelago|the-excavation|rare-amulet": true,
-		"act-4--karui-archipelago|ngakanu|greater-jeweller-s-orb-abyssal-depths": true,
-		"act-4--karui-archipelago|heart-of-the-tribe|random-loot": true,
-		"act-4--karui-archipelago|heart-of-the-tribe|uncut-spirit-gem-level-12": true,
-	},
 	notes: campaignDefaultNotes,
 	levels: campaignDefaultLevels,
 	actNotes: {},
-};
+	acts: {
+		"act-1--island-of-ogham": {
+			zones: {
+				clearfell: {
+					skipPickups: ["uncut-skill-gem-lvl-1", "orb-of-transmutation"],
+				},
+				"the-mud-burrow": {
+					skipPickups: ["orb-of-augmentation"],
+				},
+				"the-grelwood": {
+					skipPickups: [
+						"uncut-skill-gem-lvl-2",
+						"uncut-support-gem-plus-medium-life-mana-flasks",
+						"orb-of-transmutation",
+					],
+				},
+				"the-red-vale": {
+					skipPickups: ["weapon-upgrade-lvl-5", "uncut-skill-gem-level-2"],
+				},
+				"the-grim-tangle": {
+					skipPickups: ["uncut-support-gem", "uncut-skill-gem-level-3"],
+				},
+				"cemetery-of-the-eternals": {
+					skipPickups: ["iron-ring-or-lazuli-ring", "regal-orb"],
+				},
+				"tomb-of-the-consort": {
+					skipPickups: ["normal-amulet"],
+				},
+				"mausoleum-of-the-praetor": {
+					skipPickups: ["gold-plus-a-rare-item", "lesser-rune"],
+				},
+				"the-hunting-grounds": {
+					skipPickups: [
+						"uncut-skill-gem-lvl-4",
+						"uncut-support-gem-lvl-1",
+						"exalted-orb",
+					],
+				},
+				freythorn: {
+					skipPickups: ["uncut-support-gem-level-1"],
+				},
+				"ogham-farmlands": {
+					skipPickups: ["uncut-skill-gem-lvl-4", "uncut-skill-gem-level-4"],
+				},
+				"ogham-village": {
+					skipPickups: [
+						"artificer-s-orb-plus-lesser-blank-rune",
+						"uncut-support-gem",
+						"artificer-s-orb",
+					],
+				},
+				"the-manor-ramparts": {
+					skipPickups: ["uncut-skill-gem-level-5"],
+				},
+				"ogham-manor": {
+					skipPickups: ["orb-of-alchemy"],
+				},
+			},
+		},
+		"act-2--the-vastiri-desert-keth": {
+			zones: {
+				"vastiri-outskirts": {
+					skipPickups: ["uncut-support-gem-lvl-2", "exalted-orb"],
+				},
+				"mawdun-quarry": {
+					skipPickups: ["artificer-s-orb", "uncut-spirit-gem-level-5"],
+				},
+				"mawdun-mine": {
+					skipPickups: ["uncut-support-gem-level-2"],
+				},
+				"the-halani-gates": {
+					skipPickups: ["uncut-skill-gem-lvl-6", "exalted-orb"],
+				},
+				"mastodon-badlands": {
+					skipPickups: [
+						"uncut-support-gem-lvl-2",
+						"regal-orb-plus-abyss-currency",
+					],
+				},
+				"the-bone-pits": {
+					skipPickups: ["exalted-orb"],
+				},
+				keth: {
+					skipPickups: ["magic-amulet", "gemcutter-s-prism"],
+				},
+				"the-lost-city": {
+					skipPickups: ["jewel", "orb-of-alchemy"],
+				},
+				"buried-shrines": {
+					skipPickups: [
+						"uncut-support-gem",
+						"magic-ruby-sapphire-or-topaz-ring",
+						"lesser-jeweller-s-orb",
+					],
+				},
+				"valley-of-the-titans": {
+					skipPickups: ["unique-item-plus-abyss-currency"],
+				},
+				"titan-grotto": {
+					skipPickups: ["lesser-rune", "chance-shard"],
+				},
+				deshar: {
+					skipPickups: ["artificer-s-orb", "lesser-rune"],
+				},
+				"path-of-mourning": {
+					skipPickups: ["uncut-support-gem-lvl-2"],
+				},
+				"the-spires-of-deshar": {
+					skipPickups: ["gemcutter-s-prism"],
+				},
+			},
+		},
+		"act-3--the-jungles-machinarium": {
+			zones: {
+				"sandswept-marsh": {
+					skipPickups: [
+						"uncut-skill-gem-lvl-9",
+						"magic-ring",
+						"lesser-jeweller-s-orb",
+						"uncut-support-gem-level-3",
+					],
+				},
+				"jungle-ruins": {
+					skipPickups: ["2-weapon-set-passive-skill-points", "orb-of-alchemy"],
+				},
+				"infested-barrens": {
+					skipPickups: ["uncut-support-gem", "exalted-orb"],
+				},
+				"chimeral-wetlands": {
+					skipPickups: [
+						"uncut-skill-gem-lvl-9-plus-inscribed-ultimatum",
+						"magic-amulet",
+						"uncut-skill-gem-level-9",
+					],
+				},
+				"jiquani-s-machinarium": {
+					skipPickups: ["artificer-s-orb"],
+				},
+				"jiquani-s-sanctum": {
+					skipPickups: ["exalted-orb"],
+				},
+				"the-matlan-waterways": {
+					skipPickups: ["rare-weapon", "uncut-spirit-gem-level-10"],
+				},
+				"the-drowned-city": {
+					skipPickups: ["uncut-support-gem-level-3"],
+				},
+				"apex-of-filth": {
+					skipPickups: ["vaal-orb"],
+				},
+				"temple-of-kopec": {
+					skipPickups: ["uncut-spirit-gem-level-11"],
+				},
+				"utzaal-past": {
+					skipPickups: [
+						"inscribed-ultimatum",
+						"golden-idols",
+						"random-jewel-or-time-lost-jewel",
+					],
+				},
+				"the-black-chambers-past": {
+					skipPickups: ["vaal-orb"],
+				},
+			},
+		},
+		"act-4--karui-archipelago": {
+			zones: {
+				"isle-of-kin": {
+					skipPickups: [
+						"uncut-skill-gem-lvl-11-12",
+						"uncut-support-gem-lvl-4",
+						"lesser-jeweller-s-orb",
+						"sulphite-infusion-buff",
+						"torn-map-piece",
+						"gemcutter-s-prism",
+					],
+				},
+				"volcanic-warrens": {
+					skipPickups: ["rare-ring-ruby-or-topaz", "uncut-support-gem-lvl-4"],
+				},
+				"whakapanu-island": {
+					skipPickups: [
+						"uncut-support-gem-lvl-4",
+						"torn-map-piece",
+						"artificer-s-orb",
+					],
+				},
+				"singing-caverns": {
+					skipPickups: ["magic-charm"],
+				},
+				"abandoned-prison": {
+					skipPickups: ["exalted-orb"],
+				},
+				"solitary-confinement": {
+					skipPickups: ["rune"],
+				},
+				"kedge-bay": {
+					skipPickups: [
+						"torn-map-piece",
+						"lesser-jeweller-s-orb",
+						"exalted-orb",
+					],
+				},
+				"shrike-island": {
+					skipPickups: ["torn-map-piece", "uncut-support-gem-lvl-4"],
+				},
+				"eye-of-hinekora": {
+					skipPickups: ["chaos-orb"],
+				},
+				"halls-of-the-dead": {
+					skipPickups: ["random-items"],
+				},
+				arastas: {
+					skipPickups: [
+						"3-regal-orbs",
+						"3-exalted-orbs",
+						"uncut-skill-gem-level-12",
+					],
+				},
+				"the-excavation": {
+					skipPickups: ["rare-amulet"],
+				},
+				ngakanu: {
+					skipPickups: ["greater-jeweller-s-orb-abyssal-depths"],
+				},
+				"heart-of-the-tribe": {
+					skipPickups: ["random-loot", "uncut-spirit-gem-level-12"],
+				},
+			},
+		},
+	},
+});

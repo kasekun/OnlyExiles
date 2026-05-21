@@ -23,6 +23,9 @@ export interface Preset {
 	actNotes?: Record<string, string>;
 }
 
+export type { ActSpec, PresetSpec, ZoneSpec } from "./build-preset";
+export { buildPreset } from "./build-preset";
+
 export interface Filter {
 	id: string;
 	label: string;
