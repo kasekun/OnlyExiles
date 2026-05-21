@@ -14,7 +14,7 @@ import {
 	buildPresetState,
 	type Filter,
 	type Preset,
-} from "../data/templates";
+} from "../data/presets";
 import type { PlannerState } from "../lib/plannerState";
 import {
 	areaKey,

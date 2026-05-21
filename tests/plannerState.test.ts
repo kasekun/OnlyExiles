@@ -8,7 +8,7 @@ import {
 	FILTERS,
 	PRESETS,
 	validatePresets,
-} from "../app/data/templates/index";
+} from "../app/data/presets/index";
 import {
 	areaKey,
 	buildDefaultPlannerState,
