@@ -34,7 +34,7 @@ import {
 	usePlannerState,
 } from "~/composables/usePlannerState";
 import { DATA } from "~/data/campaign";
-import { FILTERS, PRESETS } from "~/data/templates/index";
+import { FILTERS, PRESETS } from "~/data/presets/index";
 
 const props = defineProps<{
 	guideId?: string;
