@@ -28,8 +28,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useGuideStore } from "~/composables/useGuideStore";
 import { useMarkdownExport } from "~/composables/useMarkdownExport";
-import { usePlannerState } from "~/composables/usePlannerState";
-import { TEMPLATES } from "~/data/templates";
+import {
+	areaKey,
+	pickKey,
+	usePlannerState,
+} from "~/composables/usePlannerState";
+import { DATA } from "~/data/campaign";
+import { FILTERS, PRESETS } from "~/data/templates/index";
 
 const props = defineProps<{
 	guideId?: string;
@@ -49,19 +54,34 @@ onMounted(() => {
 });
 
 const { width: windowWidth } = useWindowSize();
-// Templates button is hidden below 480px; overflow menu shows it instead
-const showTemplatesInOverflow = computed(
+// Presets button is hidden below 480px; overflow menu shows it instead
+const showPresetsInOverflow = computed(
 	() => mounted.value && windowWidth.value < 480,
 );
 
 // ── Computed state ──────────────────────────────────────────────────────────
 
-const skippedPickupCount = computed(
-	() => Object.values(state.skippedPickups).filter(Boolean).length,
-);
-const skippedZoneCount = computed(
-	() => Object.values(state.skippedZones).filter(Boolean).length,
-);
+const skippedPickupCount = computed(() => {
+	let n = 0;
+	for (const act of DATA) {
+		for (const area of act.areas) {
+			for (const pickup of area.pickups) {
+				if (state.skippedPickups[pickKey(act.id, area.id, pickup.id)]) n++;
+			}
+		}
+	}
+	return n;
+});
+
+const skippedZoneCount = computed(() => {
+	let n = 0;
+	for (const act of DATA) {
+		for (const area of act.areas) {
+			if (state.skippedZones[areaKey(act.id, area.id)]) n++;
+		}
+	}
+	return n;
+});
 
 const mode = computed(() => {
 	if (!props.guideId) return "scratch" as const;
@@ -257,41 +277,37 @@ function doFork() {
 	router.push("/");
 }
 
-// ── Template selection ───────────────────────────────────────────────────────
+// ── Preset and filter selection ──────────────────────────────────────────────
 
-const confirmTemplateId = ref<string | null>(null);
-const resetAllFieldsChecked = ref(false);
-const templateToConfirm = computed(
-	() => TEMPLATES.find((t) => t.id === confirmTemplateId.value) ?? null,
+const confirmPresetId = ref<string | null>(null);
+const presetToConfirm = computed(
+	() => PRESETS.find((preset) => preset.id === confirmPresetId.value) ?? null,
+);
+const hasRouteCustomizations = computed(
+	() =>
+		Object.values(state.notes).some((note) => note.trim()) ||
+		Object.values(state.levels).some((level) => level.trim()) ||
+		Object.values(state.actNotes).some((note) => note.trim()) ||
+		Object.values(state.actRegex).some((pattern) => pattern.trim()) ||
+		Object.values(state.areaOrder).some((order) => order.length > 0) ||
+		Object.values(state.skippedPickups).some(Boolean) ||
+		Object.values(state.skippedZones).some(Boolean),
 );
 
-function selectTemplate(id: string) {
-	const t = TEMPLATES.find((t) => t.id === id);
-	if (!t) return;
-	const hasContent =
-		t.notes !== undefined ||
-		t.levels !== undefined ||
-		t.skippedPickups !== undefined ||
-		t.skippedZones !== undefined;
-	const hasExistingContent =
-		Object.values(state.notes).some((n) => n.trim()) ||
-		Object.values(state.levels).some((v) => v.trim()) ||
-		Object.values(state.skippedPickups).some(Boolean) ||
-		Object.values(state.skippedZones).some(Boolean);
-	if (hasContent && hasExistingContent) {
-		resetAllFieldsChecked.value = false;
-		confirmTemplateId.value = id;
+function selectPreset(id: string) {
+	const preset = PRESETS.find((preset) => preset.id === id);
+	if (!preset) return;
+	if (hasRouteCustomizations.value) {
+		confirmPresetId.value = id;
 	} else {
-		context.applyTemplate(t);
+		context.applyPreset(preset);
 	}
 }
 
-function confirmApplyTemplate() {
-	if (!templateToConfirm.value) return;
-	context.applyTemplate(templateToConfirm.value, {
-		resetAllFields: resetAllFieldsChecked.value,
-	});
-	confirmTemplateId.value = null;
+function confirmApplyPreset() {
+	if (!presetToConfirm.value) return;
+	context.applyPreset(presetToConfirm.value);
+	confirmPresetId.value = null;
 }
 
 // ── Reset confirmation ────────────────────────────────────────────────────
@@ -311,32 +327,21 @@ function doReset() {
 <template>
   <!-- Confirmation dialogs -->
   <Teleport to="body">
-    <!-- Template confirmation -->
+    <!-- Preset confirmation -->
     <div
-      v-if="confirmTemplateId"
+      v-if="confirmPresetId"
       class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
-      @click.self="confirmTemplateId = null"
+      @click.self="confirmPresetId = null"
     >
       <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
         <p class="text-p-base text-p-text leading-[1.55]">
-          Applying <span class="text-p-amber font-semibold">{{ templateToConfirm?.label }}</span> will patch your current notes, recommended levels, and pickup skips. You can undo immediately after.
+          Applying <span class="text-p-amber font-semibold">{{ presetToConfirm?.label }}</span> replaces your current route with that preset. Your collapsed sections stay as-is, and you can undo immediately after.
         </p>
-        <label class="flex items-start gap-2.5 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            class="mt-[0.18rem] shrink-0 accent-[oklch(76%_0.158_65)]"
-            v-model="resetAllFieldsChecked"
-          />
-          <span class="text-p-sm text-p-text leading-[1.45]">
-            Reset all fields before applying
-            <span class="text-p-muted block text-p-xs leading-[1.4]">Clears notes, levels, skips, custom zone order, and regex, then applies the template cleanly.</span>
-          </span>
-        </label>
         <div class="flex items-center justify-end gap-2">
-          <button class="planner-btn-ghost" @click="confirmTemplateId = null">Cancel</button>
+          <button class="planner-btn-ghost" @click="confirmPresetId = null">Cancel</button>
           <button
             class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
-            @click="confirmApplyTemplate"
+            @click="confirmApplyPreset"
           >Apply</button>
         </div>
       </div>
@@ -422,30 +427,44 @@ function doReset() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <!-- Templates (hidden below 480px — shows in overflow instead) -->
-      <DropdownMenu>
+      <!-- Presets (hidden below 480px — shows in overflow instead) -->
+      <DropdownMenu v-if="!showPresetsInOverflow">
         <DropdownMenuTrigger as-child>
-          <button class="planner-btn-ghost max-[480px]:hidden data-[state=open]:[&_.chevron-dd]:rotate-180">
-            Templates
+          <button class="planner-btn-ghost data-[state=open]:[&_.chevron-dd]:rotate-180">
+            Presets
             <svg class="chevron-dd w-[10px] h-[6px] transition-transform duration-150 shrink-0" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,1 5,5 9,1"/></svg>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown min-w-[280px]" align="end">
+          <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Presets</div>
           <DropdownMenuItem
-            v-for="t in TEMPLATES"
-            :key="t.id"
+            v-for="preset in PRESETS"
+            :key="preset.id"
             class="planner-dd-item items-start"
-            @click="selectTemplate(t.id)"
+            @click="selectPreset(preset.id)"
           >
             <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-              <span class="text-p-sm text-p-text leading-snug">{{ t.label }}</span>
-              <span class="text-p-xs text-p-muted leading-[1.45]">{{ t.description }}</span>
+              <span class="text-p-sm text-p-text leading-snug">{{ preset.label }}</span>
+              <span class="text-p-xs text-p-muted leading-[1.45]">{{ preset.description }}</span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
+          <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Filters</div>
+          <DropdownMenuItem
+            v-for="filter in FILTERS"
+            :key="filter.id"
+            class="planner-dd-item items-start"
+            @click="context.applyFilter(filter)"
+          >
+            <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
+              <span class="text-p-sm text-p-text leading-snug">{{ filter.label }}</span>
+              <span class="text-p-xs text-p-muted leading-[1.45]">{{ filter.description }}</span>
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <!-- Overflow: always Copy Markdown + Reset; Templates added for narrow viewports -->
+      <!-- Overflow: always Copy Markdown + Reset; Presets added for narrow viewports -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <button class="planner-btn-ghost px-2" aria-label="More actions">
@@ -453,22 +472,36 @@ function doReset() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown" align="end">
-          <!-- Templates (mobile-only, gated by JS breakpoint so it actually hides) -->
-          <template v-if="showTemplatesInOverflow">
+          <!-- Presets (mobile-only, gated by JS breakpoint so it actually hides) -->
+          <template v-if="showPresetsInOverflow">
             <DropdownMenuSub>
               <DropdownMenuSubTrigger class="planner-dd-item text-p-sm text-p-text2">
-                Templates
+                Presets
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent class="planner-dropdown min-w-[280px]">
+                <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Presets</div>
                 <DropdownMenuItem
-                  v-for="t in TEMPLATES"
-                  :key="t.id"
+                  v-for="preset in PRESETS"
+                  :key="preset.id"
                   class="planner-dd-item items-start"
-                  @click="selectTemplate(t.id)"
+                  @click="selectPreset(preset.id)"
                 >
                   <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-                    <span class="text-p-sm text-p-text leading-snug">{{ t.label }}</span>
-                    <span class="text-p-xs text-p-muted leading-[1.45]">{{ t.description }}</span>
+                    <span class="text-p-sm text-p-text leading-snug">{{ preset.label }}</span>
+                    <span class="text-p-xs text-p-muted leading-[1.45]">{{ preset.description }}</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
+                <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Filters</div>
+                <DropdownMenuItem
+                  v-for="filter in FILTERS"
+                  :key="filter.id"
+                  class="planner-dd-item items-start"
+                  @click="context.applyFilter(filter)"
+                >
+                  <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
+                    <span class="text-p-sm text-p-text leading-snug">{{ filter.label }}</span>
+                    <span class="text-p-xs text-p-muted leading-[1.45]">{{ filter.description }}</span>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuSubContent>

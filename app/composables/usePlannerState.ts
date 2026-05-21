@@ -8,15 +8,20 @@ import {
 	watch,
 } from "vue";
 import { toast } from "vue-sonner";
-import { DATA } from "~/data/campaign";
-import type { Template } from "~/data/templates";
-import type { PlannerState } from "~/lib/plannerState";
+import { DATA } from "../data/campaign";
+import {
+	applyFilterToSkips,
+	buildPresetState,
+	type Filter,
+	type Preset,
+} from "../data/templates";
+import type { PlannerState } from "../lib/plannerState";
 import {
 	areaKey,
 	buildDefaultPlannerState,
 	normalizePlannerState,
 	pickKey,
-} from "~/lib/plannerState";
+} from "../lib/plannerState";
 
 export type { PlannerState };
 export { areaKey, buildDefaultPlannerState, normalizePlannerState, pickKey };
@@ -35,10 +40,8 @@ export interface PlannerContext {
 	expandActAreas(actId: string): void;
 	collapseActAreas(actId: string): void;
 	collapseEmptyAreas(actId: string): void;
-	applyTemplate(
-		template: Template,
-		options?: { resetAllFields?: boolean },
-	): void;
+	applyPreset(preset: Preset): void;
+	applyFilter(filter: Filter): void;
 }
 
 const PLANNER_CONTEXT_KEY: InjectionKey<PlannerContext> =
@@ -120,9 +123,13 @@ export function createPlannerContext(options: {
 		if (name !== undefined) guideName.value = name;
 	}
 
+	function cloneStateSnapshot(): PlannerState {
+		return JSON.parse(JSON.stringify(state)) as PlannerState;
+	}
+
 	function resetAll() {
 		if (readonlyRef.value) return;
-		const snapshot = JSON.parse(JSON.stringify(state)) as PlannerState;
+		const snapshot = cloneStateSnapshot();
 		const prevName = guideName.value;
 		if (options.persistenceKey && typeof window !== "undefined") {
 			try {
@@ -191,7 +198,7 @@ export function createPlannerContext(options: {
 			const allPickupsSkipped =
 				area.pickups.length === 0 ||
 				area.pickups.every(
-					(_, i) => !!state.skippedPickups[pickKey(actId, area.id, i)],
+					(p) => !!state.skippedPickups[pickKey(actId, area.id, p.id)],
 				);
 			if (isZoneSkipped || allPickupsSkipped) {
 				state.areasCollapsed[ak] = true;
@@ -199,92 +206,35 @@ export function createPlannerContext(options: {
 		});
 	}
 
-	function applyTemplate(
-		template: Template,
-		options?: { resetAllFields?: boolean },
-	) {
+	function applyPreset(preset: Preset) {
 		if (readonlyRef.value) return;
+		const snapshot = cloneStateSnapshot();
+		const actsCollapsed = { ...state.actsCollapsed };
+		const areasCollapsed = { ...state.areasCollapsed };
+		replaceState(buildPresetState(preset));
+		Object.assign(state.actsCollapsed, actsCollapsed);
+		Object.assign(state.areasCollapsed, areasCollapsed);
+		toast(`Applied "${preset.label}".`, {
+			action: {
+				label: "Undo",
+				onClick: () => replaceState(snapshot),
+			},
+		});
+	}
 
-		// Snapshot all template-owned fields so Undo fully restores pre-apply state.
-		const snapshot = {
-			skippedPickups: { ...state.skippedPickups },
-			skippedZones: { ...state.skippedZones },
-			levels: { ...state.levels },
-			areaOrder: JSON.parse(JSON.stringify(state.areaOrder)) as Record<
-				string,
-				string[]
-			>,
-			actRegex: { ...state.actRegex },
-			notes: { ...state.notes },
-			actNotes: { ...state.actNotes },
-		};
-
-		if (options?.resetAllFields) {
-			state.skippedPickups = {};
-			state.skippedZones = {};
-			state.levels = {};
-			state.areaOrder = {};
-			state.actRegex = {};
-			state.notes = {};
-			state.actNotes = {};
-		}
-
-		// Sparse patch: only fields the template explicitly provides are written.
-		if (template.skippedPickups !== undefined) {
-			for (const [k, v] of Object.entries(template.skippedPickups)) {
-				if (v) {
-					state.skippedPickups[k] = true;
-				} else {
-					delete state.skippedPickups[k];
-				}
-			}
-		}
-		if (template.skippedZones !== undefined) {
-			for (const [k, v] of Object.entries(template.skippedZones)) {
-				if (v) {
-					state.skippedZones[k] = true;
-				} else {
-					delete state.skippedZones[k];
-				}
-			}
-		}
-		if (template.levels !== undefined) {
-			for (const [k, v] of Object.entries(template.levels)) {
-				state.levels[k] = v;
-			}
-		}
-		if (template.areaOrder !== undefined) {
-			for (const [actId, order] of Object.entries(template.areaOrder)) {
-				state.areaOrder[actId] = order;
-			}
-		}
-		if (template.actRegex !== undefined) {
-			for (const [k, v] of Object.entries(template.actRegex)) {
-				state.actRegex[k] = v;
-			}
-		}
-		if (template.notes !== undefined) {
-			for (const [k, v] of Object.entries(template.notes)) {
-				state.notes[k] = v;
-			}
-		}
-		if (template.actNotes !== undefined) {
-			for (const [k, v] of Object.entries(template.actNotes)) {
-				state.actNotes[k] = v;
-			}
-		}
-
-		toast(`Applied "${template.label}".`, {
+	function applyFilter(filter: Filter) {
+		if (readonlyRef.value) return;
+		const snapshot = { ...state.skippedPickups };
+		state.skippedPickups = applyFilterToSkips(
+			state.skippedPickups,
+			filter,
+			DATA,
+		);
+		toast(`Applied "${filter.label}".`, {
 			action: {
 				label: "Undo",
 				onClick: () => {
-					state.skippedPickups = snapshot.skippedPickups;
-					state.skippedZones = snapshot.skippedZones;
-					state.levels = snapshot.levels;
-					state.areaOrder = snapshot.areaOrder;
-					state.actRegex = snapshot.actRegex;
-					state.notes = snapshot.notes;
-					state.actNotes = snapshot.actNotes;
+					state.skippedPickups = snapshot;
 				},
 			},
 		});
@@ -304,7 +254,8 @@ export function createPlannerContext(options: {
 		expandActAreas,
 		collapseActAreas,
 		collapseEmptyAreas,
-		applyTemplate,
+		applyPreset,
+		applyFilter,
 	};
 }
 

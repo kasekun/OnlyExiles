@@ -1,7 +1,22 @@
+export type PickupTag =
+	| "league-currency"
+	| "permanent"
+	| "skill-gem"
+	| "support-gem"
+	| "spirit-gem"
+	| "passive-points"
+	| "quest"
+	| "ascendancy"
+	| "consumable"
+	| "equipment"
+	| "crafting";
+
 export interface Pickup {
+	id: string;
 	item: string;
 	type: "Drop" | "Hand-In";
 	source: string;
+	tags: PickupTag[];
 }
 
 export interface Area {
@@ -29,6 +44,8 @@ export const DATA: Act[] = [
 				recLevel: "1",
 				pickups: [
 					{
+						id: "class-specific-skill-gem",
+						tags: ["skill-gem"],
 						item: "Class specific skill gem",
 						type: "Drop",
 						source: "unskippable chest",
@@ -41,16 +58,22 @@ export const DATA: Act[] = [
 				recLevel: "1",
 				pickups: [
 					{
+						id: "permanent-plus-10-percent-cold-resistance",
+						tags: ["permanent"],
 						item: "Permanent +10% Cold Resistance",
 						type: "Drop",
 						source: "Kill Beira of the Rotten Pack",
 					},
 					{
+						id: "uncut-skill-gem-lvl-1",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 1)",
 						type: "Drop",
 						source: "Open the Mysterious Campsite Chest / Abandoned Stash",
 					},
 					{
+						id: "orb-of-transmutation",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Transmutation",
 						type: "Drop",
 						source: "League event",
@@ -63,16 +86,22 @@ export const DATA: Act[] = [
 				recLevel: "1",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-2",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 2)",
 						type: "Drop",
 						source: "Kill The Devourer",
 					},
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem",
 						type: "Hand-In",
 						source: "Talk to the NPC after Mud Burrow boss quest completion",
 					},
 					{
+						id: "orb-of-augmentation",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Augmentation",
 						type: "Drop",
 						source: "League event",
@@ -85,16 +114,22 @@ export const DATA: Act[] = [
 				recLevel: "2",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-2",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 2)",
 						type: "Drop",
 						source: "Kill The Brambleghast",
 					},
 					{
+						id: "uncut-support-gem-plus-medium-life-mana-flasks",
+						tags: ["support-gem", "consumable"],
 						item: "Uncut Support Gem + Medium Life/Mana Flasks",
 						type: "Drop",
 						source: "Kill Areagne and loot her Witch Hut cauldron",
 					},
 					{
+						id: "orb-of-transmutation",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Transmutation",
 						type: "Drop",
 						source: "League event",
@@ -107,16 +142,22 @@ export const DATA: Act[] = [
 				recLevel: "2",
 				pickups: [
 					{
+						id: "weapon-upgrade-lvl-5",
+						tags: ["equipment"],
 						item: "Weapon upgrade (Lvl 5)",
 						type: "Drop",
 						source: "Refined Arms lootable",
 					},
 					{
+						id: "uncut-skill-gem-lvl-3",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 3)",
 						type: "Drop",
 						source: "Kill The Rust King",
 					},
 					{
+						id: "uncut-skill-gem-level-2",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 2)",
 						type: "Drop",
 						source: "League event",
@@ -129,11 +170,15 @@ export const DATA: Act[] = [
 				recLevel: "4",
 				pickups: [
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem",
 						type: "Drop",
 						source: "Kill The Rotten Druid",
 					},
 					{
+						id: "uncut-skill-gem-level-3",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 3)",
 						type: "Drop",
 						source: "League event",
@@ -146,16 +191,22 @@ export const DATA: Act[] = [
 				recLevel: "5",
 				pickups: [
 					{
+						id: "iron-ring-or-lazuli-ring",
+						tags: ["equipment"],
 						item: "Iron Ring or Lazuli Ring",
 						type: "Drop",
 						source: "Ancient Ruins Sarcophagus",
 					},
 					{
+						id: "uncut-skill-gem-lvl-3-plus-uncut-support-gem",
+						tags: ["skill-gem", "support-gem"],
 						item: "Uncut Skill Gem (Lvl 3) + Uncut Support Gem",
 						type: "Drop",
 						source: "Kill Count Lachlann",
 					},
 					{
+						id: "regal-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Regal Orb",
 						type: "Drop",
 						source: "League event",
@@ -168,11 +219,15 @@ export const DATA: Act[] = [
 				recLevel: "6",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-1",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 1)",
 						type: "Drop",
 						source: "Open the Haunted Treasure",
 					},
 					{
+						id: "normal-amulet",
+						tags: ["league-currency", "equipment"],
 						item: "Normal Amulet",
 						type: "Drop",
 						source: "League event",
@@ -185,11 +240,15 @@ export const DATA: Act[] = [
 				recLevel: "7",
 				pickups: [
 					{
+						id: "gold-plus-a-rare-item",
+						tags: ["equipment", "crafting"],
 						item: "Gold + a Rare item",
 						type: "Drop",
 						source: "Open the Forgotten Riches chest",
 					},
 					{
+						id: "lesser-rune",
+						tags: ["league-currency", "equipment"],
 						item: "Lesser Rune",
 						type: "Drop",
 						source: "League event",
@@ -202,21 +261,29 @@ export const DATA: Act[] = [
 				recLevel: "7",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Drop",
 						source: "Kill The Crowbell",
 					},
 					{
+						id: "uncut-skill-gem-lvl-4",
+						tags: ["skill-gem", "quest"],
 						item: "Uncut Skill Gem (Lvl 4)",
 						type: "Drop",
 						source: "Complete the Ritual Site encounter",
 					},
 					{
+						id: "uncut-support-gem-lvl-1",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 1)",
 						type: "Drop",
 						source: "Complete the Dryadic Ritual",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -229,17 +296,23 @@ export const DATA: Act[] = [
 				recLevel: "8",
 				pickups: [
 					{
+						id: "permanent-plus-30-to-maximum-spirit-plus-uncut-spirit-gem-lvl-4",
+						tags: ["permanent", "spirit-gem"],
 						item: "Permanent +30 to Maximum Spirit + Uncut Spirit Gem (Lvl 4)",
 						type: "Drop",
 						source:
 							"Summon and kill The King in the Mists by completing Ritual encounters",
 					},
 					{
+						id: "elemental-charm",
+						tags: ["consumable", "quest"],
 						item: "Elemental Charm",
 						type: "Hand-In",
 						source: "Complete Ominous Altars and speak to Finn in town",
 					},
 					{
+						id: "uncut-support-gem-level-1",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Level 1)",
 						type: "Drop",
 						source: "League event",
@@ -252,16 +325,22 @@ export const DATA: Act[] = [
 				recLevel: "9",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Find Una's Lute in her hut and hand it in to her",
 					},
 					{
+						id: "uncut-skill-gem-lvl-4",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 4)",
 						type: "Drop",
 						source: "Crop circle - kill Vargir the Feral Mutt",
 					},
 					{
+						id: "uncut-skill-gem-level-4",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 4)",
 						type: "Drop",
 						source: "League event",
@@ -274,26 +353,36 @@ export const DATA: Act[] = [
 				recLevel: "10",
 				pickups: [
 					{
+						id: "salvage-bench-unlock",
+						tags: ["quest"],
 						item: "Salvage Bench Unlock",
 						type: "Hand-In",
 						source: "Find Smithing Tools and return them to Renly",
 					},
 					{
+						id: "artificer-s-orb-plus-lesser-blank-rune",
+						tags: ["equipment", "crafting"],
 						item: "Artificer's Orb + Lesser Blank Rune",
 						type: "Drop",
 						source: "Blacksmith's Chest (near Smithing tools)",
 					},
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem",
 						type: "Drop",
 						source: "Kill The Executioner",
 					},
 					{
+						id: "uncut-skill-gem-lvl-5",
+						tags: ["skill-gem", "quest"],
 						item: "Uncut Skill Gem (Lvl 5)",
 						type: "Hand-In",
 						source: "Save Leitis and speak to her in town",
 					},
 					{
+						id: "artificer-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "League event",
@@ -306,11 +395,15 @@ export const DATA: Act[] = [
 				recLevel: "11",
 				pickups: [
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem",
 						type: "Drop",
 						source: "Complete The Gallows encounter",
 					},
 					{
+						id: "uncut-skill-gem-level-5",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 5)",
 						type: "Drop",
 						source: "League event",
@@ -323,11 +416,15 @@ export const DATA: Act[] = [
 				recLevel: "12",
 				pickups: [
 					{
+						id: "permanent-plus-20-to-maximum-life",
+						tags: ["permanent"],
 						item: "Permanent +20 to Maximum Life",
 						type: "Drop",
 						source: "Activate the Psalm of Madness and kill Candlemass",
 					},
 					{
+						id: "orb-of-alchemy",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Alchemy",
 						type: "Drop",
 						source: "League event",
@@ -346,16 +443,22 @@ export const DATA: Act[] = [
 				recLevel: "13",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Drop",
 						source: "Devastated camp yellow chest",
 					},
 					{
+						id: "uncut-skill-gem-lvl-5",
+						tags: ["skill-gem", "quest"],
 						item: "Uncut Skill Gem (Lvl 5)",
 						type: "Hand-In",
 						source: "Kill Rathbreaker and speak to Zarka in town",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -368,11 +471,15 @@ export const DATA: Act[] = [
 				recLevel: "14",
 				pickups: [
 					{
+						id: "artificer-s-orb",
+						tags: ["crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "Open the Faridun War Cache",
 					},
 					{
+						id: "uncut-spirit-gem-level-5",
+						tags: ["league-currency", "spirit-gem"],
 						item: "Uncut Spirit Gem (Level 5)",
 						type: "Drop",
 						source: "League event",
@@ -385,6 +492,8 @@ export const DATA: Act[] = [
 				recLevel: "15.5",
 				pickups: [
 					{
+						id: "uncut-support-gem-level-2",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Level 2)",
 						type: "Drop",
 						source: "League event",
@@ -397,16 +506,22 @@ export const DATA: Act[] = [
 				recLevel: "16.5",
 				pickups: [
 					{
+						id: "ascendancy-trial-key-djinn-barya",
+						tags: ["ascendancy"],
 						item: "Ascendancy Trial Key (Djinn Barya)",
 						type: "Drop",
 						source: "Kill Balbala",
 					},
 					{
+						id: "uncut-skill-gem-lvl-6",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 6)",
 						type: "Drop",
 						source: "Open the Bell Chest",
 					},
 					{
+						id: "artificer-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "League event",
@@ -419,16 +534,22 @@ export const DATA: Act[] = [
 				recLevel: "17.5",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-7",
+						tags: ["skill-gem", "quest"],
 						item: "Uncut Skill Gem (Lvl 7)",
 						type: "Hand-In",
 						source: "Speak to Zarka after chasing Jamanra",
 					},
 					{
+						id: "uncut-skill-gem-lvl-6",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 6)",
 						type: "Drop",
 						source: "Kill L'im the Impaler",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -441,6 +562,8 @@ export const DATA: Act[] = [
 				recLevel: "18",
 				pickups: [
 					{
+						id: "first-two-ascendancy-points",
+						tags: ["ascendancy", "quest"],
 						item: "First two Ascendancy points",
 						type: "Hand-In",
 						source: "Complete the Trial",
@@ -453,12 +576,16 @@ export const DATA: Act[] = [
 				recLevel: "18.5",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Drop",
 						source: "Open the Effigy",
 					},
 					{
-						item: "Regal Orb+ Abyss Currency",
+						id: "regal-orb-plus-abyss-currency",
+						tags: ["league-currency", "crafting"],
+						item: "Regal Orb + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -470,11 +597,15 @@ export const DATA: Act[] = [
 				recLevel: "19",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Hand-In",
 						source: "Kill Iktab + Ekbab speak to Zarka",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -487,16 +618,22 @@ export const DATA: Act[] = [
 				recLevel: "19.5",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Drop",
 						source: "Kill Kabala, Constrictor Queen",
 					},
 					{
+						id: "magic-amulet",
+						tags: ["equipment"],
 						item: "Magic Amulet",
 						type: "Drop",
 						source: "Open the Abandoned Prayer",
 					},
 					{
+						id: "gemcutter-s-prism",
+						tags: ["league-currency"],
 						item: "Gemcutter's Prism",
 						type: "Drop",
 						source: "League event",
@@ -509,16 +646,22 @@ export const DATA: Act[] = [
 				recLevel: "20.5",
 				pickups: [
 					{
+						id: "jewel",
+						tags: ["quest"],
 						item: "Jewel",
 						type: "Drop",
 						source: "Kill beetle - The Ninth Treasure of Keth",
 					},
 					{
+						id: "uncut-spirit-gem-lvl-6-7",
+						tags: ["spirit-gem"],
 						item: "Uncut Spirit Gem (Lvl 6/7)",
 						type: "Drop",
 						source: "Loot the Golden Tomb",
 					},
 					{
+						id: "orb-of-alchemy",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Alchemy",
 						type: "Drop",
 						source: "League event",
@@ -531,21 +674,29 @@ export const DATA: Act[] = [
 				recLevel: "21.5",
 				pickups: [
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem",
 						type: "Drop",
 						source: "Open the Suspicious Sarcophagus",
 					},
 					{
+						id: "magic-ruby-sapphire-or-topaz-ring",
+						tags: ["equipment"],
 						item: "Magic Ruby, Sapphire or Topaz Ring",
 						type: "Drop",
 						source: "Choose an Offering at the Elemental Shrine",
 					},
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Hand-In",
 						source: "Obtain The Essence of Water, speak to Zarka",
 					},
 					{
+						id: "lesser-jeweller-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Lesser Jeweller's Orb",
 						type: "Drop",
 						source: "League event",
@@ -558,13 +709,17 @@ export const DATA: Act[] = [
 				recLevel: "22.5",
 				pickups: [
 					{
+						id: "permanent-plus-1-charm-slot-and-choice-of-buff",
+						tags: ["permanent", "consumable", "quest"],
 						item: "Permanent +1 Charm Slot and Choice of Buff",
 						type: "Hand-In",
 						source:
 							'Deliver the Sun and Kabala Clan Relics to the Altar ("Ancient Vows" quest)',
 					},
 					{
-						item: "Unique Item+ Abyss Currency",
+						id: "unique-item-plus-abyss-currency",
+						tags: ["league-currency", "equipment", "crafting"],
+						item: "Unique Item + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -576,16 +731,22 @@ export const DATA: Act[] = [
 				recLevel: "23.5",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Hand-In",
 						source: "Kill Zalmarath for Flame Ruby, speak to Zarka",
 					},
 					{
+						id: "lesser-rune",
+						tags: ["equipment", "quest"],
 						item: "Lesser Rune",
 						type: "Drop",
 						source: "Find the Titan's Sword",
 					},
 					{
+						id: "chance-shard",
+						tags: ["league-currency", "crafting"],
 						item: "Chance Shard",
 						type: "Drop",
 						source: "League event",
@@ -598,16 +759,22 @@ export const DATA: Act[] = [
 				recLevel: "24",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Locate Final Letter and deliver to Shambrin",
 					},
 					{
+						id: "artificer-s-orb",
+						tags: ["crafting", "quest"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "Find the Unremembered Skeleton",
 					},
 					{
+						id: "lesser-rune",
+						tags: ["league-currency", "equipment"],
 						item: "Lesser Rune",
 						type: "Drop",
 						source: "League event",
@@ -620,6 +787,8 @@ export const DATA: Act[] = [
 				recLevel: "25",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-2",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Drop",
 						source: "Open the Hushed Urn",
@@ -632,11 +801,15 @@ export const DATA: Act[] = [
 				recLevel: "25",
 				pickups: [
 					{
+						id: "permanent-plus-10-percent-lightning-resistance",
+						tags: ["permanent"],
 						item: "Permanent +10% Lightning Resistance",
 						type: "Drop",
 						source: "Click on the Sisters of Garukhan Shrine",
 					},
 					{
+						id: "gemcutter-s-prism",
+						tags: ["league-currency"],
 						item: "Gemcutter's Prism",
 						type: "Drop",
 						source: "League event",
@@ -667,21 +840,29 @@ export const DATA: Act[] = [
 				recLevel: "28.5",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-9",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 9)",
 						type: "Drop",
 						source: "Foul Ritual - kill Rootdredge",
 					},
 					{
+						id: "magic-ring",
+						tags: ["equipment"],
 						item: "Magic Ring",
 						type: "Drop",
 						source: "Hanging tree - loot corpses",
 					},
 					{
+						id: "lesser-jeweller-s-orb",
+						tags: ["crafting"],
 						item: "Lesser Jeweller's Orb",
 						type: "Drop",
 						source: "Basket at the Orok Campfire [first run only]",
 					},
 					{
+						id: "uncut-support-gem-level-3",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Level 3)",
 						type: "Drop",
 						source: "League event",
@@ -694,16 +875,22 @@ export const DATA: Act[] = [
 				recLevel: "28.5",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Drop",
 						source: "Kill Mighty Silverfist",
 					},
 					{
+						id: "rare-belt",
+						tags: ["quest"],
 						item: "Rare Belt",
 						type: "Hand-In",
 						source: "Interact with Jungle Grave and speak to Servi",
 					},
 					{
+						id: "orb-of-alchemy",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Alchemy",
 						type: "Drop",
 						source: "League event",
@@ -716,12 +903,16 @@ export const DATA: Act[] = [
 				recLevel: "28.5",
 				pickups: [
 					{
+						id: "permanent-buff-choice-plus-artificer-s-orb",
+						tags: ["permanent", "crafting", "quest"],
 						item: "Permanent Buff Choice + Artificer's Orb",
 						type: "Hand-In",
 						source: "Find the Venom Vial and deliver it to Servi",
 					},
 					{
-						item: "Magic Ring+ Abyss Currency",
+						id: "magic-ring-plus-abyss-currency",
+						tags: ["league-currency", "equipment", "crafting"],
+						item: "Magic Ring + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -733,11 +924,15 @@ export const DATA: Act[] = [
 				recLevel: "30",
 				pickups: [
 					{
+						id: "uncut-support-gem",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem",
 						type: "Drop",
 						source: "Clear the Cave Location encounter",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -750,16 +945,22 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "permanent-plus-30-maximum-spirit-plus-uncut-spirit-gem-lvl-10",
+						tags: ["permanent", "spirit-gem"],
 						item: "Permanent +30 Maximum Spirit + Uncut Spirit Gem (Lvl 10)",
 						type: "Drop",
 						source: "Kill Ignagduk, The Bog Witch",
 					},
 					{
+						id: "charm-thawing-staunching-antidote-dousing-or-grounding",
+						tags: ["consumable", "quest"],
 						item: "Charm (Thawing, Staunching, Antidote, Dousing, or Grounding)",
 						type: "Hand-In",
 						source: "Return Ignagduk's Ghastly Spear to Servi",
 					},
 					{
+						id: "rune",
+						tags: ["league-currency", "equipment"],
 						item: "Rune",
 						type: "Drop",
 						source: "League event",
@@ -772,6 +973,8 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "first-four-ascendancy-points",
+						tags: ["ascendancy", "quest"],
 						item: "First four Ascendancy points",
 						type: "Hand-In",
 						source: "Complete the Trial",
@@ -784,21 +987,29 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-9-plus-inscribed-ultimatum",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 9) + Inscribed Ultimatum",
 						type: "Drop",
 						source: "Kill Xyclucian",
 					},
 					{
+						id: "2-ascendancy-points",
+						tags: ["ascendancy", "quest"],
 						item: "2 Ascendancy Points",
 						type: "Drop",
 						source: "Complete the Trial of Chaos",
 					},
 					{
+						id: "magic-amulet",
+						tags: ["equipment"],
 						item: "Magic Amulet",
 						type: "Drop",
 						source: "Kill the Rare Monster at the Toxic Bloom",
 					},
 					{
+						id: "uncut-skill-gem-level-9",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 9)",
 						type: "Drop",
 						source: "League event",
@@ -811,11 +1022,15 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "permanent-plus-10-percent-fire-resistance",
+						tags: ["permanent"],
 						item: "Permanent +10% Fire Resistance",
 						type: "Drop",
 						source: "Kill Blackjaw, The Remnant",
 					},
 					{
+						id: "artificer-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "League event",
@@ -828,11 +1043,15 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "free-vaal-orb-usage",
+						tags: ["crafting"],
 						item: 'Free "Vaal Orb" usage',
 						type: "Drop",
 						source: "Interact with the Vaal Pedestal in the zone",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -845,11 +1064,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "rare-weapon",
+						tags: ["equipment"],
 						item: "Rare Weapon",
 						type: "Drop",
 						source: "Kill the rare enemy at Narag's Hut",
 					},
 					{
+						id: "uncut-spirit-gem-level-10",
+						tags: ["league-currency", "spirit-gem"],
 						item: "Uncut Spirit Gem (Level 10)",
 						type: "Drop",
 						source: "League event",
@@ -862,6 +1085,8 @@ export const DATA: Act[] = [
 				recLevel: "36",
 				pickups: [
 					{
+						id: "uncut-support-gem-level-3",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Level 3)",
 						type: "Drop",
 						source: "League event",
@@ -874,12 +1099,16 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "reforging-bench-unlock-plus-uncut-skill-gem-lvl-10-plus-artificer-s-orb",
+						tags: ["skill-gem", "crafting", "quest"],
 						item: "Reforging Bench Unlock + Uncut Skill Gem (Lvl 10) + Artificer's Orb",
 						type: "Hand-In",
 						source:
 							"Kill Mektul, The Forgemaster, and speak to Oswald back in town",
 					},
 					{
+						id: "unique-item",
+						tags: ["league-currency", "equipment"],
 						item: "Unique Item",
 						type: "Drop",
 						source: "League event",
@@ -892,12 +1121,16 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "life-and-mana-flask",
+						tags: ["consumable", "quest"],
 						item: "Life and Mana Flask",
 						type: "Hand-In",
 						source:
 							"Place Red, Green, and Blue Mushrooms into Cauldron Keeper's cauldron",
 					},
 					{
+						id: "vaal-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Vaal Orb",
 						type: "Drop",
 						source: "League event",
@@ -910,6 +1143,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "uncut-spirit-gem-level-11",
+						tags: ["league-currency", "spirit-gem"],
 						item: "Uncut Spirit Gem (Level 11)",
 						type: "Drop",
 						source: "League event",
@@ -922,16 +1157,22 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "inscribed-ultimatum",
+						tags: ["quest"],
 						item: "Inscribed Ultimatum",
 						type: "Drop",
 						source: "Interact with the Chaos Statue",
 					},
 					{
+						id: "golden-idols",
+						tags: ["crafting"],
 						item: "Golden Idols",
 						type: "Drop",
 						source: "Interact with Peculiar Fortunes",
 					},
 					{
+						id: "random-jewel-or-time-lost-jewel",
+						tags: ["league-currency"],
 						item: "Random Jewel or Time-Lost Jewel",
 						type: "Drop",
 						source: "League event",
@@ -944,12 +1185,16 @@ export const DATA: Act[] = [
 				recLevel: "32",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source:
 							"Farm a Sacrificial Heart (here or in Utzaal) and complete the Blood Sacrifice at the altar",
 					},
 					{
+						id: "uncut-skill-gem-level-11",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 11)",
 						type: "Drop",
 						source: "League event",
@@ -962,6 +1207,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "vaal-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Vaal Orb",
 						type: "Drop",
 						source: "League event",
@@ -980,11 +1227,15 @@ export const DATA: Act[] = [
 				recLevel: "40",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points-plus-uncut-skill-gem-lvl-13",
+						tags: ["passive-points", "skill-gem", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points + Uncut Skill Gem (Lvl 13)",
 						type: "Hand-In",
 						source: "Kill Omniphobia, return to Captain Hartlin",
 					},
 					{
+						id: "orb-of-alchemy",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Alchemy",
 						type: "Drop",
 						source: "League event",
@@ -997,36 +1248,50 @@ export const DATA: Act[] = [
 				recLevel: "41",
 				pickups: [
 					{
+						id: "blank-greater-rune",
+						tags: ["equipment"],
 						item: "Blank Greater Rune",
 						type: "Drop",
 						source: "Kill The Blind Beast",
 					},
 					{
+						id: "uncut-skill-gem-lvl-11-12",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 11/12)",
 						type: "Drop",
 						source: "Beast Pen",
 					},
 					{
+						id: "uncut-support-gem-lvl-4",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 4)",
 						type: "Drop",
 						source: "Beast Pen",
 					},
 					{
+						id: "lesser-jeweller-s-orb",
+						tags: ["crafting"],
 						item: "Lesser Jeweller's Orb",
 						type: "Drop",
 						source: "Fossilised Formation",
 					},
 					{
+						id: "sulphite-infusion-buff",
+						tags: ["quest"],
 						item: "Sulphite Infusion Buff",
 						type: "Drop",
 						source: "Voltaxic Spire",
 					},
 					{
+						id: "torn-map-piece",
+						tags: ["quest"],
 						item: "Torn Map Piece",
 						type: "Drop",
 						source: "Flayed Sailor",
 					},
 					{
+						id: "gemcutter-s-prism",
+						tags: ["league-currency"],
 						item: "Gemcutter's Prism",
 						type: "Drop",
 						source: "League event",
@@ -1039,11 +1304,15 @@ export const DATA: Act[] = [
 				recLevel: "41",
 				pickups: [
 					{
+						id: "rare-ring-ruby-or-topaz",
+						tags: ["equipment"],
 						item: "Rare Ring (Ruby or Topaz)",
 						type: "Drop",
 						source: "Kill rare golems in Volcanic Nest Secret",
 					},
 					{
+						id: "uncut-support-gem-lvl-4",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Lvl 4)",
 						type: "Drop",
 						source: "League event",
@@ -1056,21 +1325,29 @@ export const DATA: Act[] = [
 				recLevel: "42",
 				pickups: [
 					{
+						id: "uncut-support-gem-lvl-4",
+						tags: ["support-gem"],
 						item: "Uncut Support Gem (Lvl 4)",
 						type: "Drop",
 						source: "Kill rare crab in Crabshell Cavern",
 					},
 					{
+						id: "torn-map-piece",
+						tags: ["quest"],
 						item: "Torn Map Piece",
 						type: "Drop",
 						source: "Petrified Pirate",
 					},
 					{
+						id: "choice-of-uncut-skill-gem-lvl-11-spirit-gem-lvl-11-or-support-gem-lvl-4",
+						tags: ["skill-gem", "support-gem", "spirit-gem", "quest"],
 						item: "Choice of Uncut Skill Gem (Lvl 11), Spirit Gem (Lvl 11), or Support Gem (Lvl 4)",
 						type: "Hand-In",
 						source: "Return Shark Fin (from Great White One) to Kaimana",
 					},
 					{
+						id: "artificer-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "League event",
@@ -1083,11 +1360,15 @@ export const DATA: Act[] = [
 				recLevel: "42",
 				pickups: [
 					{
+						id: "rare-pearlescent-amulet",
+						tags: ["equipment", "quest"],
 						item: "Rare Pearlescent Amulet",
 						type: "Hand-In",
 						source: "Return Humming Pearl (from Beckoning Clam) to Rog",
 					},
 					{
+						id: "magic-charm",
+						tags: ["league-currency", "consumable"],
 						item: "Magic Charm",
 						type: "Drop",
 						source: "League event",
@@ -1100,16 +1381,22 @@ export const DATA: Act[] = [
 				recLevel: "42",
 				pickups: [
 					{
+						id: "permanent-plus-30-percent-life-mana-flask-recovery",
+						tags: ["permanent", "consumable"],
 						item: "Permanent +30% Life/Mana Flask Recovery",
 						type: "Drop",
 						source: "Interact with the Goddess of Justice statue",
 					},
 					{
+						id: "room-full-of-gear",
+						tags: ["quest"],
 						item: "Room full of gear",
 						type: "Drop",
 						source: "Unlock The Armoury",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -1122,6 +1409,8 @@ export const DATA: Act[] = [
 				recLevel: "42",
 				pickups: [
 					{
+						id: "rune",
+						tags: ["league-currency", "equipment"],
 						item: "Rune",
 						type: "Drop",
 						source: "League event",
@@ -1134,16 +1423,22 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "torn-map-piece",
+						tags: ["quest"],
 						item: "Torn Map Piece",
 						type: "Drop",
 						source: "Open Dead Man's Chest",
 					},
 					{
+						id: "lesser-jeweller-s-orb",
+						tags: ["crafting"],
 						item: "Lesser Jeweller's Orb",
 						type: "Drop",
 						source: "Open chest in Abandoned Ship",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -1156,16 +1451,22 @@ export const DATA: Act[] = [
 				recLevel: "43",
 				pickups: [
 					{
+						id: "torn-map-piece",
+						tags: ["quest"],
 						item: "Torn Map Piece",
 						type: "Drop",
 						source: "Interact with Corpse Nest",
 					},
 					{
+						id: "plunder-s-point-expedition-mechanic-unlock",
+						tags: ["quest"],
 						item: "Plunder's Point (Expedition mechanic) Unlock",
 						type: "Hand-In",
 						source: "Return all four Torn Map Pieces to Makoru",
 					},
 					{
+						id: "uncut-support-gem-lvl-4",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Lvl 4)",
 						type: "Drop",
 						source: "League event",
@@ -1178,11 +1479,15 @@ export const DATA: Act[] = [
 				recLevel: "44",
 				pickups: [
 					{
+						id: "permanent-plus-5-percent-maximum-mana",
+						tags: ["permanent"],
 						item: "Permanent +5% Maximum Mana",
 						type: "Drop",
 						source: "Pay Respects at the Silent Hall (Navali's Rest)",
 					},
 					{
+						id: "chaos-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Chaos Orb",
 						type: "Drop",
 						source: "League event",
@@ -1195,17 +1500,23 @@ export const DATA: Act[] = [
 				recLevel: "44",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Defeat Yama the White and speak to Navali",
 					},
 					{
+						id: "3x-permanent-attributes-or-resistances",
+						tags: ["permanent", "quest"],
 						item: "3x Permanent Attributes or Resistances",
 						type: "Drop",
 						source:
 							"Complete the 3 Ancestral Tattoo trials (Tawhoa, Tasalio, Ngamahu)",
 					},
 					{
+						id: "random-items",
+						tags: ["league-currency"],
 						item: "Random Items*",
 						type: "Drop",
 						source: "League event",
@@ -1218,16 +1529,22 @@ export const DATA: Act[] = [
 				recLevel: "46",
 				pickups: [
 					{
+						id: "3-regal-orbs",
+						tags: ["crafting"],
 						item: "3 Regal Orbs",
 						type: "Drop",
 						source: "Morning bell in the Town Square",
 					},
 					{
+						id: "3-exalted-orbs",
+						tags: ["crafting"],
 						item: "3 Exalted Orbs",
 						type: "Drop",
 						source: "Evening bell at the Cliffside",
 					},
 					{
+						id: "uncut-skill-gem-level-12",
+						tags: ["league-currency", "skill-gem"],
 						item: "Uncut Skill Gem (Level 12)",
 						type: "Drop",
 						source: "League event",
@@ -1240,6 +1557,8 @@ export const DATA: Act[] = [
 				recLevel: "46",
 				pickups: [
 					{
+						id: "rare-amulet",
+						tags: ["league-currency", "equipment"],
 						item: "Rare Amulet",
 						type: "Drop",
 						source: "League event",
@@ -1252,6 +1571,8 @@ export const DATA: Act[] = [
 				recLevel: "47",
 				pickups: [
 					{
+						id: "greater-jeweller-s-orb-abyssal-depths",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Jeweller's Orb, Abyssal Depths",
 						type: "Drop",
 						source: "League event",
@@ -1264,11 +1585,15 @@ export const DATA: Act[] = [
 				recLevel: "47",
 				pickups: [
 					{
+						id: "random-loot",
+						tags: ["quest"],
 						item: "Random loot",
 						type: "Drop",
 						source: "Open the Meeting House",
 					},
 					{
+						id: "uncut-spirit-gem-level-12",
+						tags: ["league-currency", "spirit-gem"],
 						item: "Uncut Spirit Gem (Level 12)",
 						type: "Drop",
 						source: "League event",
@@ -1287,6 +1612,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "uncut-support-gem-level-4",
+						tags: ["league-currency", "support-gem"],
 						item: "Uncut Support Gem (Level 4)",
 						type: "Drop",
 						source: "League event",
@@ -1299,7 +1626,9 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
-						item: "Exalted Orb+ Abyss Currency",
+						id: "exalted-orb-plus-abyss-currency",
+						tags: ["league-currency", "crafting"],
+						item: "Exalted Orb + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1311,11 +1640,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "random-omen",
+						tags: ["quest"],
 						item: "Random Omen",
 						type: "Drop",
 						source: "Interact with Omen Altars",
 					},
 					{
+						id: "greater-orb-of-transmutation",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Transmutation",
 						type: "Drop",
 						source: "League event",
@@ -1328,11 +1661,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "armourer-s-scrap-magic-and-rare-loot",
+						tags: ["crafting"],
 						item: "Armourer's Scrap, magic and rare loot",
 						type: "Drop",
 						source: "Defeat Sigbert and Godwin at the Psalm of Blood",
 					},
 					{
+						id: "greater-rune",
+						tags: ["league-currency", "equipment"],
 						item: "Greater Rune",
 						type: "Drop",
 						source: "League event",
@@ -1345,11 +1682,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Defeat Oswin, consume Warden's Ledger",
 					},
 					{
+						id: "greater-orb-of-augmentation",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Augmentation",
 						type: "Drop",
 						source: "League event",
@@ -1362,6 +1703,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "artificer-s-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Artificer's Orb",
 						type: "Drop",
 						source: "League event",
@@ -1374,16 +1717,22 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Defeat Akthi and Anundr, speak to Risu",
 					},
 					{
+						id: "permanent-plus-5-percent-maximum-life",
+						tags: ["permanent"],
 						item: "Permanent +5% Maximum Life",
 						type: "Drop",
 						source: "Interact with the Molten Shrine in the zone",
 					},
 					{
+						id: "gemcutter-s-prism",
+						tags: ["league-currency"],
 						item: "Gemcutter's Prism",
 						type: "Drop",
 						source: "League event",
@@ -1396,6 +1745,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "orb-of-alchemy",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Alchemy",
 						type: "Drop",
 						source: "League event",
@@ -1408,12 +1759,16 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "2-out-of-3-reward-rare-ring-rare-amulet-rare-jewel",
+						tags: ["equipment"],
 						item: "2 out of 3 reward: Rare Ring, Rare Amulet, Rare Jewel",
 						type: "Drop",
 						source:
 							"Place Yoon's Barya and Rangeen's Barya into opposing altars",
 					},
 					{
+						id: "orb-of-chance",
+						tags: ["league-currency", "crafting"],
 						item: "Orb of Chance",
 						type: "Drop",
 						source: "League event",
@@ -1426,7 +1781,9 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
-						item: "Greater Orb of Augmentation+ Abyss Currency",
+						id: "greater-orb-of-augmentation-plus-abyss-currency",
+						tags: ["league-currency", "crafting"],
+						item: "Greater Orb of Augmentation + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1438,11 +1795,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "choice-of-1-of-7-buffs",
+						tags: ["quest"],
 						item: "Choice of 1 of 7 Buffs",
 						type: "Drop",
 						source: "Interact with Orbala's Pillar in Qimah",
 					},
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -1455,11 +1816,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "random-currency-item",
+						tags: ["crafting", "quest"],
 						item: "Random currency item",
 						type: "Hand-In",
 						source: "Fill Sacred Wells with Vial of Sacred Water",
 					},
 					{
+						id: "greater-orb-of-transmutation",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Transmutation",
 						type: "Drop",
 						source: "League event",
@@ -1472,11 +1837,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "uncut-skill-gem-lvl-14",
+						tags: ["skill-gem"],
 						item: "Uncut Skill Gem (Lvl 14)",
 						type: "Drop",
 						source: "Interact with the Ancient Monument",
 					},
 					{
+						id: "rare-belt",
+						tags: ["league-currency"],
 						item: "Rare Belt",
 						type: "Drop",
 						source: "League event",
@@ -1489,12 +1858,16 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "permanent-plus-40-maximum-spirit-plus-uncut-spirit-gem-lvl-14",
+						tags: ["permanent", "spirit-gem"],
 						item: "Permanent +40 Maximum Spirit + Uncut Spirit Gem (Lvl 14)",
 						type: "Drop",
 						source: "Kill Lythara, The Wayward Spear in Kriar Village",
 					},
 					{
-						item: "Greater Rune+ Abyss Currency",
+						id: "greater-rune-plus-abyss-currency",
+						tags: ["league-currency", "equipment", "crafting"],
+						item: "Greater Rune + Abyss Currency",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1506,6 +1879,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "greater-orb-of-augmentation",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Augmentation",
 						type: "Drop",
 						source: "League event",
@@ -1518,12 +1893,16 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source:
 							"Kill The Abominable Yeti in the Howling Caves, speak to Hilda",
 					},
 					{
+						id: "chaos-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Chaos Orb",
 						type: "Drop",
 						source: "League event",
@@ -1536,11 +1915,15 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "choose-unique-item",
+						tags: ["equipment", "quest"],
 						item: "Choose Unique Item",
 						type: "Hand-In",
 						source: "Talk to Elder Madox in Kriar Peaks",
 					},
 					{
+						id: "greater-orb-of-transmutation",
+						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Transmutation",
 						type: "Drop",
 						source: "League event",
@@ -1553,6 +1936,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "exalted-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
@@ -1565,6 +1950,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "vaal-orb",
+						tags: ["league-currency", "crafting"],
 						item: "Vaal Orb",
 						type: "Drop",
 						source: "League event",
@@ -1577,6 +1964,8 @@ export const DATA: Act[] = [
 				recLevel: "0",
 				pickups: [
 					{
+						id: "2-weapon-set-passive-skill-points",
+						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source:
@@ -1587,3 +1976,31 @@ export const DATA: Act[] = [
 		],
 	},
 ];
+
+export function validateCampaignData(data: Act[]): string[] {
+	const errors: string[] = [];
+	for (const act of data) {
+		for (const area of act.areas) {
+			const seen = new Set<string>();
+			for (const pickup of area.pickups) {
+				if (!pickup.id) {
+					errors.push(
+						`${act.id}|${area.id}: pickup has empty id (item: "${pickup.item}")`,
+					);
+				} else if (seen.has(pickup.id)) {
+					errors.push(
+						`${act.id}|${area.id}: duplicate pickup id "${pickup.id}"`,
+					);
+				} else {
+					seen.add(pickup.id);
+				}
+				if (pickup.tags.length === 0) {
+					errors.push(
+						`${act.id}|${area.id}|${pickup.id}: pickup has no tags (item: "${pickup.item}")`,
+					);
+				}
+			}
+		}
+	}
+	return errors;
+}

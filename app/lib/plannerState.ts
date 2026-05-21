@@ -14,8 +14,12 @@ export function areaKey(actId: string, areaId: string): string {
 	return `${actId}|${areaId}`;
 }
 
-export function pickKey(actId: string, areaId: string, i: number): string {
-	return `${actId}|${areaId}|${i}`;
+export function pickKey(
+	actId: string,
+	areaId: string,
+	pickupId: string,
+): string {
+	return `${actId}|${areaId}|${pickupId}`;
 }
 
 export function buildDefaultPlannerState(): PlannerState {

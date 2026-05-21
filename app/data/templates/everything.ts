@@ -2,13 +2,12 @@ import {
 	campaignDefaultLevels,
 	campaignDefaultNotes,
 } from "./campaign-default";
-import type { Template } from "./index";
+import type { Preset } from "./index";
 
-export const EVERYTHING: Template = {
+export const EVERYTHING: Preset = {
 	id: "everything",
 	label: "I want everything",
 	description: "Pick up every reward in every zone.",
-	skippedPickups: {},
 	notes: campaignDefaultNotes,
 	levels: campaignDefaultLevels,
 	actNotes: {},

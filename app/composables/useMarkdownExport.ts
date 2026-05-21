@@ -1,13 +1,13 @@
-import type { PlannerState } from "~/composables/usePlannerState";
+import { DATA } from "../data/campaign";
+import type { PlannerState } from "./usePlannerState";
 import {
 	areaKey,
 	getOrderedAreas,
 	pickKey,
 	usePlannerState,
-} from "~/composables/usePlannerState";
-import { DATA } from "~/data/campaign";
+} from "./usePlannerState";
 
-function buildMarkdown(
+export function buildMarkdown(
 	state: PlannerState,
 	guideName: string,
 	includeEmptyZones: boolean,
@@ -34,7 +34,7 @@ function buildMarkdown(
 			if (includeEmptyZones) return true;
 			if (area.pickups.length === 0) return false;
 			return area.pickups.some(
-				(_, i) => !state.skippedPickups[pickKey(act.id, areaId, i)],
+				(p) => !state.skippedPickups[pickKey(act.id, areaId, p.id)],
 			);
 		});
 
@@ -55,7 +55,7 @@ function buildMarkdown(
 			const note = state.notes[akey];
 
 			const visiblePickups = area.pickups.filter(
-				(_, i) => !state.skippedPickups[pickKey(act.id, areaId, i)],
+				(p) => !state.skippedPickups[pickKey(act.id, areaId, p.id)],
 			);
 
 			const levelStr = level && level !== "0" ? ` · Char level: ${level}` : "";
@@ -104,15 +104,7 @@ export function useMarkdownExport() {
 		version?: string;
 	}): Promise<boolean> {
 		try {
-			await navigator.clipboard.writeText(
-				buildMarkdown(
-					state,
-					guideName.value,
-					options.includeEmptyZones,
-					options.omitSkippedZones ?? false,
-					options.version,
-				),
-			);
+			await navigator.clipboard.writeText(getMarkdown(options));
 			return true;
 		} catch {
 			return false;

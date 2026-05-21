@@ -1,13 +1,19 @@
 import { describe, expect, it } from "bun:test";
-import { DATA } from "../app/data/campaign";
+import { buildMarkdown } from "../app/composables/useMarkdownExport";
+import { DATA, validateCampaignData } from "../app/data/campaign";
 import {
+	applyFilterToSkips,
+	buildPresetState,
 	CAMPAIGN_DEFAULT,
-	TEMPLATES,
-	validateTemplates,
+	FILTERS,
+	PRESETS,
+	validatePresets,
 } from "../app/data/templates/index";
 import {
+	areaKey,
 	buildDefaultPlannerState,
 	normalizePlannerState,
+	pickKey,
 } from "../app/lib/plannerState";
 
 // ---------------------------------------------------------------------------
@@ -110,23 +116,29 @@ describe("normalizePlannerState", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Template validation
+// Campaign and preset validation
 // ---------------------------------------------------------------------------
 
-describe("validateTemplates", () => {
-	it("returns no errors for valid built-in templates against campaign data", () => {
-		const errors = validateTemplates(TEMPLATES, DATA);
+describe("validateCampaignData", () => {
+	it("campaign data has no duplicate pickup IDs, empty IDs, or untagged pickups", () => {
+		expect(validateCampaignData(DATA)).toEqual([]);
+	});
+});
+
+describe("validatePresets", () => {
+	it("returns no errors for valid built-in presets against campaign data", () => {
+		const errors = validatePresets(PRESETS, DATA);
 		expect(errors).toEqual([]);
 	});
 
 	it("catches unknown actId in skippedPickups", () => {
-		const errors = validateTemplates(
+		const errors = validatePresets(
 			[
 				{
 					id: "t",
 					label: "T",
 					description: "",
-					skippedPickups: { "nonexistent-act|zone|0": true },
+					skippedPickups: { "nonexistent-act|zone|pickup": true },
 				},
 			],
 			DATA,
@@ -135,33 +147,32 @@ describe("validateTemplates", () => {
 		expect(errors[0]).toContain("nonexistent-act");
 	});
 
-	it("catches out-of-range pickup index", () => {
+	it("catches unknown pickup id", () => {
 		const firstAct = DATA[0];
 		if (!firstAct) throw new Error("DATA has no acts");
 		const firstArea = firstAct.areas[0];
 		if (!firstArea) throw new Error("first act has no areas");
-		const badIdx = firstArea.pickups.length;
-		const errors = validateTemplates(
+		const errors = validatePresets(
 			[
 				{
 					id: "t",
 					label: "T",
 					description: "",
 					skippedPickups: {
-						[`${firstAct.id}|${firstArea.id}|${badIdx}`]: true,
+						[`${firstAct.id}|${firstArea.id}|missing-pickup`]: true,
 					},
 				},
 			],
 			DATA,
 		);
 		expect(errors.length).toBeGreaterThan(0);
-		expect(errors[0]).toContain("out of range");
+		expect(errors[0]).toContain("unknown pickupId");
 	});
 
 	it("catches unknown areaId in skippedZones", () => {
 		const firstAct = DATA[0];
 		if (!firstAct) throw new Error("DATA has no acts");
-		const errors = validateTemplates(
+		const errors = validatePresets(
 			[
 				{
 					id: "t",
@@ -180,7 +191,7 @@ describe("validateTemplates", () => {
 		if (!firstAct) throw new Error("DATA has no acts");
 		const firstAreaId = firstAct.areas[0]?.id;
 		if (!firstAreaId) throw new Error("first act has no areas");
-		const errors = validateTemplates(
+		const errors = validatePresets(
 			[
 				{
 					id: "t",
@@ -197,7 +208,7 @@ describe("validateTemplates", () => {
 });
 
 // ---------------------------------------------------------------------------
-// CAMPAIGN_DEFAULT template structure
+// CAMPAIGN_DEFAULT preset structure
 // ---------------------------------------------------------------------------
 
 describe("CAMPAIGN_DEFAULT", () => {
@@ -217,133 +228,171 @@ describe("CAMPAIGN_DEFAULT", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Sparse template application logic
+// buildPresetState
 // ---------------------------------------------------------------------------
 
-describe("sparse template patch logic", () => {
-	it("absent template fields leave state untouched", () => {
-		const state = buildDefaultPlannerState();
-		state.notes["act-1|zone-1"] = "user note";
-		state.levels["act-1|zone-1"] = "7";
-
-		const patch = { skippedPickups: { "act-1|zone-1|0": true } };
-		for (const [k, v] of Object.entries(patch.skippedPickups)) {
-			if (v) state.skippedPickups[k] = true;
-			else delete state.skippedPickups[k];
-		}
-
-		expect(state.notes["act-1|zone-1"]).toBe("user note");
-		expect(state.levels["act-1|zone-1"]).toBe("7");
-		expect(state.skippedPickups["act-1|zone-1|0"]).toBe(true);
-	});
-
-	it("explicit false in skippedPickups clears the skip", () => {
-		const state = buildDefaultPlannerState();
-		state.skippedPickups["act-1|zone-1|0"] = true;
-
-		const patch: Record<string, boolean> = { "act-1|zone-1|0": false };
-		for (const [k, v] of Object.entries(patch)) {
-			if (v) state.skippedPickups[k] = true;
-			else delete state.skippedPickups[k];
-		}
-
-		expect(state.skippedPickups["act-1|zone-1|0"]).toBeUndefined();
-	});
-
-	it("reset-all-fields mode clears everything before applying patch", () => {
-		const state = buildDefaultPlannerState();
-		state.notes["act-1|zone-1"] = "user note";
-		state.levels["act-1|zone-1"] = "7";
-		state.skippedPickups["act-1|zone-1|0"] = true;
-		state.skippedZones["act-1|zone-1"] = true;
-
-		Object.assign(state, {
-			skippedPickups: {},
-			skippedZones: {},
-			levels: {},
-			areaOrder: {},
-			actRegex: {},
-			notes: {},
-			actNotes: {},
+describe("buildPresetState", () => {
+	it("starts absent preset-owned fields as blank objects", () => {
+		const state = buildPresetState({
+			id: "blank",
+			label: "Blank",
+			description: "",
 		});
-
-		const patch = { notes: { "act-1|zone-1": "template note" } };
-		for (const [k, v] of Object.entries(patch.notes)) {
-			state.notes[k] = v;
-		}
-
-		expect(state.notes["act-1|zone-1"]).toBe("template note");
-		expect(state.levels["act-1|zone-1"]).toBeUndefined();
-		expect(state.skippedPickups["act-1|zone-1|0"]).toBeUndefined();
-		expect(state.skippedZones["act-1|zone-1"]).toBeUndefined();
-	});
-});
-
-// ---------------------------------------------------------------------------
-// Reset-to-blank behavior
-// ---------------------------------------------------------------------------
-
-describe("reset-to-blank", () => {
-	it("Object.assign with fresh defaults blanks a populated state", () => {
-		const state = buildDefaultPlannerState();
-		state.notes.x = "something";
-		state.levels.x = "5";
-		state.skippedPickups["x|0"] = true;
-		state.skippedZones.x = true;
-
-		Object.assign(state, buildDefaultPlannerState());
-
-		expect(state.notes).toEqual({});
-		expect(state.levels).toEqual({});
 		expect(state.skippedPickups).toEqual({});
 		expect(state.skippedZones).toEqual({});
+		expect(state.levels).toEqual({});
+		expect(state.areaOrder).toEqual({});
+		expect(state.actRegex).toEqual({});
+		expect(state.notes).toEqual({});
+		expect(state.actNotes).toEqual({});
+	});
+
+	it("applies preset fields into a full planner state", () => {
+		const state = buildPresetState({
+			id: "custom",
+			label: "Custom",
+			description: "",
+			skippedPickups: { "act|area|pickup": true },
+			skippedZones: { "act|area": true },
+			levels: { "act|area": "12" },
+			areaOrder: { act: ["area"] },
+			actRegex: { act: "regex" },
+			notes: { "act|area": "note" },
+			actNotes: { act: "act note" },
+		});
+		expect(state.skippedPickups["act|area|pickup"]).toBe(true);
+		expect(state.skippedZones["act|area"]).toBe(true);
+		expect(state.levels["act|area"]).toBe("12");
+		expect(state.areaOrder.act).toEqual(["area"]);
+		expect(state.actRegex.act).toBe("regex");
+		expect(state.notes["act|area"]).toBe("note");
+		expect(state.actNotes.act).toBe("act note");
+	});
+
+	it("leaves collapse state blank for the composable to restore", () => {
+		const state = buildPresetState(CAMPAIGN_DEFAULT);
+		expect(state.actsCollapsed).toEqual({});
+		expect(state.areasCollapsed).toEqual({});
 	});
 });
 
 // ---------------------------------------------------------------------------
-// Markdown export: skipped-zone filtering
+// applyFilterToSkips
 // ---------------------------------------------------------------------------
 
-describe("skipped-zone markdown filtering", () => {
-	it("omitSkippedZones removes skipped zones from visible areas", () => {
+describe("applyFilterToSkips", () => {
+	it("skipTags marks matching pickups and preserves existing manual skips", () => {
 		const firstAct = DATA[0];
-		if (!firstAct) throw new Error("DATA has no acts");
-		const firstArea = firstAct.areas[0];
-		if (!firstArea) throw new Error("first act has no areas");
-		const akey = `${firstAct.id}|${firstArea.id}`;
+		const firstArea = firstAct?.areas[0];
+		const firstPickup = firstArea?.pickups[0];
+		if (!firstAct || !firstArea || !firstPickup)
+			throw new Error("missing data");
+		const manualKey = pickKey(firstAct.id, firstArea.id, firstPickup.id);
+		const filter = FILTERS.find((f) => f.id === "skip-league-currency");
+		if (!filter) throw new Error("missing filter");
 
-		const state = buildDefaultPlannerState();
-		state.skippedZones[akey] = true;
+		const next = applyFilterToSkips({ [manualKey]: true }, filter, DATA);
 
-		const omitSkippedZones = true;
-		const visible = firstAct.areas.filter((area) => {
-			if (omitSkippedZones && state.skippedZones[`${firstAct.id}|${area.id}`]) {
-				return false;
+		expect(next[manualKey]).toBe(true);
+		for (const act of DATA) {
+			for (const area of act.areas) {
+				for (const pickup of area.pickups) {
+					const key = pickKey(act.id, area.id, pickup.id);
+					if (pickup.tags.includes("league-currency")) {
+						expect(next[key]).toBe(true);
+					} else if (key !== manualKey) {
+						expect(next[key]).toBeUndefined();
+					}
+				}
 			}
-			return true;
-		});
-
-		expect(visible.find((a) => a.id === firstArea.id)).toBeUndefined();
+		}
 	});
 
-	it("skipped zones remain visible when omitSkippedZones is false", () => {
+	it("keepOnlyTags marks non-matching pickups additively", () => {
+		const firstAct = DATA[0];
+		const firstArea = firstAct?.areas[0];
+		const firstPickup = firstArea?.pickups[0];
+		if (!firstAct || !firstArea || !firstPickup)
+			throw new Error("missing data");
+		const manualKey = pickKey(firstAct.id, firstArea.id, firstPickup.id);
+
+		const next = applyFilterToSkips(
+			{ [manualKey]: true },
+			{
+				id: "permanent-only",
+				label: "Permanent only",
+				description: "",
+				keepOnlyTags: ["permanent"],
+			},
+			DATA,
+		);
+
+		for (const act of DATA) {
+			for (const area of act.areas) {
+				for (const pickup of area.pickups) {
+					const key = pickKey(act.id, area.id, pickup.id);
+					if (!pickup.tags.includes("permanent") || key === manualKey) {
+						expect(next[key]).toBe(true);
+					} else {
+						expect(next[key]).toBeUndefined();
+					}
+				}
+			}
+		}
+	});
+
+	it("is idempotent when the same filter is applied twice", () => {
+		const filter = FILTERS.find((f) => f.id === "skip-league-currency");
+		if (!filter) throw new Error("missing filter");
+		const once = applyFilterToSkips({}, filter, DATA);
+		const twice = applyFilterToSkips(once, filter, DATA);
+		expect(twice).toEqual(once);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Markdown export
+// ---------------------------------------------------------------------------
+
+describe("buildMarkdown", () => {
+	it("omits skipped zones when requested", () => {
 		const firstAct = DATA[0];
 		if (!firstAct) throw new Error("DATA has no acts");
 		const firstArea = firstAct.areas[0];
 		if (!firstArea) throw new Error("first act has no areas");
-		const akey = `${firstAct.id}|${firstArea.id}`;
-
 		const state = buildDefaultPlannerState();
-		state.skippedZones[akey] = true;
+		state.skippedZones[areaKey(firstAct.id, firstArea.id)] = true;
 
-		const omitSkippedZones = false;
-		const visible = firstAct.areas.filter((area) => {
-			if (omitSkippedZones && state.skippedZones[`${firstAct.id}|${area.id}`]) {
-				return false;
-			}
-			return true;
-		});
+		const markdown = buildMarkdown(state, "Test guide", true, true);
 
-		expect(visible.find((a) => a.id === firstArea.id)).toBeDefined();
+		expect(markdown).not.toContain(`### ${firstArea.name}`);
+	});
+
+	it("keeps skipped zones visible when omission is disabled", () => {
+		const firstAct = DATA[0];
+		if (!firstAct) throw new Error("DATA has no acts");
+		const firstArea = firstAct.areas[0];
+		if (!firstArea) throw new Error("first act has no areas");
+		const state = buildDefaultPlannerState();
+		state.skippedZones[areaKey(firstAct.id, firstArea.id)] = true;
+
+		const markdown = buildMarkdown(state, "Test guide", true, false);
+
+		expect(markdown).toContain(`### ${firstArea.name}`);
+	});
+
+	it("omits skipped pickups by stable pickup ID", () => {
+		const firstAct = DATA[0];
+		const firstArea = firstAct?.areas[0];
+		const firstPickup = firstArea?.pickups[0];
+		if (!firstAct || !firstArea || !firstPickup)
+			throw new Error("missing data");
+		const state = buildDefaultPlannerState();
+		state.skippedPickups[pickKey(firstAct.id, firstArea.id, firstPickup.id)] =
+			true;
+
+		const markdown = buildMarkdown(state, "Test guide", true, false);
+
+		expect(markdown).not.toContain(firstPickup.item);
 	});
 });

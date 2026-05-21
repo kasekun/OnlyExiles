@@ -1,23 +1,36 @@
-import type { Act } from "../campaign";
+import {
+	buildDefaultPlannerState,
+	type PlannerState,
+	pickKey,
+} from "../../lib/plannerState";
+import type { Act, PickupTag } from "../campaign";
 
-export interface Template {
+export interface Preset {
 	id: string;
 	label: string;
 	description: string;
-	/** Sparse: absent = no change. Explicit false clears a skip. */
-	skippedPickups?: Record<string, boolean>;
-	/** Sparse: absent = no change. Explicit false clears a zone skip. */
-	skippedZones?: Record<string, boolean>;
-	/** Sparse: absent = no change. Explicit empty string clears a level. */
+	/**
+	 * Only `true` values are meaningful because presets always reset before
+	 * applying. Runtime planner state remains wider so UI toggles can write false.
+	 */
+	skippedPickups?: Record<string, true>;
+	/** Only `true` values are meaningful; presets are full replacement states. */
+	skippedZones?: Record<string, true>;
 	levels?: Record<string, string>;
-	/** Sparse: absent = no change. Replaces order only for the listed act IDs. */
 	areaOrder?: Record<string, string[]>;
-	/** Sparse: absent = no change. Explicit empty string clears a regex. */
 	actRegex?: Record<string, string>;
-	/** Sparse: absent = no change. Explicit empty string clears a note. */
 	notes?: Record<string, string>;
-	/** Sparse: absent = no change. Explicit empty string clears an act note. */
 	actNotes?: Record<string, string>;
+}
+
+export interface Filter {
+	id: string;
+	label: string;
+	description: string;
+	/** Skip any pickup whose tags overlap with skipTags. */
+	skipTags?: PickupTag[];
+	/** Skip any pickup that has none of the keepOnlyTags. */
+	keepOnlyTags?: PickupTag[];
 }
 
 export { CAMPAIGN_DEFAULT } from "./campaign-default";
@@ -30,48 +43,107 @@ import { ESSENTIALS } from "./essentials";
 import { EVERYTHING } from "./everything";
 import { SPEEDRUN } from "./speedrun";
 
-/** User-facing templates shown in the Templates dropdown. */
-export const TEMPLATES: Template[] = [
+/** User-facing presets shown in the Presets dropdown. */
+export const PRESETS: Preset[] = [
 	CAMPAIGN_DEFAULT,
 	EVERYTHING,
 	ESSENTIALS,
 	SPEEDRUN,
 ];
 
-/**
- * Validates templates against campaign data. Returns an array of error strings.
- * Run in dev or as part of the verification pass to catch campaign/template drift.
- */
-export function validateTemplates(
-	templates: Template[],
+/** Additive filters shown in the Filters section of the preset menu. */
+export const FILTERS: Filter[] = [
+	{
+		id: "skip-league-currency",
+		label: "Skip league rewards",
+		description: "Adds skips for every league-event reward.",
+		skipTags: ["league-currency"],
+	},
+	{
+		id: "quest-items-only",
+		label: "Quest items only",
+		description:
+			"Adds skips for everything except permanents, quest items, ascendancy rewards, and passive points.",
+		keepOnlyTags: ["quest", "permanent", "ascendancy", "passive-points"],
+	},
+];
+
+/** Converts a Preset into a full PlannerState. Collapse state is intentionally blank. */
+export function buildPresetState(preset: Preset): PlannerState {
+	const state = buildDefaultPlannerState();
+	if (preset.skippedPickups)
+		Object.assign(state.skippedPickups, preset.skippedPickups);
+	if (preset.skippedZones)
+		Object.assign(state.skippedZones, preset.skippedZones);
+	if (preset.levels) Object.assign(state.levels, preset.levels);
+	if (preset.areaOrder) Object.assign(state.areaOrder, preset.areaOrder);
+	if (preset.actRegex) Object.assign(state.actRegex, preset.actRegex);
+	if (preset.notes) Object.assign(state.notes, preset.notes);
+	if (preset.actNotes) Object.assign(state.actNotes, preset.actNotes);
+	return state;
+}
+
+/** Returns a new skippedPickups map with the filter applied additively. */
+export function applyFilterToSkips(
+	current: Record<string, boolean>,
+	filter: Filter,
 	data: Act[],
-): string[] {
+): Record<string, boolean> {
+	const next = { ...current };
+	const hasAnyTag = (pickupTags: PickupTag[], tags: PickupTag[]): boolean =>
+		tags.some((tag) => pickupTags.includes(tag));
+
+	for (const act of data) {
+		for (const area of act.areas) {
+			for (const pickup of area.pickups) {
+				const hasSkippedTag = filter.skipTags
+					? hasAnyTag(pickup.tags, filter.skipTags)
+					: false;
+				const isMissingKeepOnlyTag = filter.keepOnlyTags
+					? !hasAnyTag(pickup.tags, filter.keepOnlyTags)
+					: false;
+				const shouldSkip = hasSkippedTag || isMissingKeepOnlyTag;
+				if (shouldSkip) next[pickKey(act.id, area.id, pickup.id)] = true;
+			}
+		}
+	}
+	return next;
+}
+
+/**
+ * Validates presets against campaign data. Returns an array of error strings.
+ * Run in dev or as part of the verification pass to catch campaign/preset drift.
+ */
+export function validatePresets(presets: Preset[], data: Act[]): string[] {
 	const errors: string[] = [];
 	const actIds = new Set(data.map((a) => a.id));
 	const areaIdsByAct = new Map<string, Set<string>>();
-	const pickupCountByArea = new Map<string, number>();
+	const pickupIdsByArea = new Map<string, Set<string>>();
 
 	for (const act of data) {
 		areaIdsByAct.set(act.id, new Set(act.areas.map((a) => a.id)));
 		for (const area of act.areas) {
-			pickupCountByArea.set(`${act.id}|${area.id}`, area.pickups.length);
+			pickupIdsByArea.set(
+				`${act.id}|${area.id}`,
+				new Set(area.pickups.map((pickup) => pickup.id)),
+			);
 		}
 	}
 
-	for (const t of templates) {
-		const label = `Template "${t.id}"`;
+	for (const preset of presets) {
+		const label = `Preset "${preset.id}"`;
 
-		for (const key of Object.keys(t.skippedPickups ?? {})) {
+		for (const key of Object.keys(preset.skippedPickups ?? {})) {
 			const parts = key.split("|");
 			if (parts.length !== 3) {
 				errors.push(
-					`${label}: skippedPickups key "${key}" must be actId|areaId|index`,
+					`${label}: skippedPickups key "${key}" must be actId|areaId|pickupId`,
 				);
 				continue;
 			}
 			const actId = parts[0] as string;
 			const areaId = parts[1] as string;
-			const idxStr = parts[2] as string;
+			const pickupId = parts[2] as string;
 			if (!actIds.has(actId)) {
 				errors.push(`${label}: skippedPickups unknown actId "${actId}"`);
 			} else if (!areaIdsByAct.get(actId)?.has(areaId)) {
@@ -79,17 +151,16 @@ export function validateTemplates(
 					`${label}: skippedPickups unknown areaId "${areaId}" in "${actId}"`,
 				);
 			} else {
-				const count = pickupCountByArea.get(`${actId}|${areaId}`) ?? 0;
-				const idx = parseInt(idxStr, 10);
-				if (Number.isNaN(idx) || idx < 0 || idx >= count) {
+				const pickupIds = pickupIdsByArea.get(`${actId}|${areaId}`);
+				if (!pickupIds?.has(pickupId)) {
 					errors.push(
-						`${label}: skippedPickups index ${idxStr} out of range for "${actId}|${areaId}" (0–${count - 1})`,
+						`${label}: skippedPickups unknown pickupId "${pickupId}" in "${actId}|${areaId}"`,
 					);
 				}
 			}
 		}
 
-		for (const key of Object.keys(t.skippedZones ?? {})) {
+		for (const key of Object.keys(preset.skippedZones ?? {})) {
 			const parts = key.split("|");
 			if (parts.length !== 2) {
 				errors.push(`${label}: skippedZones key "${key}" must be actId|areaId`);
@@ -106,7 +177,7 @@ export function validateTemplates(
 			}
 		}
 
-		for (const key of Object.keys(t.notes ?? {})) {
+		for (const key of Object.keys(preset.notes ?? {})) {
 			const parts = key.split("|");
 			if (parts.length !== 2) {
 				errors.push(`${label}: notes key "${key}" must be actId|areaId`);
@@ -121,7 +192,7 @@ export function validateTemplates(
 			}
 		}
 
-		for (const key of Object.keys(t.levels ?? {})) {
+		for (const key of Object.keys(preset.levels ?? {})) {
 			const parts = key.split("|");
 			if (parts.length !== 2) {
 				errors.push(`${label}: levels key "${key}" must be actId|areaId`);
@@ -138,19 +209,19 @@ export function validateTemplates(
 			}
 		}
 
-		for (const actId of Object.keys(t.actNotes ?? {})) {
+		for (const actId of Object.keys(preset.actNotes ?? {})) {
 			if (!actIds.has(actId)) {
 				errors.push(`${label}: actNotes unknown actId "${actId}"`);
 			}
 		}
 
-		for (const actId of Object.keys(t.actRegex ?? {})) {
+		for (const actId of Object.keys(preset.actRegex ?? {})) {
 			if (!actIds.has(actId)) {
 				errors.push(`${label}: actRegex unknown actId "${actId}"`);
 			}
 		}
 
-		for (const [actId, order] of Object.entries(t.areaOrder ?? {})) {
+		for (const [actId, order] of Object.entries(preset.areaOrder ?? {})) {
 			if (!actIds.has(actId)) {
 				errors.push(`${label}: areaOrder unknown actId "${actId}"`);
 				continue;

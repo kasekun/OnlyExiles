@@ -1,5 +1,5 @@
 import { DATA } from "../campaign";
-import type { Template } from "./index";
+import type { Preset } from "./index";
 
 function key(actId: string, areaId: string): string {
 	return `${actId}|${areaId}`;
@@ -40,7 +40,7 @@ export const campaignDefaultNotes: Record<string, string> = {
 		"Can buy cheap Greater Runes from Soul of the Ferryman standing by the docks",
 };
 
-export const CAMPAIGN_DEFAULT: Template = {
+export const CAMPAIGN_DEFAULT: Preset = {
 	id: "campaign-default",
 	label: "Campaign Default",
 	description:

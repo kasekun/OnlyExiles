@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { GripVertical, Pencil } from "lucide-vue-next";
+import { GripVertical, Pencil, RedoDot, X } from "lucide-vue-next";
 import { computed, nextTick, onMounted, ref } from "vue";
-import {
-	areaKey,
-	pickKey,
-	usePlannerState,
-} from "~/composables/usePlannerState";
+import { areaKey, usePlannerState } from "~/composables/usePlannerState";
 import type { Area } from "~/data/campaign";
 
 const props = defineProps<{
@@ -171,35 +167,22 @@ onMounted(() => {
         class="flex items-center pr-2 shrink-0"
       >
         <button
-          class="group/zskip bg-transparent border rounded-[3px] w-[22px] h-[22px] p-0 inline-flex items-center justify-center transition-[border-color,color,background-color] duration-130 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2 opacity-0 group-hover/area:opacity-100 focus-visible:opacity-100"
+          class="bg-transparent border rounded-[3px] h-[22px] px-[0.4rem] gap-[0.3rem] inline-flex items-center justify-center text-p-xs font-medium tracking-[0.02em] whitespace-nowrap transition-[border-color,color,background-color] duration-130 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2"
           :class="isSkipped
-            ? 'border-p-amber-dim text-p-amber-dim opacity-100!'
+            ? 'border-p-amber-dim text-p-amber-dim'
             : 'border-p-subtle text-[oklch(36%_0.005_55)] hover:border-p-amber-dim hover:text-p-amber-dim hover:bg-[oklch(76%_0.158_65/0.08)]'"
           :aria-pressed="isSkipped"
           :aria-label="isSkipped ? 'Unskip zone' : 'Skip zone'"
           @click.stop="toggleZoneSkip"
         >
-          <!-- Strikethrough icon at rest (not skipped) -->
-          <svg
-            class="block group-hover/zskip:hidden"
-            :class="{ 'hidden': isSkipped }"
-            width="11" height="10" viewBox="0 0 11 10" fill="none"
-            stroke="currentColor" stroke-linecap="round" aria-hidden="true"
-          >
-            <line x1="1.5" y1="2.5" x2="9.5" y2="2.5" stroke-width="1.4"/>
-            <line x1="1.5" y1="7.5" x2="9.5" y2="7.5" stroke-width="1.4"/>
-            <line x1="0"   y1="5"   x2="11"  y2="5"   stroke-width="2"/>
-          </svg>
-          <!-- X icon on hover or when skipped -->
-          <svg
-            class="hidden group-hover/zskip:block"
-            :class="{ 'block!': isSkipped }"
-            width="10" height="10" viewBox="0 0 10 10" fill="none"
-            stroke="currentColor" stroke-linecap="round" aria-hidden="true"
-          >
-            <line x1="2" y1="2" x2="8" y2="8" stroke-width="1.8"/>
-            <line x1="8" y1="2" x2="2" y2="8" stroke-width="1.8"/>
-          </svg>
+          <template v-if="!isSkipped">
+            Skip zone
+            <RedoDot :size="12" aria-hidden="true" />
+          </template>
+          <template v-else>
+            Unskip
+            <X :size="12" aria-hidden="true" />
+          </template>
         </button>
       </div>
     </div>
