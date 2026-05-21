@@ -56,8 +56,11 @@ const showTemplatesInOverflow = computed(
 
 // ── Computed state ──────────────────────────────────────────────────────────
 
-const skippedCount = computed(
-	() => Object.values(state.skipped).filter(Boolean).length,
+const skippedPickupCount = computed(
+	() => Object.values(state.skippedPickups).filter(Boolean).length,
+);
+const skippedZoneCount = computed(
+	() => Object.values(state.skippedZones).filter(Boolean).length,
 );
 
 const mode = computed(() => {
@@ -250,13 +253,14 @@ function doFork() {
 		localStorage.setItem("poe2-planner-v1", JSON.stringify(context.state));
 		localStorage.setItem("poe2-planner-v1-name", JSON.stringify(forkName));
 	} catch {}
-	toast("Loaded into your scratch pad — save to publish your own copy");
+	toast("Loaded into your scratch pad — save to publish your own copy.");
 	router.push("/");
 }
 
 // ── Template selection ───────────────────────────────────────────────────────
 
 const confirmTemplateId = ref<string | null>(null);
+const resetAllFieldsChecked = ref(false);
 const templateToConfirm = computed(
 	() => TEMPLATES.find((t) => t.id === confirmTemplateId.value) ?? null,
 );
@@ -264,9 +268,18 @@ const templateToConfirm = computed(
 function selectTemplate(id: string) {
 	const t = TEMPLATES.find((t) => t.id === id);
 	if (!t) return;
-	const hasNotes = t.notes !== undefined;
-	const hasUserNotes = Object.values(state.notes).some((n) => n.trim());
-	if (hasNotes && hasUserNotes) {
+	const hasContent =
+		t.notes !== undefined ||
+		t.levels !== undefined ||
+		t.skippedPickups !== undefined ||
+		t.skippedZones !== undefined;
+	const hasExistingContent =
+		Object.values(state.notes).some((n) => n.trim()) ||
+		Object.values(state.levels).some((v) => v.trim()) ||
+		Object.values(state.skippedPickups).some(Boolean) ||
+		Object.values(state.skippedZones).some(Boolean);
+	if (hasContent && hasExistingContent) {
+		resetAllFieldsChecked.value = false;
 		confirmTemplateId.value = id;
 	} else {
 		context.applyTemplate(t);
@@ -275,7 +288,9 @@ function selectTemplate(id: string) {
 
 function confirmApplyTemplate() {
 	if (!templateToConfirm.value) return;
-	context.applyTemplate(templateToConfirm.value);
+	context.applyTemplate(templateToConfirm.value, {
+		resetAllFields: resetAllFieldsChecked.value,
+	});
 	confirmTemplateId.value = null;
 }
 
@@ -302,16 +317,27 @@ function doReset() {
       class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
       @click.self="confirmTemplateId = null"
     >
-      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[400px] w-full mx-4 flex flex-col gap-4">
+      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
         <p class="text-p-base text-p-text leading-[1.55]">
-          Applying <span class="text-p-amber font-semibold">{{ templateToConfirm?.label }}</span> will reset all notes and skipped items. This cannot be undone.
+          Applying <span class="text-p-amber font-semibold">{{ templateToConfirm?.label }}</span> will patch your current notes, recommended levels, and pickup skips. You can undo immediately after.
         </p>
+        <label class="flex items-start gap-2.5 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            class="mt-[0.18rem] shrink-0 accent-[oklch(76%_0.158_65)]"
+            v-model="resetAllFieldsChecked"
+          />
+          <span class="text-p-sm text-p-text leading-[1.45]">
+            Reset all fields before applying
+            <span class="text-p-muted block text-p-xs leading-[1.4]">Clears notes, levels, skips, custom zone order, and regex, then applies the template cleanly.</span>
+          </span>
+        </label>
         <div class="flex items-center justify-end gap-2">
           <button class="planner-btn-ghost" @click="confirmTemplateId = null">Cancel</button>
           <button
             class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
             @click="confirmApplyTemplate"
-          >Apply anyway</button>
+          >Apply</button>
         </div>
       </div>
     </div>
@@ -322,16 +348,16 @@ function doReset() {
       class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
       @click.self="confirmReset = false"
     >
-      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[400px] w-full mx-4 flex flex-col gap-4">
+      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
         <p class="text-p-base text-p-text leading-[1.55]">
-          Reset will clear all skipped items, notes, and the guide name. This cannot be undone.
+          Reset clears all notes, recommended levels, pickup skips, zone skips, loot filter patterns, custom zone order, and the guide name. You can undo immediately after.
         </p>
         <div class="flex items-center justify-end gap-2">
           <button class="planner-btn-ghost" @click="confirmReset = false">Cancel</button>
           <button
             class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
             @click="doReset"
-          >Reset anyway</button>
+          >Reset</button>
         </div>
       </div>
     </div>
@@ -349,9 +375,15 @@ function doReset() {
           <span class="max-sm:hidden">PoE2 Campaign Planner</span>
           <span class="hidden max-sm:inline">PoE2 Planner</span>
         </div>
-        <span v-if="skippedCount === 1" class="text-p-xs text-p-muted max-sm:hidden">· {{ skippedCount }} pickup skipped</span>
-        <span v-else-if="skippedCount > 1" class="text-p-xs text-p-muted max-sm:hidden">· {{ skippedCount }} pickups skipped</span>
- 
+        <span
+          v-if="skippedPickupCount > 0 || skippedZoneCount > 0"
+          class="text-p-xs text-p-muted max-sm:hidden"
+        >·
+          <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped</template>
+          <template v-if="skippedPickupCount > 0 && skippedZoneCount > 0">, </template>
+          <template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped</template>
+        </span>
+
       </div>
 
       <div class="flex-1"></div>

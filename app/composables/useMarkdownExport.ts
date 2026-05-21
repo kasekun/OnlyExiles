@@ -11,6 +11,7 @@ function buildMarkdown(
 	state: PlannerState,
 	guideName: string,
 	includeEmptyZones: boolean,
+	omitSkippedZones: boolean,
 	version?: string,
 ): string {
 	const title = guideName.trim() || "Untitled guide";
@@ -26,10 +27,14 @@ function buildMarkdown(
 		const visibleAreas = actAreas.filter((areaId) => {
 			const area = act.areas.find((a) => a.id === areaId);
 			if (!area) return false;
+			// Skipped zones are filtered first when the option is enabled
+			if (omitSkippedZones && state.skippedZones[areaKey(act.id, areaId)]) {
+				return false;
+			}
 			if (includeEmptyZones) return true;
 			if (area.pickups.length === 0) return false;
 			return area.pickups.some(
-				(_, i) => !state.skipped[pickKey(act.id, areaId, i)],
+				(_, i) => !state.skippedPickups[pickKey(act.id, areaId, i)],
 			);
 		});
 
@@ -50,7 +55,7 @@ function buildMarkdown(
 			const note = state.notes[akey];
 
 			const visiblePickups = area.pickups.filter(
-				(_, i) => !state.skipped[pickKey(act.id, areaId, i)],
+				(_, i) => !state.skippedPickups[pickKey(act.id, areaId, i)],
 			);
 
 			const levelStr = level && level !== "0" ? ` · Char level: ${level}` : "";
@@ -81,18 +86,21 @@ export function useMarkdownExport() {
 
 	function getMarkdown(options: {
 		includeEmptyZones: boolean;
+		omitSkippedZones?: boolean;
 		version?: string;
 	}): string {
 		return buildMarkdown(
 			state,
 			guideName.value,
 			options.includeEmptyZones,
+			options.omitSkippedZones ?? false,
 			options.version,
 		);
 	}
 
 	async function copyMarkdown(options: {
 		includeEmptyZones: boolean;
+		omitSkippedZones?: boolean;
 		version?: string;
 	}): Promise<boolean> {
 		try {
@@ -101,6 +109,7 @@ export function useMarkdownExport() {
 					state,
 					guideName.value,
 					options.includeEmptyZones,
+					options.omitSkippedZones ?? false,
 					options.version,
 				),
 			);

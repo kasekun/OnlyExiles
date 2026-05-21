@@ -12,11 +12,11 @@ const { state, readonly } = usePlannerState();
 
 function toggleSkip(key: string) {
 	if (readonly.value) return;
-	state.skipped[key] = !state.skipped[key];
+	state.skippedPickups[key] = !state.skippedPickups[key];
 }
 
 function isSkipped(key: string): boolean {
-	return !!state.skipped[key];
+	return !!state.skippedPickups[key];
 }
 </script>
 

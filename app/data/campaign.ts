@@ -1039,7 +1039,7 @@ export const DATA: Act[] = [
 				recLevel: "41",
 				pickups: [
 					{
-						item: "Magic or Rare Ring",
+						item: "Rare Ring (Ruby or Topaz)",
 						type: "Drop",
 						source: "Kill rare golems in Volcanic Nest Secret",
 					},

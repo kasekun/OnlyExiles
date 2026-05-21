@@ -1,5 +1,6 @@
 import {
 	index,
+	integer,
 	jsonb,
 	pgTable,
 	primaryKey,
@@ -62,6 +63,7 @@ export const authAttempts = pgTable("auth_attempts", {
 export const apiAttempts = pgTable(
 	"api_attempts",
 	{
+		id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
 		ip: text("ip").notNull(),
 		action: varchar("action", { length: 32 }).notNull(),
 		guideId: varchar("guide_id", { length: 14 }),
