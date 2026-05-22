@@ -693,7 +693,7 @@ function doReset() {
       v-if="(skippedPickupCount > 0 || skippedZoneCount > 0) && openPanel === null"
     >
       <div class="max-w-[1020px] mx-auto px-6 pb-1.5 max-sm:px-4">
-        <p class="text-p-xs text-p-muted">
+        <p class="text-p-xs text-p-text2">
           <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped (of {{ totalPickupCount }})</template><template v-if="skippedPickupCount > 0 && skippedZoneCount > 0">, </template><template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped (of {{ totalZoneCount }})</template>
         </p>
       </div>
@@ -889,8 +889,8 @@ function doReset() {
 .planner-btn-primary {
   position: relative;
   overflow: hidden;
-  background: oklch(18% 0.042 65);
-  border-color: oklch(40% 0.088 65);
+  background: oklch(20% 0.056 65);
+  border-color: oklch(46% 0.100 65);
   color: var(--planner-amber);
   transform: translate(var(--btn-tx, 0px), var(--btn-ty, 0px));
   transition:
@@ -901,8 +901,8 @@ function doReset() {
 }
 
 .planner-btn-primary:hover {
-  background: oklch(22% 0.052 65);
-  border-color: oklch(54% 0.100 65);
+  background: oklch(24% 0.068 65);
+  border-color: oklch(62% 0.122 65);
   color: var(--planner-amber);
 }
 

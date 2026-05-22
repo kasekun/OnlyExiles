@@ -96,10 +96,10 @@ function autoResize(el: HTMLTextAreaElement) {
 </script>
 
 <template>
-  <div class="border border-p-border rounded-[5px] overflow-hidden">
+  <div class="border border-[oklch(28%_0.020_63)] rounded-[5px] overflow-hidden">
     <div class="flex items-stretch bg-p-act">
       <button
-        class="flex items-center gap-2 px-4 py-3 flex-1 min-w-0 bg-transparent border-0 cursor-pointer text-left text-p-amber text-p-md font-bold tracking-[-0.01em] font-p transition-[background] duration-120 select-none hover:bg-[oklch(17.5%_0.022_62)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:-outline-offset-2"
+        class="flex items-center gap-2 px-4 py-3 flex-1 min-w-0 bg-transparent border-0 cursor-pointer text-left text-p-amber text-p-md font-bold tracking-[-0.02em] font-p transition-[background] duration-120 select-none hover:bg-[oklch(19.5%_0.038_63)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:-outline-offset-2"
         @click="toggleCollapse"
         :aria-expanded="!isCollapsed"
       >

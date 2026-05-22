@@ -109,7 +109,7 @@ onMounted(() => {
 
         <span class="flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
           <span
-            class="font-p text-p-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis shrink min-w-0 transition-[color,text-decoration] duration-120"
+            class="font-p text-p-base font-bold whitespace-nowrap overflow-hidden text-ellipsis shrink min-w-0 transition-[color,text-decoration] duration-120"
             :class="isSkipped ? 'text-p-skip line-through' : 'text-p-text'"
           >
             {{ area.name }}
