@@ -17,7 +17,10 @@ export const CAMPAIGN_DEFAULT = buildPreset({
 				"the-grim-tangle": { level: "4" },
 				"cemetery-of-the-eternals": {
 					level: "5",
-					note: "Great XP\nAfter finding the keys and opening the gates for Lachlann, immediately restart at checkpoint to skip his long story animation.",
+					note: [
+						"Great XP",
+						"After finding the keys and opening the gates for Lachlann, immediately restart at checkpoint to skip his long story animation.",
+					],
 				},
 				"tomb-of-the-consort": { level: "6", note: "Great XP" },
 				"mausoleum-of-the-praetor": {
@@ -31,7 +34,10 @@ export const CAMPAIGN_DEFAULT = buildPreset({
 				"the-manor-ramparts": { level: "11", note: "Great XP" },
 				"ogham-manor": {
 					level: "12",
-					note: "Hit lvl 14 before Count Geonor if you need to use a level 5 skill gem\nTP out instead of waiting ~30s for Count Geonor loot (not great loot)",
+					note: [
+						"Hit lvl 14 before Count Geonor if you need to use a level 5 skill gem",
+						"TP out instead of waiting ~30s for Count Geonor loot (not great loot)",
+					],
 				},
 			},
 		},
@@ -65,7 +71,10 @@ export const CAMPAIGN_DEFAULT = buildPreset({
 				"infested-barrens": { level: "30" },
 				"the-azak-bog": {
 					level: "32",
-					note: "Great XP zone\nGreat farming zone - can reset at checkpoint to farm mobs multiple times",
+					note: [
+						"Great XP zone",
+						"Great farming zone - can reset at checkpoint to farm mobs multiple times",
+					],
 				},
 				"trial-of-chaos": { level: "32" },
 				"chimeral-wetlands": { level: "32" },

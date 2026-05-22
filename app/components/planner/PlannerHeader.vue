@@ -364,9 +364,9 @@ const presetToConfirm = computed(
 );
 const hasRouteCustomizations = computed(
 	() =>
-		Object.values(state.notes).some((note) => note.trim()) ||
+		Object.values(state.notes).some((note) => note.some((s) => s.trim())) ||
 		Object.values(state.levels).some((level) => level.trim()) ||
-		Object.values(state.actNotes).some((note) => note.trim()) ||
+		Object.values(state.actNotes).some((note) => note.some((s) => s.trim())) ||
 		Object.values(state.actRegex).some((pattern) => pattern.trim()) ||
 		Object.values(state.areaOrder).some((order) => order.length > 0) ||
 		Object.values(state.skippedPickups).some(Boolean) ||

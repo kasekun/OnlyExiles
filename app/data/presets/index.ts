@@ -19,8 +19,8 @@ export interface Preset {
 	levels?: Record<string, string>;
 	areaOrder?: Record<string, string[]>;
 	actRegex?: Record<string, string>;
-	notes?: Record<string, string>;
-	actNotes?: Record<string, string>;
+	notes?: Record<string, string[]>;
+	actNotes?: Record<string, string[]>;
 }
 
 export type { ActSpec, PresetSpec, ZoneSpec } from "./build-preset";

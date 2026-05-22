@@ -43,8 +43,9 @@ export function buildMarkdown(
 		lines.push(`## ${act.title}`, "");
 
 		const actNote = state.actNotes[act.id];
-		if (actNote?.trim()) {
-			lines.push(`> ${actNote.trim().replace(/\n/g, "\n> ")}`, "");
+		const actNoteLines = actNote?.map((s) => s.trim()).filter((s) => s);
+		if (actNoteLines?.length) {
+			lines.push(`> ${actNoteLines.join("\n> ")}`, "");
 		}
 
 		for (const areaId of visibleAreas) {
@@ -53,6 +54,7 @@ export function buildMarkdown(
 			const akey = areaKey(act.id, areaId);
 			const level = state.levels[akey];
 			const note = state.notes[akey];
+			const noteLines = note?.map((s) => s.trim()).filter((s) => s);
 
 			const visiblePickups = area.pickups.filter(
 				(p) => !state.skippedPickups[pickKey(act.id, areaId, p.id)],
@@ -61,8 +63,8 @@ export function buildMarkdown(
 			const levelStr = level && level !== "0" ? ` · Char level: ${level}` : "";
 			lines.push(`### ${area.name}${levelStr}`);
 
-			if (note?.trim()) {
-				lines.push(`> ${note.trim().replace(/\n/g, "\n> ")}`);
+			if (noteLines?.length) {
+				lines.push(`> ${noteLines.join("\n> ")}`);
 			}
 
 			for (const p of visiblePickups) {

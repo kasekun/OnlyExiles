@@ -4,9 +4,9 @@ export interface PlannerState {
 	areaOrder: Record<string, string[]>;
 	skippedPickups: Record<string, boolean>;
 	skippedZones: Record<string, boolean>;
-	notes: Record<string, string>;
+	notes: Record<string, string[]>;
 	levels: Record<string, string>;
-	actNotes: Record<string, string>;
+	actNotes: Record<string, string[]>;
 	actRegex: Record<string, string>;
 }
 
@@ -73,9 +73,38 @@ function filterStringArrayRecord(v: unknown): Record<string, string[]> {
 }
 
 /**
+ * Normalizes a single note value from storage.
+ * Accepts both legacy `string` (split on `\n`) and new `string[]` format.
+ * Each line is trimmed.
+ */
+function normalizeNoteValue(v: unknown): string[] | null {
+	if (typeof v === "string") {
+		return v.split("\n").map((s) => s.trim());
+	}
+	if (Array.isArray(v) && v.every((s) => typeof s === "string")) {
+		return v.map((s) => s.trim());
+	}
+	return null;
+}
+
+/**
+ * Normalizes a notes record, accepting both legacy string values and string arrays.
+ */
+function filterNotesRecord(v: unknown): Record<string, string[]> {
+	if (!v || typeof v !== "object" || Array.isArray(v)) return {};
+	const result: Record<string, string[]> = {};
+	for (const [k, val] of Object.entries(v as Record<string, unknown>)) {
+		const normalized = normalizeNoteValue(val);
+		if (normalized !== null) result[k] = normalized;
+	}
+	return result;
+}
+
+/**
  * Safely normalize an unknown input into a valid PlannerState.
  * Discards fields that don't match the expected shape.
- * String values in notes/levels/actNotes/actRegex are trimmed.
+ * Notes are stored as string arrays; legacy string values are split on `\n`.
+ * String values in levels/actRegex are trimmed.
  * Accepts the legacy `skipped` field as an alias for `skippedPickups`.
  */
 export function normalizePlannerState(input: unknown): PlannerState {
@@ -91,9 +120,9 @@ export function normalizePlannerState(input: unknown): PlannerState {
 		// Accept legacy `skipped` field during migration
 		skippedPickups: filterBooleanRecord(raw.skippedPickups ?? raw.skipped),
 		skippedZones: filterBooleanRecord(raw.skippedZones),
-		notes: filterStringRecord(raw.notes),
+		notes: filterNotesRecord(raw.notes),
 		levels: filterStringRecord(raw.levels),
-		actNotes: filterStringRecord(raw.actNotes),
+		actNotes: filterNotesRecord(raw.actNotes),
 		actRegex: filterStringRecord(raw.actRegex),
 	};
 }

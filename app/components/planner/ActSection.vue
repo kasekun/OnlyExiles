@@ -53,11 +53,11 @@ const orderedAreas = computed((): Area[] =>
 
 const actNote = computed({
 	get() {
-		return state.actNotes[props.act.id] ?? "";
+		return (state.actNotes[props.act.id] ?? []).join("\n");
 	},
 	set(v: string) {
 		if (readonly.value) return;
-		state.actNotes[props.act.id] = v;
+		state.actNotes[props.act.id] = v.split("\n");
 	},
 });
 

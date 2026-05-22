@@ -39,7 +39,7 @@ describe("buildDefaultPlannerState", () => {
 	it("returns a fresh object on each call", () => {
 		const a = buildDefaultPlannerState();
 		const b = buildDefaultPlannerState();
-		a.notes.x = "y";
+		a.notes.x = ["y"];
 		expect(b.notes.x).toBeUndefined();
 	});
 });
@@ -55,27 +55,36 @@ describe("normalizePlannerState", () => {
 
 	it("preserves valid fields", () => {
 		const result = normalizePlannerState({
-			notes: { "act-1|zone-1": "hello" },
+			notes: { "act-1|zone-1": ["hello"] },
 			levels: { "act-1|zone-1": "5" },
 			skippedPickups: { "act-1|zone-1|0": true },
 			skippedZones: { "act-1|zone-1": true },
-			actNotes: { "act-1": "act note" },
+			actNotes: { "act-1": ["act note"] },
 			actRegex: { "act-1": "some regex" },
 		});
-		expect(result.notes["act-1|zone-1"]).toBe("hello");
+		expect(result.notes["act-1|zone-1"]).toEqual(["hello"]);
 		expect(result.levels["act-1|zone-1"]).toBe("5");
 		expect(result.skippedPickups["act-1|zone-1|0"]).toBe(true);
 		expect(result.skippedZones["act-1|zone-1"]).toBe(true);
-		expect(result.actNotes["act-1"]).toBe("act note");
+		expect(result.actNotes["act-1"]).toEqual(["act note"]);
 		expect(result.actRegex["act-1"]).toBe("some regex");
 	});
 
-	it("trims whitespace from string fields", () => {
+	it("migrates legacy string notes by splitting on newlines", () => {
 		const result = normalizePlannerState({
-			notes: { "act-1|zone-1": "  spaces  " },
+			notes: { "act-1|zone-1": "line one\nline two" },
+			actNotes: { "act-1": "act line one\nact line two" },
+		});
+		expect(result.notes["act-1|zone-1"]).toEqual(["line one", "line two"]);
+		expect(result.actNotes["act-1"]).toEqual(["act line one", "act line two"]);
+	});
+
+	it("trims whitespace from note lines and string fields", () => {
+		const result = normalizePlannerState({
+			notes: { "act-1|zone-1": ["  spaces  "] },
 			levels: { "act-1|zone-1": " 5 " },
 		});
-		expect(result.notes["act-1|zone-1"]).toBe("spaces");
+		expect(result.notes["act-1|zone-1"]).toEqual(["spaces"]);
 		expect(result.levels["act-1|zone-1"]).toBe("5");
 	});
 
@@ -117,11 +126,11 @@ describe("createPlannerContext replaceState", () => {
 	it("replaceState with buildDefaultPlannerState clears all data fields from a populated state", () => {
 		const ctx = createPlannerContext({
 			initialState: {
-				notes: { "act|area": "some note" },
+				notes: { "act|area": ["some note"] },
 				levels: { "act|area": "5" },
 				skippedPickups: { "act|area|0": true },
 				skippedZones: { "act|area": true },
-				actNotes: { act: "act note" },
+				actNotes: { act: ["act note"] },
 				actRegex: { act: "pattern" },
 				areaOrder: { act: ["area-1", "area-2"] },
 			},
@@ -138,7 +147,7 @@ describe("createPlannerContext replaceState", () => {
 		const ctx = createPlannerContext({
 			initialState: {
 				skippedPickups: { "a|b|c": true, "d|e|f": true },
-				notes: { "a|b": "note1", "c|d": "note2" },
+				notes: { "a|b": ["note1"], "c|d": ["note2"] },
 			},
 		});
 
@@ -296,16 +305,16 @@ describe("buildPresetState", () => {
 			levels: { "act|area": "12" },
 			areaOrder: { act: ["area"] },
 			actRegex: { act: "regex" },
-			notes: { "act|area": "note" },
-			actNotes: { act: "act note" },
+			notes: { "act|area": ["note"] },
+			actNotes: { act: ["act note"] },
 		});
 		expect(state.skippedPickups["act|area|pickup"]).toBe(true);
 		expect(state.skippedZones["act|area"]).toBe(true);
 		expect(state.levels["act|area"]).toBe("12");
 		expect(state.areaOrder.act).toEqual(["area"]);
 		expect(state.actRegex.act).toBe("regex");
-		expect(state.notes["act|area"]).toBe("note");
-		expect(state.actNotes.act).toBe("act note");
+		expect(state.notes["act|area"]).toEqual(["note"]);
+		expect(state.actNotes.act).toEqual(["act note"]);
 	});
 
 	it("leaves collapse state blank for the composable to restore", () => {

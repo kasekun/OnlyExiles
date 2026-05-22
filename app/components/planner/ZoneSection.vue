@@ -59,11 +59,11 @@ const notesRef = ref<HTMLTextAreaElement | null>(null);
 
 const notesValue = computed({
 	get() {
-		return state.notes[akey.value] ?? "";
+		return (state.notes[akey.value] ?? []).join("\n");
 	},
 	set(v: string) {
 		if (readonly.value) return;
-		state.notes[akey.value] = v;
+		state.notes[akey.value] = v.split("\n");
 	},
 });
 
