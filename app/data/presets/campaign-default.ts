@@ -4,7 +4,7 @@ export const CAMPAIGN_DEFAULT = buildPreset({
 	id: "campaign-default",
 	label: "Campaign Default",
 	description:
-		"Recommended levels and editorial notes for every zone. Good starting point.",
+		"Recommended char levels and helpful notes for zones. A good starting point.",
 	actNotes: {},
 	acts: {
 		"act-1--island-of-ogham": {
