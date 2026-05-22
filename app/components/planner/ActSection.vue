@@ -109,31 +109,34 @@ function autoResize(el: HTMLTextAreaElement) {
 
       <div
         v-show="!isCollapsed"
-        class="flex items-center gap-1 px-3 max-sm:px-1.5 max-sm:gap-0 shrink-0 border-p-amber-bd"
+        class="flex items-center max-sm:items-stretch gap-1 px-3 max-sm:px-2 max-sm:gap-1 shrink-0"
       >
         <button
-          class="planner-btn-act flex items-center gap-1 max-sm:px-2"
+          class="planner-btn-act flex items-center justify-center gap-1 max-sm:px-2"
           @click="expandActAreas(act.id)"
           aria-label="Expand all zones"
         >
-          <ChevronsUpDown :size="12" class="sm:hidden" aria-hidden="true" />
-          <span class="max-sm:hidden">Expand zones</span>
+          <ChevronsUpDown :size="11" class="shrink-0" aria-hidden="true" />
+          <span class="hidden sm:inline">Expand zones</span>
+          <span class="sm:hidden">Expand</span>
         </button>
         <button
-          class="planner-btn-act flex items-center gap-1 max-sm:px-2"
+          class="planner-btn-act flex items-center justify-center gap-1 max-sm:px-2"
           @click="collapseActAreas(act.id)"
           aria-label="Collapse all zones"
         >
-          <ChevronsDownUp :size="12" class="sm:hidden" aria-hidden="true" />
-          <span class="max-sm:hidden">Collapse zones</span>
+          <ChevronsDownUp :size="11" class="shrink-0" aria-hidden="true" />
+          <span class="hidden sm:inline">Collapse zones</span>
+          <span class="sm:hidden">Collapse</span>
         </button>
         <button
-          class="planner-btn-act flex items-center gap-1 max-sm:px-2"
+          class="planner-btn-act flex items-center justify-center gap-1 max-sm:px-2"
           @click="collapseEmptyAreas(act.id)"
           aria-label="Collapse zones with no pickups"
         >
-          <PackageMinus :size="12" class="sm:hidden" aria-hidden="true" />
-          <span class="max-sm:hidden">Collapse empty</span>
+          <PackageMinus :size="11" class="shrink-0" aria-hidden="true" />
+          <span class="hidden sm:inline">Collapse empty</span>
+          <span class="sm:hidden">Empty</span>
         </button>
       </div>
 

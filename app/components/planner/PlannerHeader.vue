@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useWindowSize } from "@vueuse/core";
 import {
 	BookMarked,
 	Check,
 	Copy,
-	ExternalLink,
 	Eye,
 	EyeOff,
 	GitFork,
@@ -56,11 +54,6 @@ onMounted(() => {
 	mounted.value = true;
 	guideStore.load();
 });
-
-const { width: windowWidth } = useWindowSize();
-const showPresetsInOverflow = computed(
-	() => mounted.value && windowWidth.value < 480,
-);
 
 const skippedPickupCount = computed(() => {
 	let n = 0;
@@ -471,30 +464,40 @@ function doReset() {
 
   <header class="sticky top-0 z-20 bg-p-bg border-b border-p-border">
     <div class="flex items-center gap-2 max-w-[1020px] mx-auto px-6 py-2 max-sm:px-4">
-      <div class="shrink-0 flex items-center gap-2">
-        <div class="text-p-lg font-bold text-p-amber tracking-[-0.01em] flex items-center gap-2 leading-[1.3]">
+      <div class="shrink-0 flex items-center">
+        <div class="text-p-amber flex items-center gap-2">
           <BrandMark :size="13" class="shrink-0" />
-          <span class="max-sm:hidden">PoE2 Campaign Planner</span>
-          <span class="hidden max-sm:inline">PoE2 Planner</span>
+          <span class="hidden sm:inline text-p-lg font-bold tracking-[-0.01em] leading-[1.3]">PoE2 Planner</span>
         </div>
-        <span
-          v-if="skippedPickupCount > 0 || skippedZoneCount > 0"
-          class="text-p-xs text-p-muted max-sm:hidden"
-        >·
-          <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped (of {{ totalPickupCount }})</template>
-          <template v-if="skippedPickupCount > 0 && skippedZoneCount > 0">, </template>
-          <template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped (of {{ totalZoneCount }})</template>
-        </span>
-
       </div>
 
       <div class="flex-1"></div>
 
+      <div class="hidden sm:block">
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <button class="planner-btn-ghost data-[state=open]:[&_.chevron-dd]:rotate-180">
+              Presets
+              <svg class="chevron-dd w-[10px] h-[6px] transition-transform duration-150 shrink-0" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,1 5,5 9,1"/></svg>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent class="planner-dropdown min-w-[320px]" align="end">
+            <PresetMenuContent
+              @select-preset="selectPreset"
+              @apply-filter="context.applyFilter"
+            />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
       <DropdownMenu v-if="mounted">
         <DropdownMenuTrigger as-child>
-          <button class="planner-btn-ghost" aria-label="My Guides">
+          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 hidden max-sm:flex items-center" aria-label="My Guides">
             <BookMarked :size="13" aria-hidden="true" />
-            <span class="max-[480px]:hidden">My Guides</span>
+          </button>
+          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 flex items-center gap-1 max-sm:hidden" aria-label="My Guides">
+            <BookMarked :size="13" aria-hidden="true" />
+            <span class="text-p-xs">My Guides</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown min-w-[220px]" align="end">
@@ -519,47 +522,30 @@ function doReset() {
           </DropdownMenuItem>
           <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           <div class="px-[0.6rem] py-2 pointer-events-none">
-            <p class="text-p-xs text-p-muted leading-[1.5] max-w-[45ch]">Published Guides you've created on this device will appear here, along with Guides that you claim via password.</p>
+            <p class="text-p-xs text-p-muted leading-normal max-w-[45ch]">Published Guides you've created on this device will appear here, along with Guides that you claim via password.</p>
           </div>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <DropdownMenu v-if="!showPresetsInOverflow">
-        <DropdownMenuTrigger as-child>
-          <button class="planner-btn-ghost data-[state=open]:[&_.chevron-dd]:rotate-180">
-            Presets
-            <svg class="chevron-dd w-[10px] h-[6px] transition-transform duration-150 shrink-0" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,1 5,5 9,1"/></svg>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent class="planner-dropdown min-w-[320px]" align="end">
-          <PresetMenuContent
-            @select-preset="selectPreset"
-            @apply-filter="context.applyFilter"
-          />
         </DropdownMenuContent>
       </DropdownMenu>
 
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <button class="planner-btn-ghost px-2" aria-label="More actions">
+          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2" aria-label="More actions">
             <MoreHorizontal :size="14" aria-hidden="true" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown" align="end">
-          <template v-if="showPresetsInOverflow">
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger class="planner-dd-item text-p-sm text-p-text2">
-                Presets
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent class="planner-dropdown min-w-[320px]">
-                <PresetMenuContent
-                  @select-preset="selectPreset"
-                  @apply-filter="context.applyFilter"
-                />
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
-          </template>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger class="planner-dd-item text-p-sm text-p-text2">
+              Presets
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent class="planner-dropdown min-w-[320px]">
+              <PresetMenuContent
+                @select-preset="selectPreset"
+                @apply-filter="context.applyFilter"
+              />
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           <DropdownMenuItem class="planner-dd-item text-p-sm text-p-text2" @click="exportDialogOpen = true">
             Copy Markdown
           </DropdownMenuItem>
@@ -613,19 +599,8 @@ function doReset() {
         @mousemove="onPrimaryBtnMove"
         @mouseleave="onPrimaryBtnLeave"
       >
-        <GitFork :size="11" aria-hidden="true" />
-        <span class="max-sm:hidden">Fork this guide</span>
-        <span class="hidden max-sm:inline">Fork</span>
-      </button>
-
-      <button
-        v-if="isSaved"
-        class="planner-btn-ghost px-2"
-        :class="{ 'text-p-amber!': openPanel === 'share' }"
-        aria-label="Share guide"
-        @click="setPanel('share')"
-      >
-        <Share2 :size="13" aria-hidden="true" />
+        <GitFork :size="11" class="shrink-0 hidden sm:inline" aria-hidden="true" />
+        Fork this Guide
       </button>
 
       <button
@@ -634,16 +609,36 @@ function doReset() {
         @click="setPanel('passphrase')"
       >
         <KeyRound :size="11" aria-hidden="true" />
-        <span class="text-p-xs">Enter passphrase to edit</span>
+        <span class="text-p-xs">Unlock Guide</span>
       </button>
       <button
         v-if="mode === 'viewer'"
-        class="planner-btn-ghost px-2 hidden max-sm:flex items-center"
-        aria-label="Enter passphrase to edit"
+        class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 hidden max-sm:flex items-center"
+        aria-label="Unlock Guide"
         @click="setPanel('passphrase')"
       >
         <KeyRound :size="13" aria-hidden="true" />
+        <span class="text-p-xs">Unlock</span>
       </button>
+
+      <button
+        v-if="isSaved"
+        class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2"
+        :class="{ 'text-p-amber!': openPanel === 'share' }"
+        aria-label="Share guide"
+        @click="setPanel('share')"
+      >
+        <Share2 :size="13" aria-hidden="true" />
+      </button>
+    </div>
+    <div
+      v-if="(skippedPickupCount > 0 || skippedZoneCount > 0) && openPanel === null"
+    >
+      <div class="max-w-[1020px] mx-auto px-6 pb-1.5 max-sm:px-4">
+        <p class="text-p-xs text-p-muted">
+          <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped (of {{ totalPickupCount }})</template><template v-if="skippedPickupCount > 0 && skippedZoneCount > 0">, </template><template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped (of {{ totalZoneCount }})</template>
+        </p>
+      </div>
     </div>
     <div
       v-if="openPanel === 'save'"
@@ -725,20 +720,9 @@ function doReset() {
       v-else-if="openPanel === 'share' && isSaved"
       class="header-panel border-t border-p-border bg-p-inset"
     >
-      <div class="max-w-[1020px] mx-auto px-6 py-2.5 max-sm:px-4 flex items-center justify-between gap-3">
-        <button
-          class="planner-btn-ghost shrink-0"
-          :class="{
-            'border-p-amber-dim! text-p-amber-dim! hover:text-p-amber!': copyMdState === 'success',
-            'border-p-error! text-p-error!': copyMdState === 'error',
-          }"
-          @click="copyMarkdownFromPanel"
-        >
-          <Check v-if="copyMdState === 'success'" :size="11" aria-hidden="true" />
-          <span>{{ copyMdState === 'success' ? 'Markdown copied' : copyMdState === 'error' ? 'Copy failed' : 'Copy Markdown' }}</span>
-        </button>
-
-        <div class="flex items-stretch bg-p-bg border border-p-subtle rounded-[3px] overflow-hidden font-p-mono text-p-sm min-w-0 flex-1 max-w-[460px]">
+      <div class="max-w-[1020px] mx-auto px-6 py-2.5 max-sm:px-4 max-sm:py-3 flex items-center justify-between gap-3 max-sm:flex-col max-sm:items-stretch max-sm:gap-2">
+        <!-- URL bar: middle on desktop (order-2), top on mobile (first in DOM) -->
+        <div class="flex items-stretch bg-p-bg border border-p-subtle rounded-[3px] overflow-hidden font-p-mono text-p-sm min-w-0 flex-1 max-w-[460px] max-sm:max-w-none sm:order-2">
           <input
             class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.3rem] text-p-text2 outline-none select-all"
             :value="shareUrl"
@@ -758,13 +742,29 @@ function doReset() {
           </button>
         </div>
 
-        <button
-          class="shrink-0 p-1 text-p-muted hover:text-p-text2 transition-colors duration-130 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2 rounded-[3px]"
-          aria-label="Close share panel"
-          @click="closePanel"
-        >
-          <X :size="13" aria-hidden="true" />
-        </button>
+        <!-- Contents wrapper: flex row on mobile (Copy Markdown left, X right),
+             transparent on desktop so children join the parent flex with sm:order-* -->
+        <div class="flex items-center justify-between gap-2 sm:contents">
+          <button
+            class="planner-btn-ghost shrink-0 sm:order-1"
+            :class="{
+              'border-p-amber-dim! text-p-amber-dim! hover:text-p-amber!': copyMdState === 'success',
+              'border-p-error! text-p-error!': copyMdState === 'error',
+            }"
+            @click="copyMarkdownFromPanel"
+          >
+            <Check v-if="copyMdState === 'success'" :size="11" aria-hidden="true" />
+            <span>{{ copyMdState === 'success' ? 'Markdown copied' : copyMdState === 'error' ? 'Copy failed' : 'Copy Markdown' }}</span>
+          </button>
+
+          <button
+            class="shrink-0 p-1 max-sm:p-2 text-p-muted hover:text-p-text2 transition-colors duration-130 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2 rounded-[3px] sm:order-3"
+            aria-label="Close share panel"
+            @click="closePanel"
+          >
+            <X :size="13" aria-hidden="true" />
+          </button>
+        </div>
       </div>
     </div>
 
@@ -791,7 +791,7 @@ function doReset() {
             />
           </div>
           <p v-if="passphraseError" class="text-p-xs text-p-error">{{ passphraseError }}</p>
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <button
               v-if="sessionExpired"
               class="planner-btn-ghost text-p-xs text-p-muted"
