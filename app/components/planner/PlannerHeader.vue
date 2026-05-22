@@ -495,11 +495,8 @@ function doReset() {
             <span class="max-[480px]:hidden">My Guides</span>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent class="planner-dropdown" align="end">
-          <template v-if="guideStore.guides.value.length === 0">
-            <div class="px-[0.6rem] py-2 text-p-sm text-p-muted italic">No saved guides yet</div>
-          </template>
-          <template v-else>
+        <DropdownMenuContent class="planner-dropdown min-w-[220px]" align="end">
+          <template v-if="guideStore.guides.value.length > 0">
             <DropdownMenuItem
               v-for="g in guideStore.guides.value"
               :key="g.id"
@@ -518,6 +515,10 @@ function doReset() {
           <DropdownMenuItem class="planner-dd-item text-p-sm text-p-muted" @click="requestNewGuide">
             New guide
           </DropdownMenuItem>
+          <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
+          <div class="px-[0.6rem] py-2 pointer-events-none">
+            <p class="text-p-xs text-p-muted leading-[1.5] max-w-[45ch]">Published Guides you've created on this device will appear here, along with Guides that you claim via password.</p>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
 
