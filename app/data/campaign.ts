@@ -48,6 +48,13 @@ export const DATA: Act[] = [
 						type: "Drop",
 						source: "unskippable chest",
 					},
+					{
+						id: "uncut-skill-gem-lvl-1",
+						tags: ["skill-gem"],
+						item: "Uncut Skill Gem (Lvl 1)",
+						type: "Hand-In",
+						source: "Kill the Miller, talk to Renly",
+					},
 				],
 			},
 			{
