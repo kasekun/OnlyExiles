@@ -161,7 +161,7 @@ async function publishGuide() {
 	saveError.value = "";
 	try {
 		const { id } = await guideStore.saveGuide(context, passphraseValue.value);
-		toast("Guide published");
+		toast("Guide saved");
 		closePanel();
 		await router.push(`/guide/${id}`);
 	} catch (err: unknown) {
@@ -323,7 +323,9 @@ function doStartNewGuide() {
 function doFork() {
 	const forkName = `Fork of ${guideDisplayName.value}`;
 	saveScratchPadStorage(forkName);
-	toast("Loaded into your scratch pad - save to publish your own copy.");
+	toast(
+		"Loaded into your scratch pad. Save it to get your own shareable link.",
+	);
 	router.push("/");
 }
 
@@ -649,7 +651,8 @@ function doReset() {
     >
       <div class="max-w-[1020px] mx-auto px-6 py-4 max-sm:px-4">
         <div class="max-w-[420px] ml-auto flex flex-col gap-3 max-sm:max-w-none">
-          <p class="text-p-md font-bold text-p-amber tracking-[-0.01em] leading-[1.3]">Publish guide</p>
+          <p class="text-p-md font-bold text-p-amber tracking-[-0.01em] leading-[1.3]">Save guide</p>
+          <p class="text-p-xs text-p-muted leading-[1.5]">Saving publishes your guide and generates a link you can share with others.</p>
 
           <div class="flex flex-col gap-1">
             <label class="planner-eyebrow" for="save-guide-name">Guide name</label>
@@ -711,7 +714,7 @@ function doReset() {
               @click="publishGuide"
             >
               <Loader2 v-if="saving === 'saving'" :size="11" class="animate-spin" aria-hidden="true" />
-              {{ saving === 'saving' ? 'Publishing…' : 'Publish guide' }}
+              {{ saving === 'saving' ? 'Saving…' : 'Save & publish' }}
             </button>
           </div>
         </div>

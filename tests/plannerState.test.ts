@@ -394,6 +394,114 @@ describe("applyFilterToSkips", () => {
 	});
 });
 
+describe("createPlannerContext applyDefaultView", () => {
+	it("applies default view when applyDefaultView is true", () => {
+		const ctx = createPlannerContext({ applyDefaultView: true });
+		const act1 = DATA[0];
+		if (!act1) throw new Error("DATA has no acts");
+
+		// all acts expanded
+		for (const act of DATA) {
+			expect(ctx.state.actsCollapsed[act.id]).toBe(false);
+		}
+
+		// first 3 zones of act 1 are expanded
+		for (let i = 0; i < Math.min(3, act1.areas.length); i++) {
+			const area = act1.areas[i];
+			if (!area) continue;
+			expect(ctx.state.areasCollapsed[areaKey(act1.id, area.id)]).toBe(false);
+		}
+
+		// 4th zone of act 1 is collapsed
+		const zone4 = act1.areas[3];
+		if (zone4) {
+			expect(ctx.state.areasCollapsed[areaKey(act1.id, zone4.id)]).toBe(true);
+		}
+
+		// zones in act 2+ are collapsed
+		const act2 = DATA[1];
+		if (act2?.areas[0]) {
+			expect(ctx.state.areasCollapsed[areaKey(act2.id, act2.areas[0].id)]).toBe(
+				true,
+			);
+		}
+	});
+
+	it("does not apply default view when applyDefaultView is omitted", () => {
+		const ctx = createPlannerContext({});
+		expect(ctx.state.actsCollapsed).toEqual({});
+		expect(ctx.state.areasCollapsed).toEqual({});
+	});
+});
+
+describe("resetAll default view", () => {
+	it("applies default view state after reset", () => {
+		const ctx = createPlannerContext({});
+		const act1 = DATA[0];
+		if (!act1) throw new Error("DATA has no acts");
+
+		ctx.state.notes["act|area"] = ["a note"];
+		ctx.state.actsCollapsed[act1.id] = true;
+
+		ctx.resetAll();
+
+		expect(Object.keys(ctx.state.notes).length).toBe(0);
+		expect(ctx.state.actsCollapsed[act1.id]).toBe(false);
+
+		const zone1 = act1.areas[0];
+		if (zone1) {
+			expect(ctx.state.areasCollapsed[areaKey(act1.id, zone1.id)]).toBe(false);
+		}
+		const zone4 = act1.areas[3];
+		if (zone4) {
+			expect(ctx.state.areasCollapsed[areaKey(act1.id, zone4.id)]).toBe(true);
+		}
+
+		const act2 = DATA[1];
+		if (act2?.areas[0]) {
+			expect(ctx.state.areasCollapsed[areaKey(act2.id, act2.areas[0].id)]).toBe(
+				true,
+			);
+		}
+	});
+});
+
+describe("applyPreset default view", () => {
+	it("applies default view after preset instead of preserving collapse state", () => {
+		const ctx = createPlannerContext({});
+		const act1 = DATA[0];
+		const act2 = DATA[1];
+		if (!act1) throw new Error("DATA has no acts");
+
+		// manually collapse act 1's first zone and expand act 2's first zone
+		if (act1.areas[0]) {
+			ctx.state.areasCollapsed[areaKey(act1.id, act1.areas[0].id)] = true;
+		}
+		if (act2?.areas[0]) {
+			ctx.state.areasCollapsed[areaKey(act2.id, act2.areas[0].id)] = false;
+		}
+
+		ctx.applyPreset(CAMPAIGN_DEFAULT);
+
+		// act 1 first zone should now be expanded (default view, not preserved)
+		if (act1.areas[0]) {
+			expect(ctx.state.areasCollapsed[areaKey(act1.id, act1.areas[0].id)]).toBe(
+				false,
+			);
+		}
+		// act 2 first zone should now be collapsed (default view, not preserved)
+		if (act2?.areas[0]) {
+			expect(ctx.state.areasCollapsed[areaKey(act2.id, act2.areas[0].id)]).toBe(
+				true,
+			);
+		}
+		// all acts should be expanded
+		for (const act of DATA) {
+			expect(ctx.state.actsCollapsed[act.id]).toBe(false);
+		}
+	});
+});
+
 describe("buildMarkdown", () => {
 	it("omits skipped zones when requested", () => {
 		const firstAct = DATA[0];

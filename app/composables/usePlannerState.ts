@@ -59,13 +59,35 @@ export function getOrderedAreas(
 	return [...custom, ...extra];
 }
 
+function buildDefaultViewState(): {
+	actsCollapsed: Record<string, boolean>;
+	areasCollapsed: Record<string, boolean>;
+} {
+	const actsCollapsed: Record<string, boolean> = {};
+	const areasCollapsed: Record<string, boolean> = {};
+	DATA.forEach((act, actIndex) => {
+		actsCollapsed[act.id] = false;
+		act.areas.forEach((area, areaIndex) => {
+			areasCollapsed[areaKey(act.id, area.id)] =
+				actIndex !== 0 || areaIndex >= 3;
+		});
+	});
+	return { actsCollapsed, areasCollapsed };
+}
+
 export function createPlannerContext(options: {
 	initialState?: Partial<PlannerState>;
 	persistenceKey?: string;
 	readonly?: boolean;
 	initialName?: string;
+	applyDefaultView?: boolean;
 }): PlannerContext {
 	const normalizedInitial = normalizePlannerState(options.initialState ?? {});
+	if (options.applyDefaultView) {
+		const defaultView = buildDefaultViewState();
+		normalizedInitial.actsCollapsed = defaultView.actsCollapsed;
+		normalizedInitial.areasCollapsed = defaultView.areasCollapsed;
+	}
 	const state = reactive<PlannerState>(normalizedInitial);
 	const readonlyRef = ref(options.readonly ?? false);
 	const guideName = ref(options.initialName ?? "");
@@ -137,7 +159,10 @@ export function createPlannerContext(options: {
 				localStorage.removeItem(`${options.persistenceKey}-name`);
 			} catch {}
 		}
-		Object.assign(state, buildDefaultPlannerState());
+		Object.assign(state, {
+			...buildDefaultPlannerState(),
+			...buildDefaultViewState(),
+		});
 		guideName.value = "";
 		toast("Route reset.", {
 			action: {
@@ -209,11 +234,10 @@ export function createPlannerContext(options: {
 	function applyPreset(preset: Preset) {
 		if (readonlyRef.value) return;
 		const snapshot = cloneStateSnapshot();
-		const actsCollapsed = { ...state.actsCollapsed };
-		const areasCollapsed = { ...state.areasCollapsed };
 		replaceState(buildPresetState(preset));
-		Object.assign(state.actsCollapsed, actsCollapsed);
-		Object.assign(state.areasCollapsed, areasCollapsed);
+		const defaultView = buildDefaultViewState();
+		Object.assign(state.actsCollapsed, defaultView.actsCollapsed);
+		Object.assign(state.areasCollapsed, defaultView.areasCollapsed);
 		toast(`Applied "${preset.label}".`, {
 			action: {
 				label: "Undo",

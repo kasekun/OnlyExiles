@@ -13,7 +13,10 @@ const unregisterAfterEach = router.afterEach(() => {
 	trackPageview();
 });
 
-const context = createPlannerContext({ persistenceKey: "poe2-planner-v1" });
+const context = createPlannerContext({
+	persistenceKey: "poe2-planner-v1",
+	applyDefaultView: true,
+});
 providePlannerContext(context);
 
 const mounted = ref(false);
