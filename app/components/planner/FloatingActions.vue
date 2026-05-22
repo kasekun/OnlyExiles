@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SquareArrowOutUpRight } from "lucide-vue-next";
 
-const REPO = "https://github.com/kasekun/poe2drops";
+const REPO = "https://github.com/kasekun/OnlyExiles";
 </script>
 
 <template>
