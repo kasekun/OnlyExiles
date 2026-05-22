@@ -333,16 +333,33 @@ const btnTrackX = ref(0);
 const btnTrackY = ref(0);
 const btnTracking = ref(false);
 
+let btnMoveFrame: number | undefined;
+let pendingBtnEvent: MouseEvent | undefined;
+
 function onPrimaryBtnMove(e: MouseEvent) {
-	const el = primaryBtnEl.value;
-	if (!el || el.disabled) return;
-	const r = el.getBoundingClientRect();
-	btnTrackX.value = ((e.clientX - r.left - r.width / 2) / (r.width / 2)) * 2.5;
-	btnTrackY.value = ((e.clientY - r.top - r.height / 2) / (r.height / 2)) * 1.5;
-	btnTracking.value = true;
+	pendingBtnEvent = e;
+	if (btnMoveFrame !== undefined) return;
+	btnMoveFrame = requestAnimationFrame(() => {
+		btnMoveFrame = undefined;
+		const event = pendingBtnEvent;
+		if (!event) return;
+		const el = primaryBtnEl.value;
+		if (!el || el.disabled) return;
+		const r = el.getBoundingClientRect();
+		btnTrackX.value =
+			((event.clientX - r.left - r.width / 2) / (r.width / 2)) * 2.5;
+		btnTrackY.value =
+			((event.clientY - r.top - r.height / 2) / (r.height / 2)) * 1.5;
+		btnTracking.value = true;
+	});
 }
 
 function onPrimaryBtnLeave() {
+	if (btnMoveFrame !== undefined) {
+		cancelAnimationFrame(btnMoveFrame);
+		btnMoveFrame = undefined;
+	}
+	pendingBtnEvent = undefined;
 	btnTrackX.value = 0;
 	btnTrackY.value = 0;
 	btnTracking.value = false;

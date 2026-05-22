@@ -45,9 +45,15 @@ const orderedAreaIds = computed({
 	},
 });
 
+const areaById = computed(() => {
+	const m = new Map<string, Area>();
+	for (const a of props.act.areas) m.set(a.id, a);
+	return m;
+});
+
 const orderedAreas = computed((): Area[] =>
 	orderedAreaIds.value
-		.map((id: string) => props.act.areas.find((a: Area) => a.id === id))
+		.map((id: string) => areaById.value.get(id))
 		.filter((a): a is Area => a !== undefined),
 );
 

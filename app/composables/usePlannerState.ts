@@ -96,22 +96,34 @@ export function createPlannerContext(options: {
 
 	function startPersistenceWatcher() {
 		if (watcherStarted || !options.persistenceKey) return;
+		const key = options.persistenceKey;
 		watcherStarted = true;
+		let persistTimer: ReturnType<typeof setTimeout> | undefined;
 		watch(
-			() => JSON.stringify(state),
-			(json) => {
-				try {
-					localStorage.setItem(options.persistenceKey ?? "", json);
-				} catch {}
+			state,
+			() => {
+				clearTimeout(persistTimer);
+				persistTimer = setTimeout(() => {
+					persistTimer = undefined;
+					try {
+						localStorage.setItem(key, JSON.stringify(state));
+					} catch {}
+				}, 300);
 			},
 			{ deep: true },
 		);
+		if (typeof window !== "undefined") {
+			window.addEventListener("beforeunload", () => {
+				if (persistTimer === undefined) return;
+				clearTimeout(persistTimer);
+				try {
+					localStorage.setItem(key, JSON.stringify(state));
+				} catch {}
+			});
+		}
 		watch(guideName, (name) => {
 			try {
-				localStorage.setItem(
-					`${options.persistenceKey ?? ""}-name`,
-					JSON.stringify(name),
-				);
+				localStorage.setItem(`${key}-name`, JSON.stringify(name));
 			} catch {}
 		});
 	}
