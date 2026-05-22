@@ -46,27 +46,103 @@
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) + 4px);
+
+	/* ── Planner palette → Tailwind utilities ───────────────────────────
+	   bg-p-bg / text-p-text / border-p-border / border-p-subtle etc.  */
+	--color-p-bg: var(--planner-bg);
+	--color-p-surface: var(--planner-bg-surface);
+	--color-p-inset: var(--planner-bg-inset);
+	--color-p-act: var(--planner-bg-act-hd);
+	--color-p-area: var(--planner-bg-area-hd);
+	--color-p-row-odd: var(--planner-bg-row-odd);
+	--color-p-row-even: var(--planner-bg-row-even);
+	--color-p-th: var(--planner-bg-th);
+	--color-p-border: var(--planner-border);
+	--color-p-subtle: var(--planner-border-subtle);
+	--color-p-text: var(--planner-text);
+	--color-p-text2: var(--planner-text-2);
+	--color-p-muted: var(--planner-text-muted);
+	--color-p-skip: var(--planner-text-skip);
+	--color-p-amber: var(--planner-amber);
+	--color-p-amber-dim: var(--planner-amber-dim);
+	--color-p-amber-bg: var(--planner-amber-bg);
+	--color-p-amber-bd: var(--planner-amber-bd);
+	--color-p-green: var(--planner-green);
+	--color-p-green-bg: var(--planner-green-bg);
+	--color-p-green-bd: var(--planner-green-bd);
+	--color-p-blue: var(--planner-blue);
+	--color-p-blue-bg: var(--planner-blue-bg);
+	--color-p-blue-bd: var(--planner-blue-bd);
+	--color-p-error: var(--planner-error);
+
+	/* ── Planner type scale → text-p-xs / text-p-sm / text-p-base etc. */
+	--text-p-xs: var(--planner-fs-xs);
+	--text-p-sm: var(--planner-fs-sm);
+	--text-p-base: var(--planner-fs-base);
+	--text-p-md: var(--planner-fs-md);
+	--text-p-lg: var(--planner-fs-lg);
+
+	/* ── Planner font stacks → font-p / font-p-mono ─────────────────── */
+	--font-p: var(--planner-font);
+	--font-p-mono: var(--planner-mono);
 }
 
 :root {
-	--background: oklch(1 0 0);
-	--foreground: oklch(0.145 0 0);
-	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.145 0 0);
-	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.145 0 0);
-	--primary: oklch(0.205 0 0);
-	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.97 0 0);
-	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.97 0 0);
-	--muted-foreground: oklch(0.556 0 0);
-	--accent: oklch(0.97 0 0);
-	--accent-foreground: oklch(0.205 0 0);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.922 0 0);
-	--input: oklch(0.922 0 0);
-	--ring: oklch(0.708 0 0);
+	/* ── Planner design tokens (Ember Palette) ──────────── */
+	--planner-bg: oklch(11.5% 0.008 55);
+	--planner-bg-surface: oklch(15.5% 0.008 55);
+	--planner-bg-inset: oklch(13% 0.007 55);
+	--planner-bg-act-hd: oklch(15% 0.018 62);
+	--planner-bg-area-hd: oklch(18.5% 0.01 58);
+	--planner-bg-row-odd: oklch(14% 0.007 55);
+	--planner-bg-row-even: oklch(12.5% 0.006 55);
+	--planner-bg-th: oklch(17.5% 0.009 56);
+	--planner-border: oklch(26% 0.008 55);
+	--planner-border-subtle: oklch(20% 0.007 55);
+	--planner-text: oklch(88% 0.008 75);
+	--planner-text-2: oklch(66% 0.008 70);
+	--planner-text-muted: oklch(44% 0.006 60);
+	--planner-text-skip: oklch(33% 0.004 55);
+	--planner-amber: oklch(76% 0.158 65);
+	--planner-amber-dim: oklch(54% 0.1 65);
+	--planner-amber-bg: oklch(76% 0.158 65 / 0.1);
+	--planner-amber-bd: oklch(54% 0.1 65 / 0.25);
+	--planner-green: oklch(70% 0.13 148);
+	--planner-green-bg: oklch(21% 0.042 148);
+	--planner-green-bd: oklch(33% 0.07 148);
+	--planner-blue: oklch(70% 0.11 258);
+	--planner-blue-bg: oklch(20% 0.048 258);
+	--planner-blue-bd: oklch(30% 0.072 258);
+	--planner-error: oklch(64% 0.2 25);
+	--planner-radius: 5px;
+	--planner-font:
+		system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+	--planner-mono: "SF Mono", "Fira Code", "Fira Mono", ui-monospace, monospace;
+	--planner-fs-xs: 0.6875rem;
+	--planner-fs-sm: 0.8125rem;
+	--planner-fs-base: 0.9375rem;
+	--planner-fs-md: 1.0625rem;
+	--planner-fs-lg: 1.1875rem;
+
+	/* ── shadcn tokens (aligned to planner palette) ─────── */
+	--background: var(--planner-bg);
+	--foreground: var(--planner-text);
+	--card: var(--planner-bg-surface);
+	--card-foreground: var(--planner-text);
+	--popover: var(--planner-bg-surface);
+	--popover-foreground: var(--planner-text);
+	--primary: var(--planner-amber);
+	--primary-foreground: var(--planner-bg);
+	--secondary: var(--planner-bg-inset);
+	--secondary-foreground: var(--planner-text-2);
+	--muted: var(--planner-bg-inset);
+	--muted-foreground: var(--planner-text-muted);
+	--accent: var(--planner-bg-area-hd);
+	--accent-foreground: var(--planner-text);
+	--destructive: var(--planner-error);
+	--border: var(--planner-border);
+	--input: var(--planner-border);
+	--ring: var(--planner-amber-dim);
 	--chart-1: oklch(0.87 0 0);
 	--chart-2: oklch(0.556 0 0);
 	--chart-3: oklch(0.439 0 0);
@@ -124,5 +200,310 @@
 	body {
 		@apply bg-background text-foreground;
 		@apply font-sans;
+	}
+}
+
+/* ── Planner shared component classes ───────────────────────────────────
+   Patterns used in two or more components. Components import these by
+   class name rather than re-declaring the same CSS block locally.      */
+@layer components {
+	/* Eyebrow label: section headers, table column labels */
+	.planner-eyebrow {
+		display: block;
+		font-size: var(--planner-fs-xs);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.09em;
+		color: oklch(58% 0.007 62);
+	}
+
+	/* Auto-resizing notes / regex textarea */
+	.planner-textarea {
+		display: block;
+		width: 100%;
+		background: var(--planner-bg-inset);
+		border: 1px solid var(--planner-border-subtle);
+		border-radius: 3px;
+		color: var(--planner-text);
+		font-size: var(--planner-fs-base);
+		font-family: var(--planner-font);
+		line-height: 1.6;
+		padding: 0.25rem 0.5rem;
+		resize: none;
+		overflow: hidden;
+		min-height: 2rem;
+		transition: border-color 0.12s;
+
+		&:focus {
+			outline: none;
+			border-color: var(--planner-border);
+		}
+		&::placeholder {
+			color: var(--planner-text-muted);
+			font-style: italic;
+			opacity: 0.5;
+		}
+	}
+
+	/* Ghost button: header chrome (Reset, Copy Markdown, GitHub link…) */
+	.planner-btn-ghost {
+		background: transparent;
+		border: 1px solid var(--planner-border-subtle);
+		color: var(--planner-text-muted);
+		font-size: var(--planner-fs-sm);
+		font-family: var(--planner-font);
+		padding: 0.28rem 0.6rem;
+		border-radius: 4px;
+		cursor: pointer;
+		transition:
+			border-color 0.13s,
+			color 0.13s;
+		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		line-height: 1;
+		text-decoration: none;
+
+		&:hover {
+			border-color: var(--planner-border);
+			color: var(--planner-text-2);
+		}
+		&:focus-visible {
+			outline: 1px solid var(--planner-amber-dim);
+			outline-offset: 2px;
+		}
+	}
+
+	/* Skip-row cascade: reassign foreground vars so all descendant text
+	   using semantic color utilities inherits the skip (muted) value.
+	   CSS custom property inheritance means no specificity fight - the
+	   variable value is resolved via the DOM tree, not the stylesheet order. */
+	[data-skipped] {
+		--foreground: var(--planner-text-skip);
+		--muted-foreground: var(--planner-text-skip);
+		--planner-text: var(--planner-text-skip);
+		--planner-text-2: var(--planner-text-skip);
+	}
+
+	/* Amber ghost button: act-level contextual actions and restore buttons */
+	.planner-btn-act {
+		background: transparent;
+		border: 1px solid var(--planner-amber-bd);
+		color: var(--planner-amber-dim);
+		font-size: var(--planner-fs-xs);
+		font-family: var(--planner-font);
+		padding: 0.2rem 0.48rem;
+		border-radius: 3px;
+		cursor: pointer;
+		transition:
+			border-color 0.13s,
+			color 0.13s,
+			background 0.13s;
+		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+
+		&:hover {
+			border-color: var(--planner-amber-dim);
+			color: var(--planner-amber);
+			background: var(--planner-amber-bg);
+		}
+		&:focus-visible {
+			outline: 1px solid var(--planner-amber-dim);
+			outline-offset: 2px;
+		}
+		&:disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
+	}
+
+	/* Inline panel text input (save/share/passphrase panels) */
+	.planner-input {
+		display: block;
+		width: 100%;
+		background: var(--planner-bg-inset);
+		border: 1px solid var(--planner-border-subtle);
+		border-radius: 3px;
+		color: var(--planner-text);
+		font-size: var(--planner-fs-base);
+		font-family: var(--planner-font);
+		line-height: 1.5;
+		padding: 0.3rem 0.55rem;
+		transition: border-color 0.12s;
+		outline: none;
+
+		&:focus {
+			border-color: var(--planner-border);
+		}
+		&::placeholder {
+			color: var(--planner-text-muted);
+			font-style: italic;
+			opacity: 0.55;
+		}
+	}
+}
+
+/* ── Global drag ghost (used by vue-draggable-plus, can't be scoped) ── */
+.drag-ghost {
+	opacity: 0.4;
+}
+
+/* ── Reduced-motion: one rule to cover all planner transitions ────────
+   Overrides transition on every element rather than listing selectors
+   per-component. Safe for this app: no motion-dependent layout logic.  */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 1ms;
+		animation-duration: 1ms;
+	}
+}
+
+/* ── Planner dropdown (portal-rendered, can't use scoped CSS) ──────────
+   These rules are outside any @layer, so they cascade above Tailwind's
+   @layer utilities automatically - no !important needed.              */
+.planner-dropdown {
+	background: oklch(21% 0.012 58);
+	border-color: var(--planner-border);
+	border-radius: 5px;
+	padding: 0.2rem;
+	box-shadow: none;
+	min-width: 200px;
+	width: auto;
+	color: var(--planner-text);
+	font-family: var(--planner-font);
+}
+
+.planner-dd-item {
+	border-radius: 3px;
+	padding: 0.36rem 0.6rem;
+	gap: 0.45rem;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+.planner-dd-item[data-highlighted] {
+	background: oklch(27% 0.01 58);
+	color: var(--planner-text);
+}
+
+/* ── Planner tooltip (portal-rendered) ──────────────────────────────── */
+.planner-tooltip {
+	background: var(--planner-bg-surface);
+	color: var(--planner-text-2);
+	border: 1px solid var(--planner-border);
+	border-radius: 4px;
+	font-family: var(--planner-font);
+	font-size: var(--planner-fs-xs);
+	box-shadow: none;
+	padding: 0.2rem 0.5rem;
+}
+/* Hide arrow - not needed for the flat planner aesthetic */
+.planner-tooltip > svg {
+	display: none;
+}
+
+/* ── Planner toast (via vue-sonner) ─────────────────────────────────── */
+.planner-toast {
+	background: var(--planner-bg-surface) !important;
+	border-color: var(--planner-border) !important;
+	border-radius: 4px !important;
+	box-shadow: none !important;
+	color: var(--planner-text) !important;
+	font-family: var(--planner-font) !important;
+	font-size: var(--planner-fs-sm) !important;
+	padding: 0.65rem 0.85rem !important;
+	gap: 0.55rem !important;
+}
+.planner-toast-description {
+	color: var(--planner-text-2) !important;
+	font-size: var(--planner-fs-xs) !important;
+}
+.planner-toast-action {
+	background: transparent !important;
+	border: 1px solid var(--planner-amber-bd) !important;
+	color: var(--planner-amber-dim) !important;
+	font-family: var(--planner-font) !important;
+	font-size: var(--planner-fs-xs) !important;
+	border-radius: 3px !important;
+	padding: 0.18rem 0.5rem !important;
+	cursor: pointer;
+	transition:
+		border-color 0.13s,
+		color 0.13s,
+		background 0.13s;
+
+	&:hover {
+		border-color: var(--planner-amber-dim) !important;
+		color: var(--planner-amber) !important;
+		background: var(--planner-amber-bg) !important;
+	}
+}
+.planner-toast-close {
+	background: transparent !important;
+	border: 1px solid var(--planner-border-subtle) !important;
+	color: var(--planner-text-muted) !important;
+	border-radius: 3px !important;
+
+	&:hover {
+		border-color: var(--planner-border) !important;
+		color: var(--planner-text-2) !important;
+		background: transparent !important;
+	}
+}
+
+/* ── Planner export dialog ───────────────────────────────────────────── */
+.planner-dialog {
+	background: var(--planner-bg-surface) !important;
+	border: 1px solid var(--planner-border) !important;
+	border-radius: 5px !important;
+	box-shadow: none !important;
+	padding: 1.25rem !important;
+	gap: 1rem !important;
+	max-width: min(640px, calc(100vw - 2rem)) !important;
+	/* override ring from shadcn default */
+	--tw-ring-shadow: none !important;
+	--tw-shadow: none !important;
+}
+
+/* ── Export markdown preview ─────────────────────────────────────────── */
+.planner-export-preview {
+	background: var(--planner-bg-inset);
+	border: 1px solid var(--planner-border-subtle);
+	border-radius: 3px;
+	padding: 0.65rem 0.85rem;
+	font-family: var(--planner-mono);
+	font-size: var(--planner-fs-xs);
+	line-height: 1.65;
+	color: var(--planner-text-2);
+	white-space: pre;
+	overflow-x: auto;
+	overflow-y: auto;
+	max-height: min(400px, 50vh);
+	margin: 0;
+
+	/* Subtle scrollbar to stay on-theme */
+	scrollbar-width: thin;
+	scrollbar-color: var(--planner-border) transparent;
+}
+
+/* ── Planner checkbox ────────────────────────────────────────────────── */
+.planner-checkbox {
+	border-color: var(--planner-border) !important;
+	background: var(--planner-bg-inset) !important;
+	border-radius: 3px !important;
+
+	&[data-state="checked"] {
+		background: var(--planner-amber) !important;
+		border-color: var(--planner-amber) !important;
+		color: var(--planner-bg) !important;
+	}
+	&:focus-visible {
+		outline: 1px solid var(--planner-amber-dim) !important;
+		outline-offset: 2px !important;
 	}
 }

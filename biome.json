@@ -15,7 +15,10 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"complexity": {
+				"noImportantStyles": "off"
+			}
 		}
 	},
 	"javascript": {
@@ -37,6 +40,18 @@
 		}
 	},
 	"overrides": [
+		{
+			"includes": [
+				"app/data/presets/**/*.ts",
+				"!app/data/presets/build-preset.ts",
+				"!app/data/presets/index.ts"
+			],
+			"javascript": {
+				"formatter": {
+					"expand": "always"
+				}
+			}
+		},
 		{
 			"includes": ["**/*.vue"],
 			"linter": {

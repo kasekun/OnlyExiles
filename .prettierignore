@@ -1,0 +1,4 @@
+# Biome owns formatting for all non-template files.
+# Prettier runs only for Tailwind class sorting in Vue templates.
+**
+!**/*.vue
