@@ -159,7 +159,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-2",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 2)",
+						item: "Uncut Skill Gem (Lvl 2)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -179,7 +179,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-3",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 3)",
+						item: "Uncut Skill Gem (Lvl 3)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -308,7 +308,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-support-gem-level-1",
 						tags: ["league-currency", "support-gem"],
-						item: "Uncut Support Gem (Level 1)",
+						item: "Uncut Support Gem (Lvl 1)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -335,7 +335,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-4",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 4)",
+						item: "Uncut Skill Gem (Lvl 4)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -396,7 +396,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-5",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 5)",
+						item: "Uncut Skill Gem (Lvl 5)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -469,7 +469,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-spirit-gem-level-5",
 						tags: ["league-currency", "spirit-gem"],
-						item: "Uncut Spirit Gem (Level 5)",
+						item: "Uncut Spirit Gem (Lvl 5)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -482,7 +482,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-support-gem-level-2",
 						tags: ["league-currency", "support-gem"],
-						item: "Uncut Support Gem (Level 2)",
+						item: "Uncut Support Gem (Lvl 2)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -835,7 +835,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-support-gem-level-3",
 						tags: ["league-currency", "support-gem"],
-						item: "Uncut Support Gem (Level 3)",
+						item: "Uncut Support Gem (Lvl 3)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -873,18 +873,25 @@ export const DATA: Act[] = [
 				name: "The Venom Crypts",
 				pickups: [
 					{
+						id: "uncut-support-gem-level-3",
+						tags: ["skill-gem"],
+						item: "Uncut Support Gem (Lvl 3)",
+						type: "Drop",
+						source: "Rare Sarcophagus",
+					},
+					{
+						id: "random-ring",
+						tags: ["league-currency", "equipment", "crafting"],
+						item: "Random Ring",
+						type: "Drop",
+						source: "League event",
+					},
+					{
 						id: "permanent-buff-choice-plus-artificer-s-orb",
 						tags: ["permanent", "crafting", "quest"],
 						item: "Permanent Buff Choice + Artificer's Orb",
 						type: "Hand-In",
 						source: "Find the Venom Vial and deliver it to Servi",
-					},
-					{
-						id: "magic-ring-plus-abyss-currency",
-						tags: ["league-currency", "equipment", "crafting"],
-						item: "Magic Ring + Abyss Currency",
-						type: "Drop",
-						source: "League event",
 					},
 				],
 			},
@@ -976,7 +983,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-9",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 9)",
+						item: "Uncut Skill Gem (Lvl 9)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1036,7 +1043,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-spirit-gem-level-10",
 						tags: ["league-currency", "spirit-gem"],
-						item: "Uncut Spirit Gem (Level 10)",
+						item: "Uncut Spirit Gem (Lvl 10)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1049,7 +1056,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-support-gem-level-3",
 						tags: ["league-currency", "support-gem"],
-						item: "Uncut Support Gem (Level 3)",
+						item: "Uncut Support Gem (Lvl 3)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1104,7 +1111,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-spirit-gem-level-11",
 						tags: ["league-currency", "spirit-gem"],
-						item: "Uncut Spirit Gem (Level 11)",
+						item: "Uncut Spirit Gem (Lvl 11)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1152,7 +1159,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-11",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 11)",
+						item: "Uncut Skill Gem (Lvl 11)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1489,7 +1496,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-skill-gem-level-12",
 						tags: ["league-currency", "skill-gem"],
-						item: "Uncut Skill Gem (Level 12)",
+						item: "Uncut Skill Gem (Lvl 12)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1535,7 +1542,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-spirit-gem-level-12",
 						tags: ["league-currency", "spirit-gem"],
-						item: "Uncut Spirit Gem (Level 12)",
+						item: "Uncut Spirit Gem (Lvl 12)",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1554,7 +1561,7 @@ export const DATA: Act[] = [
 					{
 						id: "uncut-support-gem-level-4",
 						tags: ["league-currency", "support-gem"],
-						item: "Uncut Support Gem (Level 4)",
+						item: "Uncut Support Gem (Lvl 4)",
 						type: "Drop",
 						source: "League event",
 					},
