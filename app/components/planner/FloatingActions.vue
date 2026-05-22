@@ -6,8 +6,6 @@ const REPO = "https://github.com/kasekun/poe2drops";
 
 <template>
   <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5 max-sm:bottom-4 max-sm:right-4">
-
-    <!-- Utility links: quiet pair -->
     <div class="flex flex-col items-end gap-1">
       <a
         :href="REPO"
@@ -44,13 +42,12 @@ const REPO = "https://github.com/kasekun/poe2drops";
       </a>
     </div>
 
-    <!-- BMC: warmer, more prominent anchor -->
     <a
       href="https://www.buymeacoffee.com/jesseswan"
       target="_blank"
       rel="noreferrer noopener"
       class="inline-flex items-center gap-[0.4rem] h-8 pl-1.5 pr-2.5 bg-p-area text-p-text2 text-p-xs font-p font-medium leading-none whitespace-nowrap no-underline border border-p-border rounded-lg transition-[border-color,color] duration-130 hover:border-p-amber-dim hover:text-p-text focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[3px]"
-      aria-label="Buy me a coffee — support this project"
+      aria-label="Buy me a coffee - support this project"
     >
       <img
         src="/bmc-logo.svg"

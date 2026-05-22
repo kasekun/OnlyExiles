@@ -18,7 +18,7 @@ function getDb(): PostgresJsDatabase<typeof schema> {
 	return _db;
 }
 
-// Lazy proxy — defers Postgres client creation until first DB operation,
+// Lazy proxy - defers Postgres client creation until first DB operation,
 // so the server starts without POSTGRES_URL present in dev.
 export const db = new Proxy({} as PostgresJsDatabase<typeof schema>, {
 	get(_target, prop) {

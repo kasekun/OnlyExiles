@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 404, message: "Guide not found" });
 	}
 
-	// Refresh lastViewedAt asynchronously — fire and forget
+	// Refresh lastViewedAt asynchronously - fire and forget
 	db.update(guides)
 		.set({ lastViewedAt: new Date() })
 		.where(eq(guides.id, id))

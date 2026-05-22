@@ -17,8 +17,8 @@ const is404 = computed(() => props.error.statusCode === 404);
 useHead({
 	title: computed(() =>
 		is404.value
-			? "Guide not found — PoE2 Campaign Planner"
-			: "Error — PoE2 Campaign Planner",
+			? "Guide not found - PoE2 Campaign Planner"
+			: "Error - PoE2 Campaign Planner",
 	),
 });
 

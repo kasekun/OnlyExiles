@@ -31,6 +31,7 @@ import { useGuideStore } from "~/composables/useGuideStore";
 import { useMarkdownExport } from "~/composables/useMarkdownExport";
 import {
 	areaKey,
+	buildDefaultPlannerState,
 	pickKey,
 	usePlannerState,
 } from "~/composables/usePlannerState";
@@ -47,6 +48,8 @@ const router = useRouter();
 const context = usePlannerState();
 const { state, readonly, guideName } = context;
 const guideStore = useGuideStore();
+const SCRATCH_STATE_STORAGE_KEY = "poe2-planner-v1";
+const SCRATCH_NAME_STORAGE_KEY = "poe2-planner-v1-name";
 
 const mounted = ref(false);
 onMounted(() => {
@@ -55,12 +58,9 @@ onMounted(() => {
 });
 
 const { width: windowWidth } = useWindowSize();
-// Presets button is hidden below 480px; overflow menu shows it instead
 const showPresetsInOverflow = computed(
 	() => mounted.value && windowWidth.value < 480,
 );
-
-// ── Computed state ──────────────────────────────────────────────────────────
 
 const skippedPickupCount = computed(() => {
 	let n = 0;
@@ -105,8 +105,6 @@ const guideDisplayName = computed(
 
 const exportDialogOpen = ref(false);
 
-// ── View Transitions helper ───────────────────────────────────────────────────
-
 function withTransition(fn: () => void) {
 	if (typeof document === "undefined") {
 		fn();
@@ -124,8 +122,6 @@ function withTransition(fn: () => void) {
 		await nextTick();
 	});
 }
-
-// ── Panel state ──────────────────────────────────────────────────────────────
 
 type Panel = "save" | "share" | "passphrase" | null;
 const openPanel = ref<Panel>(null);
@@ -145,8 +141,6 @@ function closePanel() {
 		saving.value = "idle";
 	});
 }
-
-// ── Save panel ───────────────────────────────────────────────────────────────
 
 const passphraseValue = ref("");
 const confirmValue = ref("");
@@ -177,8 +171,6 @@ async function publishGuide() {
 	}
 }
 
-// ── Update guide ─────────────────────────────────────────────────────────────
-
 const updating = ref(false);
 const updateState = ref<"idle" | "success">("idle");
 
@@ -201,14 +193,12 @@ async function updateGuide() {
 				sessionExpired.value = true;
 			});
 		} else {
-			toast("Update failed — try again.");
+			toast("Update failed - try again.");
 		}
 	} finally {
 		updating.value = false;
 	}
 }
-
-// ── Share panel ───────────────────────────────────────────────────────────────
 
 const shareUrl = computed(() =>
 	props.guideId
@@ -246,8 +236,6 @@ async function copyMarkdownFromPanel() {
 	);
 }
 
-// ── Passphrase / claim panel ─────────────────────────────────────────────────
-
 const passphraseError = ref("");
 const sessionExpired = ref(false);
 const claiming = ref(false);
@@ -270,7 +258,7 @@ async function claimEditRights() {
 		const status = (err as { status?: number })?.status;
 		if (status === 429) {
 			passphraseError.value =
-				"Too many failed attempts — try again in 10 minutes";
+				"Too many failed attempts - try again in 10 minutes";
 		} else if (status === 401) {
 			passphraseError.value = "Incorrect passphrase";
 		} else {
@@ -299,19 +287,45 @@ async function discardLocalEditsAndReload() {
 	}
 }
 
-// ── Fork ─────────────────────────────────────────────────────────────────────
+const confirmNewGuide = ref(false);
+
+function requestNewGuide() {
+	confirmNewGuide.value = true;
+}
+
+function clearScratchPadStorage() {
+	try {
+		localStorage.removeItem(SCRATCH_STATE_STORAGE_KEY);
+		localStorage.removeItem(SCRATCH_NAME_STORAGE_KEY);
+	} catch {}
+}
+
+function saveScratchPadStorage(name: string) {
+	try {
+		localStorage.setItem(
+			SCRATCH_STATE_STORAGE_KEY,
+			JSON.stringify(context.state),
+		);
+		localStorage.setItem(SCRATCH_NAME_STORAGE_KEY, JSON.stringify(name));
+	} catch {}
+}
+
+function doStartNewGuide() {
+	confirmNewGuide.value = false;
+	clearScratchPadStorage();
+	if (mode.value === "scratch") {
+		context.replaceState(buildDefaultPlannerState(), "");
+	} else {
+		router.push("/");
+	}
+}
 
 function doFork() {
 	const forkName = `Fork of ${guideDisplayName.value}`;
-	try {
-		localStorage.setItem("poe2-planner-v1", JSON.stringify(context.state));
-		localStorage.setItem("poe2-planner-v1-name", JSON.stringify(forkName));
-	} catch {}
-	toast("Loaded into your scratch pad — save to publish your own copy.");
+	saveScratchPadStorage(forkName);
+	toast("Loaded into your scratch pad - save to publish your own copy.");
 	router.push("/");
 }
-
-// ── Primary button: magnetic hover + animated icon state ─────────────────────
 
 const primaryBtnEl = ref<HTMLButtonElement | null>(null);
 const btnTrackX = ref(0);
@@ -344,8 +358,6 @@ const btnIconState = computed<"loading" | "success" | "idle">(() => {
 	return "idle";
 });
 
-// ── Preset and filter selection ──────────────────────────────────────────────
-
 const confirmPresetId = ref<string | null>(null);
 const presetToConfirm = computed(
 	() => PRESETS.find((preset) => preset.id === confirmPresetId.value) ?? null,
@@ -377,8 +389,6 @@ function confirmApplyPreset() {
 	confirmPresetId.value = null;
 }
 
-// ── Reset confirmation ────────────────────────────────────────────────────
-
 const confirmReset = ref(false);
 
 function requestReset() {
@@ -392,9 +402,7 @@ function doReset() {
 </script>
 
 <template>
-  <!-- Confirmation dialogs -->
   <Teleport to="body">
-    <!-- Preset confirmation -->
     <Transition name="confirm">
       <div
         v-if="confirmPresetId"
@@ -416,7 +424,27 @@ function doReset() {
       </div>
     </Transition>
 
-    <!-- Reset confirmation -->
+    <Transition name="confirm">
+      <div
+        v-if="confirmNewGuide"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
+        @click.self="confirmNewGuide = false"
+      >
+        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
+          <p class="text-p-base text-p-text leading-[1.55]">
+            Starting a new guide clears your current scratch pad - notes, levels, skips, and loot filter patterns will be lost.
+          </p>
+          <div class="flex items-center justify-end gap-2">
+            <button class="planner-btn-ghost" @click="confirmNewGuide = false">Cancel</button>
+            <button
+              class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
+              @click="doStartNewGuide"
+            >Start new guide</button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
     <Transition name="confirm">
       <div
         v-if="confirmReset"
@@ -440,11 +468,7 @@ function doReset() {
   </Teleport>
 
   <header class="sticky top-0 z-20 bg-p-bg border-b border-p-border">
-
-    <!-- ── Shared toolbar (all breakpoints) ─────────────────────────────── -->
     <div class="flex items-center gap-2 max-w-[1020px] mx-auto px-6 py-2 max-sm:px-4">
-
-      <!-- Brand -->
       <div class="shrink-0 flex items-center gap-2">
         <div class="text-p-lg font-bold text-p-amber tracking-[-0.01em] flex items-center gap-2 leading-[1.3]">
           <BrandMark :size="13" class="shrink-0" />
@@ -464,7 +488,6 @@ function doReset() {
 
       <div class="flex-1"></div>
 
-      <!-- My Guides -->
       <DropdownMenu v-if="mounted">
         <DropdownMenuTrigger as-child>
           <button class="planner-btn-ghost" aria-label="My Guides">
@@ -492,13 +515,12 @@ function doReset() {
             </DropdownMenuItem>
             <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           </template>
-          <DropdownMenuItem class="planner-dd-item text-p-sm text-p-muted" @click="router.push('/')">
+          <DropdownMenuItem class="planner-dd-item text-p-sm text-p-muted" @click="requestNewGuide">
             New guide
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <!-- Presets (hidden below 480px — shows in overflow instead) -->
       <DropdownMenu v-if="!showPresetsInOverflow">
         <DropdownMenuTrigger as-child>
           <button class="planner-btn-ghost data-[state=open]:[&_.chevron-dd]:rotate-180">
@@ -514,7 +536,6 @@ function doReset() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <!-- Overflow: always Copy Markdown + Reset; Presets added for narrow viewports -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <button class="planner-btn-ghost px-2" aria-label="More actions">
@@ -522,7 +543,6 @@ function doReset() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown" align="end">
-          <!-- Presets (mobile-only, gated by JS breakpoint so it actually hides) -->
           <template v-if="showPresetsInOverflow">
             <DropdownMenuSub>
               <DropdownMenuSubTrigger class="planner-dd-item text-p-sm text-p-text2">
@@ -549,7 +569,6 @@ function doReset() {
 
       <span aria-hidden="true" class="w-px h-[14px] bg-p-subtle self-center mx-0.5 shrink-0" />
 
-      <!-- Primary action -->
       <button
         v-if="mode === 'scratch'"
         ref="primaryBtnEl"
@@ -596,7 +615,6 @@ function doReset() {
         <span class="hidden max-sm:inline">Fork</span>
       </button>
 
-      <!-- Share icon (shown after save) -->
       <button
         v-if="isSaved"
         class="planner-btn-ghost px-2"
@@ -607,7 +625,6 @@ function doReset() {
         <Share2 :size="13" aria-hidden="true" />
       </button>
 
-      <!-- Claim edit rights (viewer mode) -->
       <button
         v-if="mode === 'viewer'"
         class="planner-btn-ghost flex items-center gap-1 max-sm:hidden"
@@ -625,10 +642,6 @@ function doReset() {
         <KeyRound :size="13" aria-hidden="true" />
       </button>
     </div>
-
-    <!-- ── Inline panels ─────────────────────────────────────────────────── -->
-
-    <!-- Save panel -->
     <div
       v-if="openPanel === 'save'"
       class="header-panel border-t border-p-border bg-p-inset"
@@ -704,14 +717,11 @@ function doReset() {
       </div>
     </div>
 
-    <!-- Share panel -->
     <div
       v-else-if="openPanel === 'share' && isSaved"
       class="header-panel border-t border-p-border bg-p-inset"
     >
       <div class="max-w-[1020px] mx-auto px-6 py-2.5 max-sm:px-4 flex items-center justify-between gap-3">
-
-        <!-- Copy Markdown -->
         <button
           class="planner-btn-ghost shrink-0"
           :class="{
@@ -724,7 +734,6 @@ function doReset() {
           <span>{{ copyMdState === 'success' ? 'Markdown copied' : copyMdState === 'error' ? 'Copy failed' : 'Copy Markdown' }}</span>
         </button>
 
-        <!-- Link bar -->
         <div class="flex items-stretch bg-p-bg border border-p-subtle rounded-[3px] overflow-hidden font-p-mono text-p-sm min-w-0 flex-1 max-w-[460px]">
           <input
             class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.3rem] text-p-text2 outline-none select-all"
@@ -745,7 +754,6 @@ function doReset() {
           </button>
         </div>
 
-        <!-- Close -->
         <button
           class="shrink-0 p-1 text-p-muted hover:text-p-text2 transition-colors duration-130 focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-2 rounded-[3px]"
           aria-label="Close share panel"
@@ -756,7 +764,6 @@ function doReset() {
       </div>
     </div>
 
-    <!-- Passphrase / claim panel -->
     <div
       v-else-if="openPanel === 'passphrase'"
       class="header-panel border-t border-p-border bg-p-inset"
@@ -765,7 +772,7 @@ function doReset() {
         <div class="max-w-[420px] ml-auto flex flex-col gap-3 max-sm:max-w-none">
           <p v-if="!sessionExpired" class="text-p-md font-bold text-p-amber tracking-[-0.01em] leading-[1.3]">Unlock editing</p>
           <p v-else class="text-p-xs text-p-amber leading-[1.45]">
-            Session expired — enter your passphrase to continue editing.
+            Session expired - enter your passphrase to continue editing.
           </p>
           <div class="flex flex-col gap-1">
             <label class="planner-eyebrow" for="claim-passphrase">Passphrase</label>
@@ -811,7 +818,6 @@ function doReset() {
 </template>
 
 <style scoped>
-/* ── Primary button: ember shimmer ──────────────────────────────────────────── */
 .planner-btn-primary {
   position: relative;
   overflow: hidden;
@@ -855,7 +861,6 @@ function doReset() {
   }
 }
 
-/* ── Animated icon slot ─────────────────────────────────────────────────────── */
 .btn-icon {
   display: inline-flex;
   align-items: center;
@@ -889,12 +894,10 @@ function doReset() {
   }
 }
 
-/* ── Panel view-transition name ─────────────────────────────────────────────── */
 .header-panel {
   view-transition-name: header-panel;
 }
 
-/* ── Confirm dialog transitions (Vue <Transition name="confirm">) ─────────── */
 .confirm-enter-active {
   transition: opacity 160ms;
 }
@@ -927,14 +930,12 @@ function doReset() {
 </style>
 
 <style>
-/* ── View Transitions: suppress whole-page cross-fade ───────────────────────── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-/* ── Header panel: clip-wipe entrance / exit ────────────────────────────────── */
 ::view-transition-new(header-panel) {
   animation: header-panel-enter 210ms cubic-bezier(0.2, 0, 0, 1) both;
 }
@@ -967,7 +968,6 @@ function doReset() {
   }
 }
 
-/* ── Reduced motion: suppress all View Transition animations ─────────────────── */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-image-pair(*),

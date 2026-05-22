@@ -277,7 +277,7 @@
 
 	/* Skip-row cascade: reassign foreground vars so all descendant text
 	   using semantic color utilities inherits the skip (muted) value.
-	   CSS custom property inheritance means no specificity fight — the
+	   CSS custom property inheritance means no specificity fight - the
 	   variable value is resolved via the DOM tree, not the stylesheet order. */
 	[data-skipped] {
 		--foreground: var(--planner-text-skip);
@@ -365,7 +365,7 @@
 
 /* ── Planner dropdown (portal-rendered, can't use scoped CSS) ──────────
    These rules are outside any @layer, so they cascade above Tailwind's
-   @layer utilities automatically — no !important needed.              */
+   @layer utilities automatically - no !important needed.              */
 .planner-dropdown {
 	background: oklch(21% 0.012 58);
 	border-color: var(--planner-border);
@@ -402,7 +402,7 @@
 	box-shadow: none;
 	padding: 0.2rem 0.5rem;
 }
-/* Hide arrow — not needed for the flat planner aesthetic */
+/* Hide arrow - not needed for the flat planner aesthetic */
 .planner-tooltip > svg {
 	display: none;
 }

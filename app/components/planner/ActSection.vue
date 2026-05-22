@@ -31,7 +31,6 @@ function toggleCollapse() {
 	state.actsCollapsed[props.act.id] = !isCollapsed.value;
 }
 
-// Ordered area IDs — custom order from state, falls back to DATA order
 const orderedAreaIds = computed({
 	get() {
 		return getOrderedAreas(
@@ -52,7 +51,6 @@ const orderedAreas = computed((): Area[] =>
 		.filter((a): a is Area => a !== undefined),
 );
 
-// Act note
 const actNote = computed({
 	get() {
 		return state.actNotes[props.act.id] ?? "";
@@ -99,8 +97,6 @@ function autoResize(el: HTMLTextAreaElement) {
 
 <template>
   <div class="border border-p-border rounded-[5px] overflow-hidden">
-
-    <!-- Act header -->
     <div class="flex items-stretch bg-p-act">
       <button
         class="flex items-center gap-2 px-4 py-3 flex-1 min-w-0 bg-transparent border-0 cursor-pointer text-left text-p-amber text-p-md font-bold tracking-[-0.01em] font-p transition-[background] duration-120 select-none hover:bg-[oklch(17.5%_0.022_62)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:-outline-offset-2"
@@ -142,14 +138,8 @@ function autoResize(el: HTMLTextAreaElement) {
       </div>
 
     </div>
-
-    <!-- Act body -->
     <div v-show="!isCollapsed" class="bg-p-inset px-4 pt-3 pb-2 flex flex-col gap-3">
-
-      <!-- Act-level fields -->
       <div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-
-        <!-- Free-form note -->
         <div class="flex flex-col gap-1">
           <span class="planner-eyebrow">Act note</span>
           <textarea
@@ -162,8 +152,6 @@ function autoResize(el: HTMLTextAreaElement) {
             rows="2"
           />
         </div>
-
-        <!-- Loot filter regex -->
         <div class="flex flex-col gap-1">
           <span class="planner-eyebrow">Loot filter regex</span>
           <p class="text-p-xs text-p-muted leading-[1.4]">
@@ -206,8 +194,6 @@ function autoResize(el: HTMLTextAreaElement) {
         </div>
 
       </div>
-
-      <!-- Draggable areas list -->
       <VueDraggable
         v-model="orderedAreaIds"
         :animation="150"

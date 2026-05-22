@@ -25,7 +25,6 @@ function toggleZoneSkip() {
 	state.skippedZones[akey.value] = !isSkipped.value;
 }
 
-// Editable level
 const levelEditing = ref(false);
 const levelInputRef = ref<HTMLInputElement | null>(null);
 
@@ -52,7 +51,6 @@ function onLevelKeydown(e: KeyboardEvent) {
 	if (e.key === "Escape") levelEditing.value = false;
 }
 
-// Notes textarea
 const notesRef = ref<HTMLTextAreaElement | null>(null);
 
 const notesValue = computed({
@@ -89,8 +87,6 @@ onMounted(() => {
       : 'border-p-subtle'"
   >
     <div class="flex items-stretch bg-p-area">
-
-      <!-- Drag handle — hidden in readonly mode -->
       <span
         class="drag-handle flex items-center px-1.5 text-p-muted opacity-0 cursor-grab shrink-0 transition-opacity duration-120 group-hover/area:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
         :class="{ 'invisible pointer-events-none': readonly }"
@@ -98,8 +94,6 @@ onMounted(() => {
       >
         <GripVertical :size="14" />
       </span>
-
-      <!-- Toggle + name + level badge -->
       <div
         class="flex items-center gap-2 py-2 pr-3 pl-1 flex-1 min-w-0 cursor-pointer select-none transition-[background] duration-120 hover:bg-[oklch(21%_0.010_57)] focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:-outline-offset-2"
         @click="toggleCollapse"
@@ -119,7 +113,6 @@ onMounted(() => {
             {{ area.name }}
           </span>
 
-          <!-- Level badge: editable on click (disabled in readonly) -->
           <span
             v-if="!levelEditing && !isSkipped"
             class="inline-flex items-center shrink-0 group/level"
@@ -160,8 +153,6 @@ onMounted(() => {
             /></span>
         </span>
       </div>
-
-      <!-- Zone skip toggle — hidden in readonly mode -->
       <div
         v-if="!readonly"
         class="flex items-center pr-2 shrink-0"
@@ -186,11 +177,7 @@ onMounted(() => {
         </button>
       </div>
     </div>
-
-    <!-- Area body -->
     <div v-show="!isCollapsed && !isSkipped" class="py-3 px-4 flex flex-col gap-4 max-sm:px-3 max-sm:py-2">
-
-      <!-- Notes -->
       <div class="flex flex-col gap-1">
         <span class="planner-eyebrow">Notes</span>
         <textarea
@@ -204,8 +191,6 @@ onMounted(() => {
           rows="1"
         />
       </div>
-
-      <!-- Pickups -->
       <div class="flex flex-col gap-1">
         <span class="planner-eyebrow">Pickups</span>
         <PlannerPickupTable :act-id="actId" :area="area" />

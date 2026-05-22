@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { buildMarkdown } from "../app/composables/useMarkdownExport";
+import { createPlannerContext } from "../app/composables/usePlannerState";
 import { DATA, validateCampaignData } from "../app/data/campaign";
 import {
 	applyFilterToSkips,
@@ -13,23 +14,24 @@ import {
 	areaKey,
 	buildDefaultPlannerState,
 	normalizePlannerState,
+	type PlannerState,
 	pickKey,
 } from "../app/lib/plannerState";
 
-// ---------------------------------------------------------------------------
-// buildDefaultPlannerState
-// ---------------------------------------------------------------------------
+function expectPlannerDataFieldsEmpty(state: PlannerState) {
+	expect(state.notes).toEqual({});
+	expect(state.levels).toEqual({});
+	expect(state.skippedPickups).toEqual({});
+	expect(state.skippedZones).toEqual({});
+	expect(state.actNotes).toEqual({});
+	expect(state.actRegex).toEqual({});
+	expect(state.areaOrder).toEqual({});
+}
 
 describe("buildDefaultPlannerState", () => {
-	it("returns a truly blank state — no notes, levels, skips, or custom order", () => {
+	it("returns a truly blank state - no notes, levels, skips, or custom order", () => {
 		const s = buildDefaultPlannerState();
-		expect(s.notes).toEqual({});
-		expect(s.levels).toEqual({});
-		expect(s.skippedPickups).toEqual({});
-		expect(s.skippedZones).toEqual({});
-		expect(s.actNotes).toEqual({});
-		expect(s.actRegex).toEqual({});
-		expect(s.areaOrder).toEqual({});
+		expectPlannerDataFieldsEmpty(s);
 		expect(s.actsCollapsed).toEqual({});
 		expect(s.areasCollapsed).toEqual({});
 	});
@@ -41,10 +43,6 @@ describe("buildDefaultPlannerState", () => {
 		expect(b.notes.x).toBeUndefined();
 	});
 });
-
-// ---------------------------------------------------------------------------
-// normalizePlannerState
-// ---------------------------------------------------------------------------
 
 describe("normalizePlannerState", () => {
 	it("returns a blank state for null/undefined input", () => {
@@ -115,9 +113,62 @@ describe("normalizePlannerState", () => {
 	});
 });
 
-// ---------------------------------------------------------------------------
-// Campaign and preset validation
-// ---------------------------------------------------------------------------
+describe("createPlannerContext replaceState", () => {
+	it("replaceState with buildDefaultPlannerState clears all data fields from a populated state", () => {
+		const ctx = createPlannerContext({
+			initialState: {
+				notes: { "act|area": "some note" },
+				levels: { "act|area": "5" },
+				skippedPickups: { "act|area|0": true },
+				skippedZones: { "act|area": true },
+				actNotes: { act: "act note" },
+				actRegex: { act: "pattern" },
+				areaOrder: { act: ["area-1", "area-2"] },
+			},
+			initialName: "My populated guide",
+		});
+
+		ctx.replaceState(buildDefaultPlannerState(), "");
+
+		expectPlannerDataFieldsEmpty(ctx.state);
+		expect(ctx.guideName.value).toBe("");
+	});
+
+	it("replaceState with buildDefaultPlannerState removes all individual entries", () => {
+		const ctx = createPlannerContext({
+			initialState: {
+				skippedPickups: { "a|b|c": true, "d|e|f": true },
+				notes: { "a|b": "note1", "c|d": "note2" },
+			},
+		});
+
+		ctx.replaceState(buildDefaultPlannerState(), "");
+
+		expect(Object.keys(ctx.state.skippedPickups).length).toBe(0);
+		expect(Object.keys(ctx.state.notes).length).toBe(0);
+	});
+
+	it("replaceState preserves the existing name when no name argument is supplied", () => {
+		const ctx = createPlannerContext({ initialName: "Named guide" });
+
+		ctx.replaceState(buildDefaultPlannerState());
+
+		expect(ctx.guideName.value).toBe("Named guide");
+	});
+
+	it("replaceState with a preset-populated state then buildDefaultPlannerState leaves state blank", () => {
+		const ctx = createPlannerContext({});
+		const presetState = buildPresetState(CAMPAIGN_DEFAULT);
+		ctx.replaceState(presetState);
+		expect(Object.keys(ctx.state.notes).length).toBeGreaterThan(0);
+		expect(Object.keys(ctx.state.levels).length).toBeGreaterThan(0);
+
+		ctx.replaceState(buildDefaultPlannerState(), "");
+
+		expectPlannerDataFieldsEmpty(ctx.state);
+		expect(ctx.guideName.value).toBe("");
+	});
+});
 
 describe("validateCampaignData", () => {
 	it("campaign data has no duplicate pickup IDs, empty IDs, or untagged pickups", () => {
@@ -207,10 +258,6 @@ describe("validatePresets", () => {
 	});
 });
 
-// ---------------------------------------------------------------------------
-// CAMPAIGN_DEFAULT preset structure
-// ---------------------------------------------------------------------------
-
 describe("CAMPAIGN_DEFAULT", () => {
 	it("has levels for every zone in campaign data", () => {
 		for (const act of DATA) {
@@ -226,10 +273,6 @@ describe("CAMPAIGN_DEFAULT", () => {
 		expect(CAMPAIGN_DEFAULT.skippedZones ?? {}).toEqual({});
 	});
 });
-
-// ---------------------------------------------------------------------------
-// buildPresetState
-// ---------------------------------------------------------------------------
 
 describe("buildPresetState", () => {
 	it("starts absent preset-owned fields as blank objects", () => {
@@ -275,10 +318,6 @@ describe("buildPresetState", () => {
 		expect(state.areasCollapsed).toEqual({});
 	});
 });
-
-// ---------------------------------------------------------------------------
-// applyFilterToSkips
-// ---------------------------------------------------------------------------
 
 describe("applyFilterToSkips", () => {
 	it("skipTags marks matching pickups and preserves existing manual skips", () => {
@@ -349,10 +388,6 @@ describe("applyFilterToSkips", () => {
 		expect(twice).toEqual(once);
 	});
 });
-
-// ---------------------------------------------------------------------------
-// Markdown export
-// ---------------------------------------------------------------------------
 
 describe("buildMarkdown", () => {
 	it("omits skipped zones when requested", () => {

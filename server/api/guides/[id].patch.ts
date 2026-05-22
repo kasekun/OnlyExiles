@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
 	if ((guideUpdateCount?.c ?? 0) >= 60) {
 		throw createError({
 			statusCode: 429,
-			message: "Too many updates — try again shortly",
+			message: "Too many updates - try again shortly",
 		});
 	}
 
@@ -84,7 +84,7 @@ export default defineEventHandler(async (event) => {
 	if ((ipUpdateCount?.c ?? 0) >= 120) {
 		throw createError({
 			statusCode: 429,
-			message: "Too many updates — try again shortly",
+			message: "Too many updates - try again shortly",
 		});
 	}
 

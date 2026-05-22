@@ -36,7 +36,7 @@ if (error.value || !guideData.value) {
 const guide = computed(() => guideData.value as GuideResponse);
 const normalizedState = normalizePlannerState(guide.value.state);
 
-// Create isolated context — no scratch-pad persistence
+// Create isolated context - no scratch-pad persistence
 const context = createPlannerContext({
 	initialState: normalizedState,
 	initialName: guide.value.name,
@@ -91,7 +91,7 @@ async function discardLocalEditsAndReload() {
 }
 
 useHead({
-	title: computed(() => `${guide.value.name} — PoE2 Campaign Planner`),
+	title: computed(() => `${guide.value.name} - PoE2 Campaign Planner`),
 });
 </script>
 
@@ -111,7 +111,7 @@ useHead({
     >
       <div class="flex items-start justify-between gap-3 bg-p-surface border border-p-border rounded-[4px] px-4 py-2.5">
         <p class="text-p-xs text-p-muted leading-normal">
-          This guide was created for <span class="font-p-mono">{{ guide.version }}</span> — some content may be outdated.
+          This guide was created for <span class="font-p-mono">{{ guide.version }}</span> - some content may be outdated.
         </p>
         <button
           class="text-p-xs text-p-muted hover:text-p-text2 shrink-0 transition-colors duration-120"

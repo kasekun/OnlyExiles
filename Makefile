@@ -1,9 +1,9 @@
 .PHONY: check format lint lint\:fix biome\:check typecheck
 
 # Full pre-commit pass:
-#   1. canonicalize  — rename deprecated v3 class aliases to v4 equivalents
-#   2. format:classes — prettier-plugin-tailwindcss sorts class order
-#   3. biome:check   — format + lint + organizeImports (runs last, wins on formatting)
+#   1. canonicalize  - rename deprecated v3 class aliases to v4 equivalents
+#   2. format:classes - prettier-plugin-tailwindcss sorts class order
+#   3. biome:check   - format + lint + organizeImports (runs last, wins on formatting)
 check:
 	bun run canonicalize
 	bun run format:classes

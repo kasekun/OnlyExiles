@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
 	if ((shortCount?.c ?? 0) >= 10) {
 		throw createError({
 			statusCode: 429,
-			message: "Too many guides created — try again later",
+			message: "Too many guides created - try again later",
 		});
 	}
 
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
 	if ((longCount?.c ?? 0) >= 100) {
 		throw createError({
 			statusCode: 429,
-			message: "Too many guides created — try again later",
+			message: "Too many guides created - try again later",
 		});
 	}
 

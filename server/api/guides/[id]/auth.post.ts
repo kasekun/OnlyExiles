@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
 	if ((failCount?.c ?? 0) >= 5) {
 		throw createError({
 			statusCode: 429,
-			message: "Too many failed attempts — try again in 10 minutes",
+			message: "Too many failed attempts - try again in 10 minutes",
 		});
 	}
 

@@ -15,7 +15,7 @@ export function buildMarkdown(
 	version?: string,
 ): string {
 	const title = guideName.trim() || "Untitled guide";
-	const lines: string[] = [`# ${title} — PoE2 Campaign Route`, ""];
+	const lines: string[] = [`# ${title} - PoE2 Campaign Route`, ""];
 
 	for (const act of DATA) {
 		const actAreas = getOrderedAreas(
