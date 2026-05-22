@@ -14,7 +14,7 @@ import {
 	Share2,
 	X,
 } from "lucide-vue-next";
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { toast } from "vue-sonner";
 import {
 	DropdownMenu,
@@ -97,21 +97,45 @@ const guideDisplayName = computed(
 
 const exportDialogOpen = ref(false);
 
+// ── View Transitions helper ───────────────────────────────────────────────────
+
+function withTransition(fn: () => void) {
+	if (typeof document === "undefined") {
+		fn();
+		return;
+	}
+	const doc = document as Document & {
+		startViewTransition?: (cb: () => Promise<void>) => unknown;
+	};
+	if (!doc.startViewTransition) {
+		fn();
+		return;
+	}
+	doc.startViewTransition(async () => {
+		fn();
+		await nextTick();
+	});
+}
+
 // ── Panel state ──────────────────────────────────────────────────────────────
 
 type Panel = "save" | "share" | "passphrase" | null;
 const openPanel = ref<Panel>(null);
 
 function setPanel(p: Panel) {
-	openPanel.value = openPanel.value === p ? null : p;
+	withTransition(() => {
+		openPanel.value = openPanel.value === p ? null : p;
+	});
 }
 
 function closePanel() {
-	openPanel.value = null;
-	passphraseValue.value = "";
-	confirmValue.value = "";
-	passphraseError.value = "";
-	saving.value = "idle";
+	withTransition(() => {
+		openPanel.value = null;
+		passphraseValue.value = "";
+		confirmValue.value = "";
+		passphraseError.value = "";
+		saving.value = "idle";
+	});
 }
 
 // ── Save panel ───────────────────────────────────────────────────────────────
@@ -164,8 +188,10 @@ async function updateGuide() {
 		if (status === 401) {
 			guideStore.expireToken(props.guideId);
 			context.setReadonly(true);
-			openPanel.value = "passphrase";
-			sessionExpired.value = true;
+			withTransition(() => {
+				openPanel.value = "passphrase";
+				sessionExpired.value = true;
+			});
 		} else {
 			toast("Update failed — try again.");
 		}
@@ -277,6 +303,39 @@ function doFork() {
 	router.push("/");
 }
 
+// ── Primary button: magnetic hover + animated icon state ─────────────────────
+
+const primaryBtnEl = ref<HTMLButtonElement | null>(null);
+const btnTrackX = ref(0);
+const btnTrackY = ref(0);
+const btnTracking = ref(false);
+
+function onPrimaryBtnMove(e: MouseEvent) {
+	const el = primaryBtnEl.value;
+	if (!el || el.disabled) return;
+	const r = el.getBoundingClientRect();
+	btnTrackX.value = ((e.clientX - r.left - r.width / 2) / (r.width / 2)) * 2.5;
+	btnTrackY.value = ((e.clientY - r.top - r.height / 2) / (r.height / 2)) * 1.5;
+	btnTracking.value = true;
+}
+
+function onPrimaryBtnLeave() {
+	btnTrackX.value = 0;
+	btnTrackY.value = 0;
+	btnTracking.value = false;
+}
+
+const primaryBtnStyle = computed(() => ({
+	"--btn-tx": `${btnTrackX.value.toFixed(2)}px`,
+	"--btn-ty": `${btnTrackY.value.toFixed(2)}px`,
+}));
+
+const btnIconState = computed<"loading" | "success" | "idle">(() => {
+	if (updating.value) return "loading";
+	if (updateState.value === "success") return "success";
+	return "idle";
+});
+
 // ── Preset and filter selection ──────────────────────────────────────────────
 
 const confirmPresetId = ref<string | null>(null);
@@ -328,44 +387,48 @@ function doReset() {
   <!-- Confirmation dialogs -->
   <Teleport to="body">
     <!-- Preset confirmation -->
-    <div
-      v-if="confirmPresetId"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
-      @click.self="confirmPresetId = null"
-    >
-      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
-        <p class="text-p-base text-p-text leading-[1.55]">
-          Applying <span class="text-p-amber font-semibold">{{ presetToConfirm?.label }}</span> replaces your current route with that preset. Your collapsed sections stay as-is, and you can undo immediately after.
-        </p>
-        <div class="flex items-center justify-end gap-2">
-          <button class="planner-btn-ghost" @click="confirmPresetId = null">Cancel</button>
-          <button
-            class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
-            @click="confirmApplyPreset"
-          >Apply</button>
+    <Transition name="confirm">
+      <div
+        v-if="confirmPresetId"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
+        @click.self="confirmPresetId = null"
+      >
+        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
+          <p class="text-p-base text-p-text leading-[1.55]">
+            Applying <span class="text-p-amber font-semibold">{{ presetToConfirm?.label }}</span> replaces your current route with that preset. Your collapsed sections stay as-is, and you can undo immediately after.
+          </p>
+          <div class="flex items-center justify-end gap-2">
+            <button class="planner-btn-ghost" @click="confirmPresetId = null">Cancel</button>
+            <button
+              class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
+              @click="confirmApplyPreset"
+            >Apply</button>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
 
     <!-- Reset confirmation -->
-    <div
-      v-else-if="confirmReset"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
-      @click.self="confirmReset = false"
-    >
-      <div class="bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
-        <p class="text-p-base text-p-text leading-[1.55]">
-          Reset clears all notes, recommended levels, pickup skips, zone skips, loot filter patterns, custom zone order, and the guide name. You can undo immediately after.
-        </p>
-        <div class="flex items-center justify-end gap-2">
-          <button class="planner-btn-ghost" @click="confirmReset = false">Cancel</button>
-          <button
-            class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
-            @click="doReset"
-          >Reset</button>
+    <Transition name="confirm">
+      <div
+        v-if="confirmReset"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
+        @click.self="confirmReset = false"
+      >
+        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
+          <p class="text-p-base text-p-text leading-[1.55]">
+            Reset clears all notes, recommended levels, pickup skips, zone skips, loot filter patterns, custom zone order, and the guide name. You can undo immediately after.
+          </p>
+          <div class="flex items-center justify-end gap-2">
+            <button class="planner-btn-ghost" @click="confirmReset = false">Cancel</button>
+            <button
+              class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
+              @click="doReset"
+            >Reset</button>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 
   <header class="sticky top-0 z-20 bg-p-bg border-b border-p-border">
@@ -523,23 +586,44 @@ function doReset() {
       <!-- Primary action -->
       <button
         v-if="mode === 'scratch'"
-        class="planner-btn-act"
+        ref="primaryBtnEl"
+        class="planner-btn-act planner-btn-primary"
+        :style="primaryBtnStyle"
+        :data-tracking="btnTracking ? 'yes' : undefined"
         @click="setPanel('save')"
+        @mousemove="onPrimaryBtnMove"
+        @mouseleave="onPrimaryBtnLeave"
       >Save guide</button>
       <button
         v-else-if="mode === 'owner'"
-        class="planner-btn-act"
+        ref="primaryBtnEl"
+        class="planner-btn-act planner-btn-primary"
         :disabled="updating"
+        :style="primaryBtnStyle"
+        :data-tracking="btnTracking ? 'yes' : undefined"
         @click="updateGuide"
+        @mousemove="onPrimaryBtnMove"
+        @mouseleave="onPrimaryBtnLeave"
       >
-        <Loader2 v-if="updating" :size="11" class="animate-spin" aria-hidden="true" />
-        <Check v-else-if="updateState === 'success'" :size="11" aria-hidden="true" />
-        {{ updating ? 'Saving…' : updateState === 'success' ? 'Saved' : 'Update guide' }}
+        <span v-if="btnIconState !== 'idle'" class="btn-icon" aria-hidden="true">
+          <svg v-if="btnIconState === 'loading'" class="btn-spinner" width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <circle cx="5" cy="5" r="3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="8 14" />
+          </svg>
+          <svg v-else class="btn-check" width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path pathLength="1" d="M1.5,5.5 L4,8 L8.5,2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        {{ btnIconState === 'loading' ? 'Saving…' : btnIconState === 'success' ? 'Saved' : 'Update guide' }}
       </button>
       <button
         v-else-if="mode === 'viewer'"
-        class="planner-btn-act"
+        ref="primaryBtnEl"
+        class="planner-btn-act planner-btn-primary"
+        :style="primaryBtnStyle"
+        :data-tracking="btnTracking ? 'yes' : undefined"
         @click="doFork"
+        @mousemove="onPrimaryBtnMove"
+        @mouseleave="onPrimaryBtnLeave"
       >
         <GitFork :size="11" aria-hidden="true" />
         <span class="max-sm:hidden">Fork this guide</span>
@@ -581,7 +665,7 @@ function doReset() {
     <!-- Save panel -->
     <div
       v-if="openPanel === 'save'"
-      class="border-t border-p-border bg-p-inset"
+      class="header-panel border-t border-p-border bg-p-inset"
     >
       <div class="max-w-[1020px] mx-auto px-6 py-4 max-sm:px-4">
         <div class="max-w-[420px] ml-auto flex flex-col gap-3 max-sm:max-w-none">
@@ -657,7 +741,7 @@ function doReset() {
     <!-- Share panel -->
     <div
       v-else-if="openPanel === 'share' && isSaved"
-      class="border-t border-p-border bg-p-inset"
+      class="header-panel border-t border-p-border bg-p-inset"
     >
       <div class="max-w-[1020px] mx-auto px-6 py-2.5 max-sm:px-4 flex items-center justify-between gap-3">
 
@@ -709,7 +793,7 @@ function doReset() {
     <!-- Passphrase / claim panel -->
     <div
       v-else-if="openPanel === 'passphrase'"
-      class="border-t border-p-border bg-p-inset"
+      class="header-panel border-t border-p-border bg-p-inset"
     >
       <div class="max-w-[1020px] mx-auto px-6 py-4 max-sm:px-4">
         <div class="max-w-[420px] ml-auto flex flex-col gap-3 max-sm:max-w-none">
@@ -759,3 +843,171 @@ function doReset() {
 
   <PlannerExportDialog v-model:open="exportDialogOpen" :version="guideVersion" />
 </template>
+
+<style scoped>
+/* ── Primary button: ember shimmer ──────────────────────────────────────────── */
+.planner-btn-primary {
+  position: relative;
+  overflow: hidden;
+  transform: translate(var(--btn-tx, 0px), var(--btn-ty, 0px));
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0, 0, 1),
+    border-color 0.13s,
+    color 0.13s,
+    background-color 0.13s;
+}
+
+.planner-btn-primary[data-tracking] {
+  transition:
+    transform 0.07s linear,
+    border-color 0.13s,
+    color 0.13s,
+    background-color 0.13s;
+}
+
+.planner-btn-primary::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    oklch(76% 0.158 65 / 0.11) 28deg,
+    transparent 56deg,
+    transparent 360deg
+  );
+  animation: btn-shimmer 7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes btn-shimmer {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Animated icon slot ─────────────────────────────────────────────────────── */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+}
+
+.btn-spinner {
+  animation: icon-spin 0.65s linear infinite;
+}
+
+@keyframes icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-check path {
+  stroke-dasharray: 1;
+  animation: draw-check 0.32s cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes draw-check {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── Panel view-transition name ─────────────────────────────────────────────── */
+.header-panel {
+  view-transition-name: header-panel;
+}
+
+/* ── Confirm dialog transitions (Vue <Transition name="confirm">) ─────────── */
+.confirm-enter-active {
+  transition: opacity 160ms;
+}
+.confirm-leave-active {
+  transition: opacity 110ms;
+}
+.confirm-enter-from,
+.confirm-leave-to {
+  opacity: 0;
+}
+
+.confirm-enter-active .confirm-dialog {
+  transition:
+    opacity 200ms,
+    transform 230ms cubic-bezier(0.2, 0, 0, 1);
+}
+.confirm-leave-active .confirm-dialog {
+  transition:
+    opacity 110ms,
+    transform 110ms cubic-bezier(0.4, 0, 1, 1);
+}
+.confirm-enter-from .confirm-dialog {
+  opacity: 0;
+  transform: scale(0.95) translateY(-8px);
+}
+.confirm-leave-to .confirm-dialog {
+  opacity: 0;
+  transform: scale(0.97) translateY(-4px);
+}
+</style>
+
+<style>
+/* ── View Transitions: suppress whole-page cross-fade ───────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ── Header panel: clip-wipe entrance / exit ────────────────────────────────── */
+::view-transition-new(header-panel) {
+  animation: header-panel-enter 210ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+::view-transition-old(header-panel) {
+  animation: header-panel-exit 150ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes header-panel-enter {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+@keyframes header-panel-exit {
+  from {
+    clip-path: inset(0 0 0% 0);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+}
+
+/* ── Reduced motion: suppress all View Transition animations ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+</style>
