@@ -26,6 +26,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import PresetMenuContent from "~/components/planner/PresetMenuContent.vue";
 import { useGuideStore } from "~/composables/useGuideStore";
 import { useMarkdownExport } from "~/composables/useMarkdownExport";
 import {
@@ -34,7 +35,7 @@ import {
 	usePlannerState,
 } from "~/composables/usePlannerState";
 import { DATA } from "~/data/campaign";
-import { FILTERS, PRESETS } from "~/data/presets/index";
+import { PRESETS } from "~/data/presets/index";
 
 const props = defineProps<{
 	guideId?: string;
@@ -73,6 +74,11 @@ const skippedPickupCount = computed(() => {
 	return n;
 });
 
+const totalPickupCount = DATA.reduce(
+	(sum, act) => sum + act.areas.reduce((s, area) => s + area.pickups.length, 0),
+	0,
+);
+
 const skippedZoneCount = computed(() => {
 	let n = 0;
 	for (const act of DATA) {
@@ -82,6 +88,8 @@ const skippedZoneCount = computed(() => {
 	}
 	return n;
 });
+
+const totalZoneCount = DATA.reduce((sum, act) => sum + act.areas.length, 0);
 
 const mode = computed(() => {
 	if (!props.guideId) return "scratch" as const;
@@ -447,9 +455,9 @@ function doReset() {
           v-if="skippedPickupCount > 0 || skippedZoneCount > 0"
           class="text-p-xs text-p-muted max-sm:hidden"
         >·
-          <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped</template>
+          <template v-if="skippedPickupCount > 0">{{ skippedPickupCount }} {{ skippedPickupCount === 1 ? 'pickup' : 'pickups' }} skipped (of {{ totalPickupCount }})</template>
           <template v-if="skippedPickupCount > 0 && skippedZoneCount > 0">, </template>
-          <template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped</template>
+          <template v-if="skippedZoneCount > 0">{{ skippedZoneCount }} {{ skippedZoneCount === 1 ? 'zone' : 'zones' }} skipped (of {{ totalZoneCount }})</template>
         </span>
 
       </div>
@@ -482,7 +490,7 @@ function doReset() {
               />
               <span class="truncate max-w-[22ch]">{{ g.name }}</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
+            <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           </template>
           <DropdownMenuItem class="planner-dd-item text-p-sm text-p-muted" @click="router.push('/')">
             New guide
@@ -498,32 +506,11 @@ function doReset() {
             <svg class="chevron-dd w-[10px] h-[6px] transition-transform duration-150 shrink-0" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="1,1 5,5 9,1"/></svg>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent class="planner-dropdown min-w-[280px]" align="end">
-          <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Presets</div>
-          <DropdownMenuItem
-            v-for="preset in PRESETS"
-            :key="preset.id"
-            class="planner-dd-item items-start"
-            @click="selectPreset(preset.id)"
-          >
-            <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-              <span class="text-p-sm text-p-text leading-snug">{{ preset.label }}</span>
-              <span class="text-p-xs text-p-muted leading-[1.45]">{{ preset.description }}</span>
-            </div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
-          <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Filters</div>
-          <DropdownMenuItem
-            v-for="filter in FILTERS"
-            :key="filter.id"
-            class="planner-dd-item items-start"
-            @click="context.applyFilter(filter)"
-          >
-            <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-              <span class="text-p-sm text-p-text leading-snug">{{ filter.label }}</span>
-              <span class="text-p-xs text-p-muted leading-[1.45]">{{ filter.description }}</span>
-            </div>
-          </DropdownMenuItem>
+        <DropdownMenuContent class="planner-dropdown min-w-[320px]" align="end">
+          <PresetMenuContent
+            @select-preset="selectPreset"
+            @apply-filter="context.applyFilter"
+          />
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -541,40 +528,19 @@ function doReset() {
               <DropdownMenuSubTrigger class="planner-dd-item text-p-sm text-p-text2">
                 Presets
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent class="planner-dropdown min-w-[280px]">
-                <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Presets</div>
-                <DropdownMenuItem
-                  v-for="preset in PRESETS"
-                  :key="preset.id"
-                  class="planner-dd-item items-start"
-                  @click="selectPreset(preset.id)"
-                >
-                  <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-                    <span class="text-p-sm text-p-text leading-snug">{{ preset.label }}</span>
-                    <span class="text-p-xs text-p-muted leading-[1.45]">{{ preset.description }}</span>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
-                <div class="px-[0.6rem] pt-1.5 pb-1 text-p-xs font-bold uppercase tracking-[0.09em] text-p-muted">Filters</div>
-                <DropdownMenuItem
-                  v-for="filter in FILTERS"
-                  :key="filter.id"
-                  class="planner-dd-item items-start"
-                  @click="context.applyFilter(filter)"
-                >
-                  <div class="flex flex-col gap-[0.2rem] py-[0.2rem] min-w-0">
-                    <span class="text-p-sm text-p-text leading-snug">{{ filter.label }}</span>
-                    <span class="text-p-xs text-p-muted leading-[1.45]">{{ filter.description }}</span>
-                  </div>
-                </DropdownMenuItem>
+              <DropdownMenuSubContent class="planner-dropdown min-w-[320px]">
+                <PresetMenuContent
+                  @select-preset="selectPreset"
+                  @apply-filter="context.applyFilter"
+                />
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
+            <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           </template>
           <DropdownMenuItem class="planner-dd-item text-p-sm text-p-text2" @click="exportDialogOpen = true">
             Copy Markdown
           </DropdownMenuItem>
-          <DropdownMenuSeparator class="bg-p-subtle mx-1 my-0.5" />
+          <DropdownMenuSeparator class="bg-p-border mx-1 my-0.5" />
           <DropdownMenuItem class="planner-dd-item text-p-sm text-p-error" @click="requestReset">
             Reset
           </DropdownMenuItem>

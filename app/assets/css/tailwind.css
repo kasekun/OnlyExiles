@@ -367,7 +367,7 @@
    These rules are outside any @layer, so they cascade above Tailwind's
    @layer utilities automatically — no !important needed.              */
 .planner-dropdown {
-	background: var(--planner-bg-surface);
+	background: oklch(21% 0.012 58);
 	border-color: var(--planner-border);
 	border-radius: 5px;
 	padding: 0.2rem;
@@ -387,7 +387,7 @@
 	cursor: pointer;
 }
 .planner-dd-item[data-highlighted] {
-	background: var(--planner-bg-area-hd);
+	background: oklch(27% 0.01 58);
 	color: var(--planner-text);
 }
 
