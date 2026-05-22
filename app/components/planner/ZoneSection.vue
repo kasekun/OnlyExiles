@@ -42,7 +42,11 @@ function commitLevel(e: Event) {
 		return;
 	}
 	const val = (e.target as HTMLInputElement).value.trim();
-	state.levels[akey.value] = val || props.area.recLevel;
+	if (val) {
+		state.levels[akey.value] = val;
+	} else {
+		delete state.levels[akey.value];
+	}
 	levelEditing.value = false;
 }
 

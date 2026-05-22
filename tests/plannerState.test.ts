@@ -259,13 +259,9 @@ describe("validatePresets", () => {
 });
 
 describe("CAMPAIGN_DEFAULT", () => {
-	it("has levels for every zone in campaign data", () => {
-		for (const act of DATA) {
-			for (const area of act.areas) {
-				const key = `${act.id}|${area.id}`;
-				expect(CAMPAIGN_DEFAULT.levels?.[key]).toBeDefined();
-			}
-		}
+	it("has only valid level keys (no unknown acts or areas)", () => {
+		const errors = validatePresets([CAMPAIGN_DEFAULT], DATA);
+		expect(errors).toEqual([]);
 	});
 
 	it("has no skipped pickups or zones by default", () => {

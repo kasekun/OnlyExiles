@@ -22,7 +22,6 @@ export interface Pickup {
 export interface Area {
 	id: string;
 	name: string;
-	recLevel: string;
 	notes?: string;
 	pickups: Pickup[];
 }
@@ -41,7 +40,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-riverbank",
 				name: "The Riverbank",
-				recLevel: "1",
 				pickups: [
 					{
 						id: "class-specific-skill-gem",
@@ -55,7 +53,6 @@ export const DATA: Act[] = [
 			{
 				id: "clearfell",
 				name: "Clearfell",
-				recLevel: "1",
 				pickups: [
 					{
 						id: "permanent-plus-10-percent-cold-resistance",
@@ -83,7 +80,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-mud-burrow",
 				name: "The Mud Burrow",
-				recLevel: "1",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-2",
@@ -111,7 +107,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-grelwood",
 				name: "The Grelwood",
-				recLevel: "2",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-2",
@@ -139,7 +134,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-red-vale",
 				name: "The Red Vale",
-				recLevel: "2",
 				pickups: [
 					{
 						id: "weapon-upgrade-lvl-5",
@@ -167,7 +161,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-grim-tangle",
 				name: "The Grim Tangle",
-				recLevel: "4",
 				pickups: [
 					{
 						id: "uncut-support-gem",
@@ -188,7 +181,6 @@ export const DATA: Act[] = [
 			{
 				id: "cemetery-of-the-eternals",
 				name: "Cemetery of the Eternals",
-				recLevel: "5",
 				pickups: [
 					{
 						id: "iron-ring-or-lazuli-ring",
@@ -216,7 +208,6 @@ export const DATA: Act[] = [
 			{
 				id: "tomb-of-the-consort",
 				name: "Tomb of the Consort",
-				recLevel: "6",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-1",
@@ -237,7 +228,6 @@ export const DATA: Act[] = [
 			{
 				id: "mausoleum-of-the-praetor",
 				name: "Mausoleum of the Praetor",
-				recLevel: "7",
 				pickups: [
 					{
 						id: "gold-plus-a-rare-item",
@@ -258,7 +248,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-hunting-grounds",
 				name: "The Hunting Grounds",
-				recLevel: "7",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -293,7 +282,6 @@ export const DATA: Act[] = [
 			{
 				id: "freythorn",
 				name: "Freythorn",
-				recLevel: "8",
 				pickups: [
 					{
 						id: "permanent-plus-30-to-maximum-spirit-plus-uncut-spirit-gem-lvl-4",
@@ -322,7 +310,6 @@ export const DATA: Act[] = [
 			{
 				id: "ogham-farmlands",
 				name: "Ogham Farmlands",
-				recLevel: "9",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -350,7 +337,6 @@ export const DATA: Act[] = [
 			{
 				id: "ogham-village",
 				name: "Ogham Village",
-				recLevel: "10",
 				pickups: [
 					{
 						id: "salvage-bench-unlock",
@@ -392,7 +378,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-manor-ramparts",
 				name: "The Manor Ramparts",
-				recLevel: "11",
 				pickups: [
 					{
 						id: "uncut-support-gem",
@@ -413,7 +398,6 @@ export const DATA: Act[] = [
 			{
 				id: "ogham-manor",
 				name: "Ogham Manor",
-				recLevel: "12",
 				pickups: [
 					{
 						id: "permanent-plus-20-to-maximum-life",
@@ -440,7 +424,6 @@ export const DATA: Act[] = [
 			{
 				id: "vastiri-outskirts",
 				name: "Vastiri Outskirts",
-				recLevel: "13",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-2",
@@ -468,7 +451,6 @@ export const DATA: Act[] = [
 			{
 				id: "mawdun-quarry",
 				name: "Mawdun Quarry",
-				recLevel: "14",
 				pickups: [
 					{
 						id: "artificer-s-orb",
@@ -489,7 +471,6 @@ export const DATA: Act[] = [
 			{
 				id: "mawdun-mine",
 				name: "Mawdun Mine",
-				recLevel: "15.5",
 				pickups: [
 					{
 						id: "uncut-support-gem-level-2",
@@ -503,7 +484,6 @@ export const DATA: Act[] = [
 			{
 				id: "traitor-s-passage",
 				name: "Traitor's Passage",
-				recLevel: "16.5",
 				pickups: [
 					{
 						id: "ascendancy-trial-key-djinn-barya",
@@ -531,7 +511,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-halani-gates",
 				name: "The Halani Gates",
-				recLevel: "17.5",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-7",
@@ -559,7 +538,6 @@ export const DATA: Act[] = [
 			{
 				id: "trial-of-sekhemas",
 				name: "Trial of Sekhemas",
-				recLevel: "18",
 				pickups: [
 					{
 						id: "first-two-ascendancy-points",
@@ -573,7 +551,6 @@ export const DATA: Act[] = [
 			{
 				id: "mastodon-badlands",
 				name: "Mastodon Badlands",
-				recLevel: "18.5",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-2",
@@ -594,7 +571,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-bone-pits",
 				name: "The Bone Pits",
-				recLevel: "19",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-2",
@@ -615,7 +591,6 @@ export const DATA: Act[] = [
 			{
 				id: "keth",
 				name: "Keth",
-				recLevel: "19.5",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -643,7 +618,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-lost-city",
 				name: "The Lost City",
-				recLevel: "20.5",
 				pickups: [
 					{
 						id: "jewel",
@@ -671,7 +645,6 @@ export const DATA: Act[] = [
 			{
 				id: "buried-shrines",
 				name: "Buried Shrines",
-				recLevel: "21.5",
 				pickups: [
 					{
 						id: "uncut-support-gem",
@@ -706,7 +679,6 @@ export const DATA: Act[] = [
 			{
 				id: "valley-of-the-titans",
 				name: "Valley of the Titans",
-				recLevel: "22.5",
 				pickups: [
 					{
 						id: "permanent-plus-1-charm-slot-and-choice-of-buff",
@@ -728,7 +700,6 @@ export const DATA: Act[] = [
 			{
 				id: "titan-grotto",
 				name: "Titan Grotto",
-				recLevel: "23.5",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-2",
@@ -756,7 +727,6 @@ export const DATA: Act[] = [
 			{
 				id: "deshar",
 				name: "Deshar",
-				recLevel: "24",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -784,7 +754,6 @@ export const DATA: Act[] = [
 			{
 				id: "path-of-mourning",
 				name: "Path of Mourning",
-				recLevel: "25",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-2",
@@ -798,7 +767,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-spires-of-deshar",
 				name: "The Spires of Deshar",
-				recLevel: "25",
 				pickups: [
 					{
 						id: "permanent-plus-10-percent-lightning-resistance",
@@ -819,13 +787,11 @@ export const DATA: Act[] = [
 			{
 				id: "the-dreadnought",
 				name: "The Dreadnought",
-				recLevel: "26",
 				pickups: [],
 			},
 			{
 				id: "dreadnought-vanguard",
 				name: "Dreadnought Vanguard",
-				recLevel: "27",
 				pickups: [],
 			},
 		],
@@ -837,7 +803,6 @@ export const DATA: Act[] = [
 			{
 				id: "sandswept-marsh",
 				name: "Sandswept Marsh",
-				recLevel: "28.5",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-9",
@@ -872,7 +837,6 @@ export const DATA: Act[] = [
 			{
 				id: "jungle-ruins",
 				name: "Jungle Ruins",
-				recLevel: "28.5",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -900,7 +864,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-venom-crypts",
 				name: "The Venom Crypts",
-				recLevel: "28.5",
 				pickups: [
 					{
 						id: "permanent-buff-choice-plus-artificer-s-orb",
@@ -921,7 +884,6 @@ export const DATA: Act[] = [
 			{
 				id: "infested-barrens",
 				name: "Infested Barrens",
-				recLevel: "30",
 				pickups: [
 					{
 						id: "uncut-support-gem",
@@ -942,7 +904,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-azak-bog",
 				name: "The Azak Bog",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "permanent-plus-30-maximum-spirit-plus-uncut-spirit-gem-lvl-10",
@@ -970,7 +931,6 @@ export const DATA: Act[] = [
 			{
 				id: "trial-of-chaos",
 				name: "Trial of Chaos",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "first-four-ascendancy-points",
@@ -984,7 +944,6 @@ export const DATA: Act[] = [
 			{
 				id: "chimeral-wetlands",
 				name: "Chimeral Wetlands",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-9-plus-inscribed-ultimatum",
@@ -1019,7 +978,6 @@ export const DATA: Act[] = [
 			{
 				id: "jiquani-s-machinarium",
 				name: "Jiquani's Machinarium",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "permanent-plus-10-percent-fire-resistance",
@@ -1040,7 +998,6 @@ export const DATA: Act[] = [
 			{
 				id: "jiquani-s-sanctum",
 				name: "Jiquani's Sanctum",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "free-vaal-orb-usage",
@@ -1061,7 +1018,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-matlan-waterways",
 				name: "The Matlan Waterways",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "rare-weapon",
@@ -1082,7 +1038,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-drowned-city",
 				name: "The Drowned City",
-				recLevel: "36",
 				pickups: [
 					{
 						id: "uncut-support-gem-level-3",
@@ -1096,7 +1051,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-molten-vault",
 				name: "The Molten Vault",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "reforging-bench-unlock-plus-uncut-skill-gem-lvl-10-plus-artificer-s-orb",
@@ -1118,7 +1072,6 @@ export const DATA: Act[] = [
 			{
 				id: "apex-of-filth",
 				name: "Apex of Filth",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "life-and-mana-flask",
@@ -1140,7 +1093,6 @@ export const DATA: Act[] = [
 			{
 				id: "temple-of-kopec",
 				name: "Temple of Kopec",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "uncut-spirit-gem-level-11",
@@ -1154,7 +1106,6 @@ export const DATA: Act[] = [
 			{
 				id: "utzaal-past",
 				name: "Utzaal (Past)",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "inscribed-ultimatum",
@@ -1182,7 +1133,6 @@ export const DATA: Act[] = [
 			{
 				id: "aggorat",
 				name: "Aggorat",
-				recLevel: "32",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1204,7 +1154,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-black-chambers-past",
 				name: "The Black Chambers (Past)",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "vaal-orb",
@@ -1224,7 +1173,6 @@ export const DATA: Act[] = [
 			{
 				id: "journey-s-end",
 				name: "Journey's End",
-				recLevel: "40",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points-plus-uncut-skill-gem-lvl-13",
@@ -1245,7 +1193,6 @@ export const DATA: Act[] = [
 			{
 				id: "isle-of-kin",
 				name: "Isle of Kin",
-				recLevel: "41",
 				pickups: [
 					{
 						id: "blank-greater-rune",
@@ -1301,7 +1248,6 @@ export const DATA: Act[] = [
 			{
 				id: "volcanic-warrens",
 				name: "Volcanic Warrens",
-				recLevel: "41",
 				pickups: [
 					{
 						id: "rare-ring-ruby-or-topaz",
@@ -1322,7 +1268,6 @@ export const DATA: Act[] = [
 			{
 				id: "whakapanu-island",
 				name: "Whakapanu Island",
-				recLevel: "42",
 				pickups: [
 					{
 						id: "uncut-support-gem-lvl-4",
@@ -1357,7 +1302,6 @@ export const DATA: Act[] = [
 			{
 				id: "singing-caverns",
 				name: "Singing Caverns",
-				recLevel: "42",
 				pickups: [
 					{
 						id: "rare-pearlescent-amulet",
@@ -1378,7 +1322,6 @@ export const DATA: Act[] = [
 			{
 				id: "abandoned-prison",
 				name: "Abandoned Prison",
-				recLevel: "42",
 				pickups: [
 					{
 						id: "permanent-plus-30-percent-life-mana-flask-recovery",
@@ -1406,7 +1349,6 @@ export const DATA: Act[] = [
 			{
 				id: "solitary-confinement",
 				name: "Solitary Confinement",
-				recLevel: "42",
 				pickups: [
 					{
 						id: "rune",
@@ -1420,7 +1362,6 @@ export const DATA: Act[] = [
 			{
 				id: "kedge-bay",
 				name: "Kedge Bay",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "torn-map-piece",
@@ -1448,7 +1389,6 @@ export const DATA: Act[] = [
 			{
 				id: "shrike-island",
 				name: "Shrike Island",
-				recLevel: "43",
 				pickups: [
 					{
 						id: "torn-map-piece",
@@ -1476,7 +1416,6 @@ export const DATA: Act[] = [
 			{
 				id: "eye-of-hinekora",
 				name: "Eye of Hinekora",
-				recLevel: "44",
 				pickups: [
 					{
 						id: "permanent-plus-5-percent-maximum-mana",
@@ -1497,7 +1436,6 @@ export const DATA: Act[] = [
 			{
 				id: "halls-of-the-dead",
 				name: "Halls of the Dead",
-				recLevel: "44",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1526,7 +1464,6 @@ export const DATA: Act[] = [
 			{
 				id: "arastas",
 				name: "Arastas",
-				recLevel: "46",
 				pickups: [
 					{
 						id: "3-regal-orbs",
@@ -1554,7 +1491,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-excavation",
 				name: "The Excavation",
-				recLevel: "46",
 				pickups: [
 					{
 						id: "rare-amulet",
@@ -1568,7 +1504,6 @@ export const DATA: Act[] = [
 			{
 				id: "ngakanu",
 				name: "Ngakanu",
-				recLevel: "47",
 				pickups: [
 					{
 						id: "greater-jeweller-s-orb-abyssal-depths",
@@ -1582,7 +1517,6 @@ export const DATA: Act[] = [
 			{
 				id: "heart-of-the-tribe",
 				name: "Heart of the Tribe",
-				recLevel: "47",
 				pickups: [
 					{
 						id: "random-loot",
@@ -1609,7 +1543,6 @@ export const DATA: Act[] = [
 			{
 				id: "scorched-farmlands",
 				name: "Scorched Farmlands",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "uncut-support-gem-level-4",
@@ -1623,7 +1556,6 @@ export const DATA: Act[] = [
 			{
 				id: "stones-of-serle",
 				name: "Stones of Serle",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "exalted-orb-plus-abyss-currency",
@@ -1637,7 +1569,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-blackwood",
 				name: "The Blackwood",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "random-omen",
@@ -1658,7 +1589,6 @@ export const DATA: Act[] = [
 			{
 				id: "holten",
 				name: "Holten",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "armourer-s-scrap-magic-and-rare-loot",
@@ -1679,7 +1609,6 @@ export const DATA: Act[] = [
 			{
 				id: "wolvenhold",
 				name: "Wolvenhold",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1700,7 +1629,6 @@ export const DATA: Act[] = [
 			{
 				id: "holten-estate",
 				name: "Holten Estate",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "artificer-s-orb",
@@ -1714,7 +1642,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-khari-crossing",
 				name: "The Khari Crossing",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1742,7 +1669,6 @@ export const DATA: Act[] = [
 			{
 				id: "pools-of-khatal",
 				name: "Pools of Khatal",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "orb-of-alchemy",
@@ -1756,7 +1682,6 @@ export const DATA: Act[] = [
 			{
 				id: "sel-khari-sanctuary",
 				name: "Sel Khari Sanctuary",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "2-out-of-3-reward-rare-ring-rare-amulet-rare-jewel",
@@ -1778,7 +1703,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-galai-gates",
 				name: "The Galai Gates",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "greater-orb-of-augmentation-plus-abyss-currency",
@@ -1792,7 +1716,6 @@ export const DATA: Act[] = [
 			{
 				id: "qimah",
 				name: "Qimah",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "choice-of-1-of-7-buffs",
@@ -1813,7 +1736,6 @@ export const DATA: Act[] = [
 			{
 				id: "qimah-reservoir",
 				name: "Qimah Reservoir",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "random-currency-item",
@@ -1834,7 +1756,6 @@ export const DATA: Act[] = [
 			{
 				id: "ashen-forest",
 				name: "Ashen Forest",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-14",
@@ -1855,7 +1776,6 @@ export const DATA: Act[] = [
 			{
 				id: "kriar-village",
 				name: "Kriar Village",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "permanent-plus-40-maximum-spirit-plus-uncut-spirit-gem-lvl-14",
@@ -1876,7 +1796,6 @@ export const DATA: Act[] = [
 			{
 				id: "glacial-tarn",
 				name: "Glacial Tarn",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "greater-orb-of-augmentation",
@@ -1890,7 +1809,6 @@ export const DATA: Act[] = [
 			{
 				id: "howling-caves",
 				name: "Howling Caves",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1912,7 +1830,6 @@ export const DATA: Act[] = [
 			{
 				id: "kriar-peaks",
 				name: "Kriar Peaks",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "choose-unique-item",
@@ -1933,7 +1850,6 @@ export const DATA: Act[] = [
 			{
 				id: "etched-ravine",
 				name: "Etched Ravine",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "exalted-orb",
@@ -1947,7 +1863,6 @@ export const DATA: Act[] = [
 			{
 				id: "the-cuachic-vault",
 				name: "The Cuachic Vault",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "vaal-orb",
@@ -1961,7 +1876,6 @@ export const DATA: Act[] = [
 			{
 				id: "interlude-finale-kingsmarch-hub",
 				name: "Interlude Finale (Kingsmarch Hub)",
-				recLevel: "0",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
