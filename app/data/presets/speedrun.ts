@@ -7,8 +7,7 @@ import {
 export const SPEEDRUN = buildPreset({
 	id: "speedrun",
 	label: "I want to go fast",
-	description:
-		"Only quest-blocking rewards and powerful permanents. Skip everything optional.",
+	description: "Only quest-blocking rewards and powerful permanents.",
 	notes: campaignDefaultNotes,
 	levels: campaignDefaultLevels,
 	actNotes: {},
@@ -16,10 +15,15 @@ export const SPEEDRUN = buildPreset({
 		"act-1--island-of-ogham": {
 			zones: {
 				clearfell: {
-					skipPickups: ["uncut-skill-gem-lvl-1", "orb-of-transmutation"],
+					skipPickups: [
+						"uncut-skill-gem-lvl-1",
+						"orb-of-transmutation",
+					],
 				},
 				"the-mud-burrow": {
-					skipPickups: ["orb-of-augmentation"],
+					skipPickups: [
+						"orb-of-augmentation",
+					],
 				},
 				"the-grelwood": {
 					skipPickups: [
@@ -29,19 +33,33 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"the-red-vale": {
-					skipPickups: ["weapon-upgrade-lvl-5", "uncut-skill-gem-level-2"],
+					skipPickups: [
+						"weapon-upgrade-lvl-5",
+						"uncut-skill-gem-level-2",
+					],
 				},
 				"the-grim-tangle": {
-					skipPickups: ["uncut-support-gem", "uncut-skill-gem-level-3"],
+					skipPickups: [
+						"uncut-support-gem",
+						"uncut-skill-gem-level-3",
+					],
 				},
 				"cemetery-of-the-eternals": {
-					skipPickups: ["iron-ring-or-lazuli-ring", "regal-orb"],
+					skipPickups: [
+						"iron-ring-or-lazuli-ring",
+						"regal-orb",
+					],
 				},
 				"tomb-of-the-consort": {
-					skipPickups: ["normal-amulet"],
+					skipPickups: [
+						"normal-amulet",
+					],
 				},
 				"mausoleum-of-the-praetor": {
-					skipPickups: ["gold-plus-a-rare-item", "lesser-rune"],
+					skipPickups: [
+						"gold-plus-a-rare-item",
+						"lesser-rune",
+					],
 				},
 				"the-hunting-grounds": {
 					skipPickups: [
@@ -51,10 +69,15 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				freythorn: {
-					skipPickups: ["uncut-support-gem-level-1"],
+					skipPickups: [
+						"uncut-support-gem-level-1",
+					],
 				},
 				"ogham-farmlands": {
-					skipPickups: ["uncut-skill-gem-lvl-4", "uncut-skill-gem-level-4"],
+					skipPickups: [
+						"uncut-skill-gem-lvl-4",
+						"uncut-skill-gem-level-4",
+					],
 				},
 				"ogham-village": {
 					skipPickups: [
@@ -64,26 +87,41 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"the-manor-ramparts": {
-					skipPickups: ["uncut-skill-gem-level-5"],
+					skipPickups: [
+						"uncut-skill-gem-level-5",
+					],
 				},
 				"ogham-manor": {
-					skipPickups: ["orb-of-alchemy"],
+					skipPickups: [
+						"orb-of-alchemy",
+					],
 				},
 			},
 		},
 		"act-2--the-vastiri-desert-keth": {
 			zones: {
 				"vastiri-outskirts": {
-					skipPickups: ["uncut-support-gem-lvl-2", "exalted-orb"],
+					skipPickups: [
+						"uncut-support-gem-lvl-2",
+						"exalted-orb",
+					],
 				},
 				"mawdun-quarry": {
-					skipPickups: ["artificer-s-orb", "uncut-spirit-gem-level-5"],
+					skipPickups: [
+						"artificer-s-orb",
+						"uncut-spirit-gem-level-5",
+					],
 				},
 				"mawdun-mine": {
-					skipPickups: ["uncut-support-gem-level-2"],
+					skipPickups: [
+						"uncut-support-gem-level-2",
+					],
 				},
 				"the-halani-gates": {
-					skipPickups: ["uncut-skill-gem-lvl-6", "exalted-orb"],
+					skipPickups: [
+						"uncut-skill-gem-lvl-6",
+						"exalted-orb",
+					],
 				},
 				"mastodon-badlands": {
 					skipPickups: [
@@ -92,13 +130,21 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"the-bone-pits": {
-					skipPickups: ["exalted-orb"],
+					skipPickups: [
+						"exalted-orb",
+					],
 				},
 				keth: {
-					skipPickups: ["magic-amulet", "gemcutter-s-prism"],
+					skipPickups: [
+						"magic-amulet",
+						"gemcutter-s-prism",
+					],
 				},
 				"the-lost-city": {
-					skipPickups: ["jewel", "orb-of-alchemy"],
+					skipPickups: [
+						"jewel",
+						"orb-of-alchemy",
+					],
 				},
 				"buried-shrines": {
 					skipPickups: [
@@ -108,19 +154,31 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"valley-of-the-titans": {
-					skipPickups: ["unique-item-plus-abyss-currency"],
+					skipPickups: [
+						"unique-item-plus-abyss-currency",
+					],
 				},
 				"titan-grotto": {
-					skipPickups: ["lesser-rune", "chance-shard"],
+					skipPickups: [
+						"lesser-rune",
+						"chance-shard",
+					],
 				},
 				deshar: {
-					skipPickups: ["artificer-s-orb", "lesser-rune"],
+					skipPickups: [
+						"artificer-s-orb",
+						"lesser-rune",
+					],
 				},
 				"path-of-mourning": {
-					skipPickups: ["uncut-support-gem-lvl-2"],
+					skipPickups: [
+						"uncut-support-gem-lvl-2",
+					],
 				},
 				"the-spires-of-deshar": {
-					skipPickups: ["gemcutter-s-prism"],
+					skipPickups: [
+						"gemcutter-s-prism",
+					],
 				},
 			},
 		},
@@ -135,10 +193,16 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"jungle-ruins": {
-					skipPickups: ["2-weapon-set-passive-skill-points", "orb-of-alchemy"],
+					skipPickups: [
+						"2-weapon-set-passive-skill-points",
+						"orb-of-alchemy",
+					],
 				},
 				"infested-barrens": {
-					skipPickups: ["uncut-support-gem", "exalted-orb"],
+					skipPickups: [
+						"uncut-support-gem",
+						"exalted-orb",
+					],
 				},
 				"chimeral-wetlands": {
 					skipPickups: [
@@ -148,22 +212,35 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"jiquani-s-machinarium": {
-					skipPickups: ["artificer-s-orb"],
+					skipPickups: [
+						"artificer-s-orb",
+					],
 				},
 				"jiquani-s-sanctum": {
-					skipPickups: ["exalted-orb"],
+					skipPickups: [
+						"exalted-orb",
+					],
 				},
 				"the-matlan-waterways": {
-					skipPickups: ["rare-weapon", "uncut-spirit-gem-level-10"],
+					skipPickups: [
+						"rare-weapon",
+						"uncut-spirit-gem-level-10",
+					],
 				},
 				"the-drowned-city": {
-					skipPickups: ["uncut-support-gem-level-3"],
+					skipPickups: [
+						"uncut-support-gem-level-3",
+					],
 				},
 				"apex-of-filth": {
-					skipPickups: ["vaal-orb"],
+					skipPickups: [
+						"vaal-orb",
+					],
 				},
 				"temple-of-kopec": {
-					skipPickups: ["uncut-spirit-gem-level-11"],
+					skipPickups: [
+						"uncut-spirit-gem-level-11",
+					],
 				},
 				"utzaal-past": {
 					skipPickups: [
@@ -173,7 +250,9 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"the-black-chambers-past": {
-					skipPickups: ["vaal-orb"],
+					skipPickups: [
+						"vaal-orb",
+					],
 				},
 			},
 		},
@@ -190,7 +269,10 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"volcanic-warrens": {
-					skipPickups: ["rare-ring-ruby-or-topaz", "uncut-support-gem-lvl-4"],
+					skipPickups: [
+						"rare-ring-ruby-or-topaz",
+						"uncut-support-gem-lvl-4",
+					],
 				},
 				"whakapanu-island": {
 					skipPickups: [
@@ -200,13 +282,19 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"singing-caverns": {
-					skipPickups: ["magic-charm"],
+					skipPickups: [
+						"magic-charm",
+					],
 				},
 				"abandoned-prison": {
-					skipPickups: ["exalted-orb"],
+					skipPickups: [
+						"exalted-orb",
+					],
 				},
 				"solitary-confinement": {
-					skipPickups: ["rune"],
+					skipPickups: [
+						"rune",
+					],
 				},
 				"kedge-bay": {
 					skipPickups: [
@@ -216,13 +304,20 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"shrike-island": {
-					skipPickups: ["torn-map-piece", "uncut-support-gem-lvl-4"],
+					skipPickups: [
+						"torn-map-piece",
+						"uncut-support-gem-lvl-4",
+					],
 				},
 				"eye-of-hinekora": {
-					skipPickups: ["chaos-orb"],
+					skipPickups: [
+						"chaos-orb",
+					],
 				},
 				"halls-of-the-dead": {
-					skipPickups: ["random-items"],
+					skipPickups: [
+						"random-items",
+					],
 				},
 				arastas: {
 					skipPickups: [
@@ -232,13 +327,20 @@ export const SPEEDRUN = buildPreset({
 					],
 				},
 				"the-excavation": {
-					skipPickups: ["rare-amulet"],
+					skipPickups: [
+						"rare-amulet",
+					],
 				},
 				ngakanu: {
-					skipPickups: ["greater-jeweller-s-orb-abyssal-depths"],
+					skipPickups: [
+						"greater-jeweller-s-orb-abyssal-depths",
+					],
 				},
 				"heart-of-the-tribe": {
-					skipPickups: ["random-loot", "uncut-spirit-gem-level-12"],
+					skipPickups: [
+						"random-loot",
+						"uncut-spirit-gem-level-12",
+					],
 				},
 			},
 		},

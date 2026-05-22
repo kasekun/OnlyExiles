@@ -41,6 +41,18 @@
 	},
 	"overrides": [
 		{
+			"includes": [
+				"app/data/presets/**/*.ts",
+				"!app/data/presets/build-preset.ts",
+				"!app/data/presets/index.ts"
+			],
+			"javascript": {
+				"formatter": {
+					"expand": "always"
+				}
+			}
+		},
+		{
 			"includes": ["**/*.vue"],
 			"linter": {
 				"rules": {
