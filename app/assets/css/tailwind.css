@@ -238,6 +238,9 @@
 			outline: none;
 			border-color: var(--planner-border);
 		}
+		&:read-only:focus {
+			border-color: var(--planner-border-subtle);
+		}
 		&::placeholder {
 			color: var(--planner-text-muted);
 			font-style: italic;
@@ -284,6 +287,22 @@
 		--muted-foreground: var(--planner-text-skip);
 		--planner-text: var(--planner-text-skip);
 		--planner-text-2: var(--planner-text-skip);
+	}
+
+	/* Blue ghost button variant: viewer-mode unlock action */
+	.planner-btn-viewer {
+		background: var(--planner-blue-bg);
+		border-color: var(--planner-blue-bd);
+		color: var(--planner-blue);
+
+		&:hover {
+			background: oklch(26% 0.06 258);
+			border-color: var(--planner-blue-bd);
+			color: var(--planner-blue);
+		}
+		&:focus-visible {
+			outline-color: var(--planner-blue);
+		}
 	}
 
 	/* Amber ghost button: act-level contextual actions and restore buttons */

@@ -190,7 +190,8 @@ onMounted(() => {
           placeholder="Add notes for this zone..."
           :value="notesValue"
           :readonly="readonly"
-          :class="{ 'opacity-60 cursor-default': readonly }"
+          :class="{ 'cursor-default': readonly }"
+          @mousedown="readonly ? $event.preventDefault() : undefined"
           @input="onNotesInput"
           rows="1"
         />

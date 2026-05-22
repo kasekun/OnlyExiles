@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Eye } from "lucide-vue-next";
 import { computed, ref } from "vue";
 import { usePlannerState } from "~/composables/usePlannerState";
 
@@ -49,6 +50,16 @@ function onNameKeydown(e: KeyboardEvent) {
         v-else
         class="block text-p-lg font-semibold text-p-text tracking-[-0.01em] truncate px-2 py-[0.18rem]"
       >{{ guideDisplayName }}</span>
+    </div>
+
+    <!-- View-only badge -->
+    <div
+      v-if="readonly"
+      class="shrink-0 inline-flex items-center gap-[0.3rem] px-[0.45rem] py-[0.18rem] rounded-[3px] border border-p-blue-bd bg-p-blue-bg text-p-blue text-p-xs select-none"
+      aria-label="You are viewing this guide in read-only mode"
+    >
+      <Eye :size="10" aria-hidden="true" class="shrink-0 opacity-70" />
+      <span>Viewing</span>
     </div>
 
     <!-- Expand / Collapse -->
