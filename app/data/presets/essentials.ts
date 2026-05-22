@@ -175,7 +175,7 @@ export const ESSENTIALS = buildPreset({
 				},
 				"the-venom-crypts": {
 					skipPickups: [
-						"magic-ring-plus-abyss-currency",
+						"random-ring",
 					],
 				},
 				"infested-barrens": {
