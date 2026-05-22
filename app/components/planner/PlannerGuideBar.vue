@@ -36,6 +36,7 @@ function onNameKeydown(e: KeyboardEvent) {
         v-if="!readonly"
         ref="nameInputRef"
         class="w-full bg-transparent border border-transparent rounded-[3px] px-2 py-[0.18rem] text-p-lg font-semibold text-p-text tracking-[-0.01em] placeholder:text-p-muted outline-none transition-[border-color,background-color] duration-150 hover:border-p-subtle focus:bg-p-inset focus:border-p-border truncate"
+        aria-label="Guide name"
         :value="guideName"
         placeholder="Untitled guide"
         maxlength="255"

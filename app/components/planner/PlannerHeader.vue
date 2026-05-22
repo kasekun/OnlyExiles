@@ -449,6 +449,7 @@ function doReset() {
           class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
           role="dialog"
           aria-modal="true"
+          aria-label="Apply preset"
           aria-describedby="preset-dialog-desc"
         >
           <p id="preset-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
@@ -476,10 +477,11 @@ function doReset() {
           class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
           role="dialog"
           aria-modal="true"
+          aria-label="Start new guide"
           aria-describedby="new-guide-dialog-desc"
         >
           <p id="new-guide-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
-            Starting a new guide clears your current scratch pad - notes, levels, skips, and loot filter patterns will be lost.
+            Starting a new guide clears your current scratch pad: notes, levels, skips, and loot filter patterns will be lost.
           </p>
           <div class="flex items-center justify-end gap-2">
             <button ref="newGuideCancelRef" class="planner-btn-ghost" @click="confirmNewGuide = false">Cancel</button>
@@ -503,6 +505,7 @@ function doReset() {
           class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
           role="dialog"
           aria-modal="true"
+          aria-label="Reset guide"
           aria-describedby="reset-dialog-desc"
         >
           <p id="reset-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
@@ -702,7 +705,7 @@ function doReset() {
       <div class="max-w-[1020px] mx-auto px-6 py-4 max-sm:px-4">
         <div class="max-w-[420px] ml-auto flex flex-col gap-3 max-sm:max-w-none">
           <p class="text-p-md font-bold text-p-amber tracking-[-0.01em] leading-[1.3]">Save guide</p>
-          <p class="text-p-xs text-p-muted leading-[1.5]">Saving publishes your guide and generates a link you can share with others.</p>
+          <p class="text-p-xs text-p-muted leading-normal">Saving publishes your guide and generates a link you can share with others.</p>
 
           <div class="flex flex-col gap-1">
             <label class="planner-eyebrow" for="save-guide-name">Guide name</label>
@@ -794,7 +797,7 @@ function doReset() {
               'text-p-error! hover:text-p-error!': copyShareState === 'error',
             }"
             @click="copyShareUrl"
-            :aria-label="copyShareState === 'error' ? 'Copy failed - try selecting the URL manually' : 'Copy share link'"
+            :aria-label="copyShareState === 'success' ? 'Link copied' : copyShareState === 'error' ? 'Copy failed - try selecting the URL manually' : 'Copy share link'"
           >
             <Check v-if="copyShareState === 'success'" :size="12" aria-hidden="true" />
             <X v-else-if="copyShareState === 'error'" :size="12" aria-hidden="true" />

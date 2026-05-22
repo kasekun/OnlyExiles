@@ -85,10 +85,8 @@ onMounted(() => {
 
 <template>
   <div
-    class="border rounded-[4px] overflow-hidden bg-p-surface group/area transition-[border-color,opacity] duration-120"
-    :class="isSkipped
-      ? 'border-p-subtle opacity-50'
-      : 'border-p-subtle'"
+    class="border border-p-subtle rounded-[4px] overflow-hidden bg-p-surface group/area transition-[border-color,opacity] duration-120"
+    :class="{ 'opacity-50': isSkipped }"
   >
     <div class="flex items-stretch bg-p-area">
       <span
