@@ -14,8 +14,8 @@ Ads are unethical, and only scum use paywalls. If this planner helps keep your b
 
 PoE data changes, I make mistakes, and don't play the game enough to notice all the time. If an act drop, quest reward, area note, or route detail is wrong, send help:
 
-- [Raise an issue](https://github.com/kasekun/poe2drops/issues/new) if you just want to report the problem.
-- [Edit the campaign data and raise a PR](https://github.com/kasekun/poe2drops/edit/main/app/data/campaign.ts) if you know the fix and want to save everyone a round trip.
+- [Raise an issue](https://github.com/kasekun/OnlyExiles/issues/new) if you just want to report the problem.
+- [Edit the campaign data and raise a PR](https://github.com/kasekun/OnlyExiles/edit/main/app/data/campaign.ts) if you know the fix and want to save everyone a round trip.
 
 Tiny corrections are welcome. Act, area, reward, and source are the good stuff. "This is wrong lol" is funny but cursed.
 
