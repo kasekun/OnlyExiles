@@ -42,23 +42,41 @@ const REPO = "https://github.com/kasekun/poe2drops";
       </a>
     </div>
 
-    <a
-      href="https://www.buymeacoffee.com/jesseswan"
-      target="_blank"
-      rel="noreferrer noopener"
-      class="inline-flex items-center gap-[0.4rem] h-8 pl-1.5 pr-2.5 bg-p-area text-p-text2 text-p-xs font-p font-medium leading-none whitespace-nowrap no-underline border border-p-border rounded-lg transition-[border-color,color] duration-130 hover:border-p-amber-dim hover:text-p-text focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[3px]"
-      aria-label="Buy me a coffee - support this project"
-    >
-      <img
-        src="/bmc-logo.svg"
-        class="h-6 w-6 rounded-[4px] shrink-0 block bg-[#ffdd00] p-[2px] object-contain"
-        width="24"
-        height="24"
-        alt=""
+    <div class="relative group/coffee">
+      <!-- Personal note — fades in above the button on hover/focus -->
+      <div
+        class="absolute bottom-full right-0 mb-2 w-56 pointer-events-none opacity-0 translate-y-1 transition-[opacity,transform] duration-200 ease-out group-hover/coffee:opacity-100 group-hover/coffee:translate-y-0 group-focus-within/coffee:opacity-100 group-focus-within/coffee:translate-y-0 motion-reduce:transition-none"
         aria-hidden="true"
-      />
-      Buy me a coffee
-      <SquareArrowOutUpRight :size="11" class="text-p-muted shrink-0" aria-hidden="true" />
-    </a>
+      >
+        <div
+          class="rounded-lg bg-p-inset p-3"
+          style="border: 1px solid oklch(54% 0.100 65 / 0.30);"
+        >
+          <p class="text-[0.6875rem] leading-[1.6] text-p-muted">
+            Ads are unethical, and only scum use paywall. Your support will mean i spend more time on OnlyExiles and less time on other projects.
+          </p>
+          <p class="mt-2 text-[0.6875rem] italic text-p-amber-dim">Love, Jesse</p>
+        </div>
+      </div>
+
+      <a
+        href="https://www.buymeacoffee.com/jesseswan"
+        target="_blank"
+        rel="noreferrer noopener"
+        class="inline-flex items-center gap-[0.4rem] h-8 pl-1.5 pr-2.5 bg-p-area text-p-text2 text-p-xs font-p font-medium leading-none whitespace-nowrap no-underline border border-p-border rounded-lg transition-[border-color,color] duration-130 hover:border-p-amber-dim hover:text-p-amber focus-visible:outline-1 focus-visible:outline-p-amber-dim focus-visible:outline-offset-[3px]"
+        aria-label="Buy me a coffee — support this project"
+      >
+        <img
+          src="/bmc-logo.svg"
+          class="h-6 w-6 rounded-[4px] shrink-0 block bg-[#ffdd00] p-[2px] object-contain"
+          width="24"
+          height="24"
+          alt=""
+          aria-hidden="true"
+        />
+        Buy me a coffee
+        <SquareArrowOutUpRight :size="11" class="text-p-muted shrink-0" aria-hidden="true" />
+      </a>
+    </div>
   </div>
 </template>
