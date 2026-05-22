@@ -176,7 +176,6 @@ export function createPlannerContext(options: {
 	}
 
 	function expandAll() {
-		if (readonlyRef.value) return;
 		DATA.forEach((act) => {
 			state.actsCollapsed[act.id] = false;
 			act.areas.forEach((area) => {
@@ -186,7 +185,6 @@ export function createPlannerContext(options: {
 	}
 
 	function collapseAll() {
-		if (readonlyRef.value) return;
 		DATA.forEach((act) => {
 			state.actsCollapsed[act.id] = true;
 			act.areas.forEach((area) => {
@@ -196,7 +194,6 @@ export function createPlannerContext(options: {
 	}
 
 	function expandActAreas(actId: string) {
-		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {
@@ -205,7 +202,6 @@ export function createPlannerContext(options: {
 	}
 
 	function collapseActAreas(actId: string) {
-		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {
@@ -214,7 +210,6 @@ export function createPlannerContext(options: {
 	}
 
 	function collapseEmptyAreas(actId: string) {
-		if (readonlyRef.value) return;
 		const act = DATA.find((a) => a.id === actId);
 		if (!act) return;
 		act.areas.forEach((area) => {

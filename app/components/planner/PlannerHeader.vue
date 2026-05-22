@@ -605,7 +605,7 @@ function doReset() {
 
       <button
         v-if="mode === 'viewer'"
-        class="planner-btn-ghost flex items-center gap-1 max-sm:hidden"
+        class="planner-btn-ghost planner-btn-viewer flex items-center gap-1 max-sm:hidden"
         @click="setPanel('passphrase')"
       >
         <KeyRound :size="11" aria-hidden="true" />
@@ -613,7 +613,7 @@ function doReset() {
       </button>
       <button
         v-if="mode === 'viewer'"
-        class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 hidden max-sm:flex items-center"
+        class="planner-btn-ghost planner-btn-viewer px-2 max-sm:px-2.5 max-sm:py-2 hidden max-sm:flex items-center"
         aria-label="Unlock Guide"
         @click="setPanel('passphrase')"
       >
@@ -825,12 +825,21 @@ function doReset() {
 .planner-btn-primary {
   position: relative;
   overflow: hidden;
+  background: oklch(18% 0.042 65);
+  border-color: oklch(40% 0.088 65);
+  color: var(--planner-amber);
   transform: translate(var(--btn-tx, 0px), var(--btn-ty, 0px));
   transition:
     transform 0.45s cubic-bezier(0.2, 0, 0, 1),
     border-color 0.13s,
     color 0.13s,
     background-color 0.13s;
+}
+
+.planner-btn-primary:hover {
+  background: oklch(22% 0.052 65);
+  border-color: oklch(54% 0.100 65);
+  color: var(--planner-amber);
 }
 
 .planner-btn-primary[data-tracking] {
@@ -851,7 +860,7 @@ function doReset() {
   background: conic-gradient(
     from 0deg at 50% 50%,
     transparent 0deg,
-    oklch(76% 0.158 65 / 0.11) 28deg,
+    oklch(76% 0.158 65 / 0.18) 28deg,
     transparent 56deg,
     transparent 360deg
   );

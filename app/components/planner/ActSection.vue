@@ -108,6 +108,7 @@ function autoResize(el: HTMLTextAreaElement) {
       </button>
 
       <div
+        v-if="!readonly"
         v-show="!isCollapsed"
         class="flex items-center max-sm:items-stretch gap-1 px-3 max-sm:px-2 max-sm:gap-1 shrink-0"
       >
@@ -150,7 +151,8 @@ function autoResize(el: HTMLTextAreaElement) {
             placeholder="Notes for this act..."
             :value="actNote"
             :readonly="readonly"
-            :class="{ 'opacity-60 cursor-default': readonly }"
+            :class="{ 'cursor-default': readonly }"
+            @mousedown="readonly ? $event.preventDefault() : undefined"
             @input="actNote = ($event.target as HTMLTextAreaElement).value; autoResize($event.target as HTMLTextAreaElement)"
             rows="2"
           />
@@ -168,11 +170,12 @@ function autoResize(el: HTMLTextAreaElement) {
           >
             <input
               type="text"
-              class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.35rem] text-p-text2 placeholder:text-p-muted placeholder:not-italic outline-none"
-              :class="{ 'opacity-60 cursor-default': readonly }"
+              class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.35rem] text-p-text placeholder:text-p-muted placeholder:not-italic outline-none"
               placeholder='e.g., "\d+% i.+mov|ph.*da|\d cfl.+da"'
               :value="actRegex"
               :readonly="readonly"
+              :class="{ 'cursor-default': readonly }"
+              @mousedown="readonly ? $event.preventDefault() : undefined"
               @input="actRegex = ($event.target as HTMLInputElement).value"
               spellcheck="false"
               autocomplete="off"
