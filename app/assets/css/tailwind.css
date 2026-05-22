@@ -277,7 +277,7 @@
 
 	/* Skip-row cascade: reassign foreground vars so all descendant text
 	   using semantic color utilities inherits the skip (muted) value.
-	   CSS custom property inheritance means no specificity fight — the
+	   CSS custom property inheritance means no specificity fight - the
 	   variable value is resolved via the DOM tree, not the stylesheet order. */
 	[data-skipped] {
 		--foreground: var(--planner-text-skip);
@@ -301,6 +301,9 @@
 			color 0.13s,
 			background 0.13s;
 		white-space: nowrap;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
 
 		&:hover {
 			border-color: var(--planner-amber-dim);
@@ -314,6 +317,31 @@
 		&:disabled {
 			opacity: 0.4;
 			cursor: default;
+		}
+	}
+
+	/* Inline panel text input (save/share/passphrase panels) */
+	.planner-input {
+		display: block;
+		width: 100%;
+		background: var(--planner-bg-inset);
+		border: 1px solid var(--planner-border-subtle);
+		border-radius: 3px;
+		color: var(--planner-text);
+		font-size: var(--planner-fs-base);
+		font-family: var(--planner-font);
+		line-height: 1.5;
+		padding: 0.3rem 0.55rem;
+		transition: border-color 0.12s;
+		outline: none;
+
+		&:focus {
+			border-color: var(--planner-border);
+		}
+		&::placeholder {
+			color: var(--planner-text-muted);
+			font-style: italic;
+			opacity: 0.55;
 		}
 	}
 }
@@ -337,32 +365,29 @@
 
 /* ── Planner dropdown (portal-rendered, can't use scoped CSS) ──────────
    These rules are outside any @layer, so they cascade above Tailwind's
-   @layer utilities automatically — no !important needed.              */
+   @layer utilities automatically - no !important needed.              */
 .planner-dropdown {
-	background: var(--planner-bg-surface);
+	background: oklch(21% 0.012 58);
 	border-color: var(--planner-border);
 	border-radius: 5px;
-	padding: 0;
+	padding: 0.2rem;
 	box-shadow: none;
-	min-width: 240px;
+	min-width: 200px;
 	width: auto;
 	color: var(--planner-text);
 	font-family: var(--planner-font);
 }
 
 .planner-dd-item {
-	border-radius: 0;
-	padding: 0;
-	gap: 0;
+	border-radius: 3px;
+	padding: 0.36rem 0.6rem;
+	gap: 0.45rem;
 	display: flex;
+	align-items: center;
 	cursor: pointer;
-	border-bottom: 1px solid var(--planner-border-subtle);
-}
-.planner-dd-item:last-child {
-	border-bottom: none;
 }
 .planner-dd-item[data-highlighted] {
-	background: var(--planner-bg-area-hd);
+	background: oklch(27% 0.01 58);
 	color: var(--planner-text);
 }
 
@@ -377,7 +402,7 @@
 	box-shadow: none;
 	padding: 0.2rem 0.5rem;
 }
-/* Hide arrow — not needed for the flat planner aesthetic */
+/* Hide arrow - not needed for the flat planner aesthetic */
 .planner-tooltip > svg {
 	display: none;
 }

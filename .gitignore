@@ -117,3 +117,5 @@ dist
 
 .cursor/
 .temp/
+
+.env.*

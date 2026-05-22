@@ -4,21 +4,30 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useMarkdownExport } from "~/composables/useMarkdownExport";
 
-defineProps<{ open: boolean }>();
+const props = defineProps<{ open: boolean; version?: string }>();
 const emit = defineEmits<{ "update:open": [value: boolean] }>();
 
 const includeEmpty = ref(true);
+const omitSkipped = ref(false);
 type CopyState = "idle" | "success" | "error";
 const copyState = ref<CopyState>("idle");
 
 const { getMarkdown, copyMarkdown } = useMarkdownExport();
 
 const preview = computed(() =>
-	getMarkdown({ includeEmptyZones: includeEmpty.value }),
+	getMarkdown({
+		includeEmptyZones: includeEmpty.value,
+		omitSkippedZones: omitSkipped.value,
+		version: props.version,
+	}),
 );
 
 async function handleCopy() {
-	const ok = await copyMarkdown({ includeEmptyZones: includeEmpty.value });
+	const ok = await copyMarkdown({
+		includeEmptyZones: includeEmpty.value,
+		omitSkippedZones: omitSkipped.value,
+		version: props.version,
+	});
 	copyState.value = ok ? "success" : "error";
 	setTimeout(
 		() => {
@@ -41,20 +50,36 @@ async function handleCopy() {
       <!-- Live preview -->
       <pre class="planner-export-preview">{{ preview }}</pre>
 
-      <!-- Option -->
-      <div class="flex items-center gap-2.5">
-        <Checkbox
-          id="include-empty"
-          :checked="includeEmpty"
-          @update:checked="includeEmpty = !!$event"
-          class="planner-checkbox"
-        />
-        <label
-          for="include-empty"
-          class="text-p-sm text-p-text cursor-pointer select-none leading-[1.4]"
-        >
-          Include zones with no pickups
-        </label>
+      <!-- Options -->
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2.5">
+          <Checkbox
+            id="include-empty"
+            :checked="includeEmpty"
+            @update:checked="includeEmpty = !!$event"
+            class="planner-checkbox"
+          />
+          <label
+            for="include-empty"
+            class="text-p-sm text-p-text cursor-pointer select-none leading-[1.4]"
+          >
+            Include zones with no pickups
+          </label>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <Checkbox
+            id="omit-skipped"
+            :checked="omitSkipped"
+            @update:checked="omitSkipped = !!$event"
+            class="planner-checkbox"
+          />
+          <label
+            for="omit-skipped"
+            class="text-p-sm text-p-text cursor-pointer select-none leading-[1.4]"
+          >
+            Omit skipped zones from export
+          </label>
+        </div>
       </div>
 
       <!-- Footer -->

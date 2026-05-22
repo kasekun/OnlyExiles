@@ -1,17 +1,21 @@
-import type { PlannerState } from "~/composables/usePlannerState";
+import { DATA } from "../data/campaign";
+import type { PlannerState } from "./usePlannerState";
 import {
 	areaKey,
 	getOrderedAreas,
 	pickKey,
 	usePlannerState,
-} from "~/composables/usePlannerState";
-import { DATA } from "~/data/campaign";
+} from "./usePlannerState";
 
-function buildMarkdown(
+export function buildMarkdown(
 	state: PlannerState,
+	guideName: string,
 	includeEmptyZones: boolean,
+	omitSkippedZones: boolean,
+	version?: string,
 ): string {
-	const lines: string[] = ["# PoE2 Campaign Planner — My Route", ""];
+	const title = guideName.trim() || "Untitled guide";
+	const lines: string[] = [`# ${title} - PoE2 Campaign Route`, ""];
 
 	for (const act of DATA) {
 		const actAreas = getOrderedAreas(
@@ -23,10 +27,14 @@ function buildMarkdown(
 		const visibleAreas = actAreas.filter((areaId) => {
 			const area = act.areas.find((a) => a.id === areaId);
 			if (!area) return false;
+			// Skipped zones are filtered first when the option is enabled
+			if (omitSkippedZones && state.skippedZones[areaKey(act.id, areaId)]) {
+				return false;
+			}
 			if (includeEmptyZones) return true;
 			if (area.pickups.length === 0) return false;
 			return area.pickups.some(
-				(_, i) => !state.skipped[pickKey(act.id, areaId, i)],
+				(p) => !state.skippedPickups[pickKey(act.id, areaId, p.id)],
 			);
 		});
 
@@ -35,8 +43,9 @@ function buildMarkdown(
 		lines.push(`## ${act.title}`, "");
 
 		const actNote = state.actNotes[act.id];
-		if (actNote?.trim()) {
-			lines.push(`> ${actNote.trim().replace(/\n/g, "\n> ")}`, "");
+		const actNoteLines = actNote?.map((s) => s.trim()).filter((s) => s);
+		if (actNoteLines?.length) {
+			lines.push(`> ${actNoteLines.join("\n> ")}`, "");
 		}
 
 		for (const areaId of visibleAreas) {
@@ -45,16 +54,17 @@ function buildMarkdown(
 			const akey = areaKey(act.id, areaId);
 			const level = state.levels[akey];
 			const note = state.notes[akey];
+			const noteLines = note?.map((s) => s.trim()).filter((s) => s);
 
 			const visiblePickups = area.pickups.filter(
-				(_, i) => !state.skipped[pickKey(act.id, areaId, i)],
+				(p) => !state.skippedPickups[pickKey(act.id, areaId, p.id)],
 			);
 
 			const levelStr = level && level !== "0" ? ` · Char level: ${level}` : "";
 			lines.push(`### ${area.name}${levelStr}`);
 
-			if (note?.trim()) {
-				lines.push(`> ${note.trim().replace(/\n/g, "\n> ")}`);
+			if (noteLines?.length) {
+				lines.push(`> ${noteLines.join("\n> ")}`);
 			}
 
 			for (const p of visiblePickups) {
@@ -65,23 +75,38 @@ function buildMarkdown(
 		}
 	}
 
-	return lines.join("\n").trim();
+	const body = lines.join("\n").trim();
+
+	if (version) {
+		return `${body}\n\n---\n*Guide version: ${version}*`;
+	}
+	return body;
 }
 
 export function useMarkdownExport() {
-	const { state } = usePlannerState();
+	const { state, guideName } = usePlannerState();
 
-	function getMarkdown(options: { includeEmptyZones: boolean }): string {
-		return buildMarkdown(state, options.includeEmptyZones);
+	function getMarkdown(options: {
+		includeEmptyZones: boolean;
+		omitSkippedZones?: boolean;
+		version?: string;
+	}): string {
+		return buildMarkdown(
+			state,
+			guideName.value,
+			options.includeEmptyZones,
+			options.omitSkippedZones ?? false,
+			options.version,
+		);
 	}
 
 	async function copyMarkdown(options: {
 		includeEmptyZones: boolean;
+		omitSkippedZones?: boolean;
+		version?: string;
 	}): Promise<boolean> {
 		try {
-			await navigator.clipboard.writeText(
-				buildMarkdown(state, options.includeEmptyZones),
-			);
+			await navigator.clipboard.writeText(getMarkdown(options));
 			return true;
 		} catch {
 			return false;

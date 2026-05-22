@@ -18,9 +18,6 @@ export default defineNuxtConfig({
 		},
 	},
 
-	// /guide/:id route scaffolded for next plan (save/share backend)
-	// router: { routes: [{ path: '/guide/:id', component: '~/pages/guide/[id].vue' }] },
-
 	vite: {
 		optimizeDeps: {
 			include: [
