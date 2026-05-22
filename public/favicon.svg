@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 10" fill="none" stroke="#f59929" stroke-linecap="round">
-  <!-- Top arm  full width -->
+  <!-- Top arm: full width -->
   <line x1="0.8" y1="1.2" x2="10.2" y2="1.2" stroke-width="1.7"/>
-  <!-- Middle arm  shorter (~64%), classic E proportion -->
+  <!-- Middle arm: shorter (~64%), classic E proportion -->
   <line x1="0.8" y1="5"   x2="6.2"  y2="5"   stroke-width="1.7"/>
-  <!-- Bottom arm  full width -->
+  <!-- Bottom arm: full width -->
   <line x1="0.8" y1="8.8" x2="10.2" y2="8.8" stroke-width="1.7"/>
 </svg>
