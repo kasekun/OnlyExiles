@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { GripVertical, Pencil, RedoDot, X } from "lucide-vue-next";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { areaKey, usePlannerState } from "~/composables/usePlannerState";
 import type { Area } from "~/data/campaign";
 
@@ -81,14 +81,22 @@ function onNotesInput(e: Event) {
 onMounted(() => {
 	if (notesRef.value) autoResize(notesRef.value);
 });
+
+watch(
+	() => !isCollapsed.value && !isSkipped.value,
+	async (visible) => {
+		if (visible) {
+			await nextTick();
+			if (notesRef.value) autoResize(notesRef.value);
+		}
+	},
+);
 </script>
 
 <template>
   <div
-    class="border rounded-[4px] overflow-hidden bg-p-surface group/area transition-[border-color,opacity] duration-120"
-    :class="isSkipped
-      ? 'border-p-subtle opacity-50'
-      : 'border-p-subtle'"
+    class="border border-p-subtle rounded-[4px] overflow-hidden bg-p-surface group/area transition-[border-color,opacity] duration-120"
+    :class="{ 'opacity-50': isSkipped }"
   >
     <div class="flex items-stretch bg-p-area">
       <span
@@ -111,7 +119,7 @@ onMounted(() => {
 
         <span class="flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
           <span
-            class="font-p text-p-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis shrink min-w-0 transition-[color,text-decoration] duration-120"
+            class="font-p text-p-base font-bold whitespace-nowrap overflow-hidden text-ellipsis shrink min-w-0 transition-[color,text-decoration] duration-120"
             :class="isSkipped ? 'text-p-skip line-through' : 'text-p-text'"
           >
             {{ area.name }}
@@ -151,6 +159,8 @@ onMounted(() => {
               class="bg-transparent border-0 text-p-amber font-p-mono text-p-xs w-10 p-0 outline-none"
               type="text"
               :value="displayLevel"
+              :aria-label="`Recommended level for ${area.name}`"
+              maxlength="6"
               @blur="commitLevel"
               @keydown="onLevelKeydown"
               size="4"
@@ -181,7 +191,7 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <div v-show="!isCollapsed && !isSkipped" class="py-3 px-4 flex flex-col gap-4 max-sm:px-3 max-sm:py-2">
+    <div v-if="!isCollapsed && !isSkipped" class="py-3 px-4 flex flex-col gap-4 max-sm:px-3 max-sm:py-2">
       <div class="flex flex-col gap-1">
         <span class="planner-eyebrow">Notes</span>
         <textarea
