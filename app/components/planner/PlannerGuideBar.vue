@@ -42,7 +42,7 @@ function onNameKeydown(e: KeyboardEvent) {
         spellcheck="false"
         autocomplete="off"
         @focus="nameFocused = true"
-        @blur="commitName; nameFocused = false"
+        @blur="commitName($event)"
         @keydown="onNameKeydown"
         @change="commitName"
       />

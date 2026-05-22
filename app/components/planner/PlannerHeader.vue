@@ -12,7 +12,7 @@ import {
 	Share2,
 	X,
 } from "lucide-vue-next";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { toast } from "vue-sonner";
 import {
 	DropdownMenu,
@@ -53,6 +53,7 @@ const mounted = ref(false);
 onMounted(() => {
 	mounted.value = true;
 	guideStore.load();
+	document.addEventListener("keydown", onDocumentEscape);
 });
 
 const skippedPickupCount = computed(() => {
@@ -199,7 +200,7 @@ const shareUrl = computed(() =>
 		: "",
 );
 
-const copyShareState = ref<"idle" | "success">("idle");
+const copyShareState = ref<"idle" | "success" | "error">("idle");
 
 async function copyShareUrl() {
 	try {
@@ -209,7 +210,12 @@ async function copyShareUrl() {
 			copyShareState.value = "idle";
 			closePanel();
 		}, 1500);
-	} catch {}
+	} catch {
+		copyShareState.value = "error";
+		setTimeout(() => {
+			copyShareState.value = "idle";
+		}, 2500);
+	}
 }
 
 const { copyMarkdown } = useMarkdownExport();
@@ -386,6 +392,40 @@ function confirmApplyPreset() {
 
 const confirmReset = ref(false);
 
+const presetCancelRef = ref<HTMLButtonElement | null>(null);
+const newGuideCancelRef = ref<HTMLButtonElement | null>(null);
+const resetCancelRef = ref<HTMLButtonElement | null>(null);
+
+// Focus management: delayed to beat Radix's async focus-restore after dropdown close
+watch(confirmPresetId, (id) => {
+	if (id) setTimeout(() => presetCancelRef.value?.focus(), 50);
+});
+watch(confirmNewGuide, (open) => {
+	if (open) setTimeout(() => newGuideCancelRef.value?.focus(), 50);
+});
+watch(confirmReset, (open) => {
+	if (open) setTimeout(() => resetCancelRef.value?.focus(), 50);
+});
+
+// Document-level Escape handler: reliable regardless of where focus landed
+function onDocumentEscape(e: KeyboardEvent) {
+	if (e.key !== "Escape") return;
+	if (confirmPresetId.value) {
+		confirmPresetId.value = null;
+		return;
+	}
+	if (confirmNewGuide.value) {
+		confirmNewGuide.value = false;
+		return;
+	}
+	if (confirmReset.value) {
+		confirmReset.value = false;
+		return;
+	}
+}
+
+onUnmounted(() => document.removeEventListener("keydown", onDocumentEscape));
+
 function requestReset() {
 	confirmReset.value = true;
 }
@@ -403,13 +443,19 @@ function doReset() {
         v-if="confirmPresetId"
         class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
         @click.self="confirmPresetId = null"
+        @keydown.escape="confirmPresetId = null"
       >
-        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
-          <p class="text-p-base text-p-text leading-[1.55]">
+        <div
+          class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
+          role="dialog"
+          aria-modal="true"
+          aria-describedby="preset-dialog-desc"
+        >
+          <p id="preset-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
             Applying <span class="text-p-amber font-semibold">{{ presetToConfirm?.label }}</span> replaces your current route with that preset. Your collapsed sections stay as-is, and you can undo immediately after.
           </p>
           <div class="flex items-center justify-end gap-2">
-            <button class="planner-btn-ghost" @click="confirmPresetId = null">Cancel</button>
+            <button ref="presetCancelRef" class="planner-btn-ghost" @click="confirmPresetId = null">Cancel</button>
             <button
               class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
               @click="confirmApplyPreset"
@@ -424,13 +470,19 @@ function doReset() {
         v-if="confirmNewGuide"
         class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
         @click.self="confirmNewGuide = false"
+        @keydown.escape="confirmNewGuide = false"
       >
-        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
-          <p class="text-p-base text-p-text leading-[1.55]">
+        <div
+          class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
+          role="dialog"
+          aria-modal="true"
+          aria-describedby="new-guide-dialog-desc"
+        >
+          <p id="new-guide-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
             Starting a new guide clears your current scratch pad - notes, levels, skips, and loot filter patterns will be lost.
           </p>
           <div class="flex items-center justify-end gap-2">
-            <button class="planner-btn-ghost" @click="confirmNewGuide = false">Cancel</button>
+            <button ref="newGuideCancelRef" class="planner-btn-ghost" @click="confirmNewGuide = false">Cancel</button>
             <button
               class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
               @click="doStartNewGuide"
@@ -445,13 +497,19 @@ function doReset() {
         v-if="confirmReset"
         class="fixed inset-0 z-50 flex items-center justify-center bg-[oklch(5%_0.005_55/0.7)]"
         @click.self="confirmReset = false"
+        @keydown.escape="confirmReset = false"
       >
-        <div class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4">
-          <p class="text-p-base text-p-text leading-[1.55]">
+        <div
+          class="confirm-dialog bg-p-surface border border-p-border rounded-[5px] p-6 max-w-[420px] w-full mx-4 flex flex-col gap-4"
+          role="dialog"
+          aria-modal="true"
+          aria-describedby="reset-dialog-desc"
+        >
+          <p id="reset-dialog-desc" class="text-p-base text-p-text leading-[1.55]">
             Reset clears all notes, recommended levels, pickup skips, zone skips, loot filter patterns, custom zone order, and the guide name. You can undo immediately after.
           </p>
           <div class="flex items-center justify-end gap-2">
-            <button class="planner-btn-ghost" @click="confirmReset = false">Cancel</button>
+            <button ref="resetCancelRef" class="planner-btn-ghost" @click="confirmReset = false">Cancel</button>
             <button
               class="planner-btn-ghost border-p-error! text-p-error! hover:border-p-error! hover:text-p-error!"
               @click="doReset"
@@ -492,12 +550,9 @@ function doReset() {
 
       <DropdownMenu v-if="mounted">
         <DropdownMenuTrigger as-child>
-          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 hidden max-sm:flex items-center" aria-label="My Guides">
+          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 flex items-center gap-1" aria-label="My Guides">
             <BookMarked :size="13" aria-hidden="true" />
-          </button>
-          <button class="planner-btn-ghost px-2 max-sm:px-2.5 max-sm:py-2 flex items-center gap-1 max-sm:hidden" aria-label="My Guides">
-            <BookMarked :size="13" aria-hidden="true" />
-            <span class="text-p-xs">My Guides</span>
+            <span class="text-p-xs hidden sm:inline">My Guides</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="planner-dropdown min-w-[220px]" align="end">
@@ -672,6 +727,7 @@ function doReset() {
                 v-model="passphraseValue"
                 placeholder="At least 8 characters"
                 autocomplete="new-password"
+                @keydown.enter.prevent="publishGuide"
               />
               <button
                 class="absolute right-2 top-1/2 -translate-y-1/2 text-p-muted hover:text-p-text2 transition-colors duration-120"
@@ -694,6 +750,7 @@ function doReset() {
               v-model="confirmValue"
               placeholder="Repeat passphrase"
               autocomplete="new-password"
+              @keydown.enter.prevent="publishGuide"
             />
           </div>
 
@@ -732,13 +789,17 @@ function doReset() {
           />
           <button
             class="shrink-0 flex items-center justify-center gap-1.5 px-3 border-l border-p-subtle text-p-muted hover:text-p-amber transition-colors duration-130"
-            :class="{ 'text-p-amber!': copyShareState === 'success' }"
+            :class="{
+              'text-p-amber!': copyShareState === 'success',
+              'text-p-error! hover:text-p-error!': copyShareState === 'error',
+            }"
             @click="copyShareUrl"
-            aria-label="Copy share link"
+            :aria-label="copyShareState === 'error' ? 'Copy failed - try selecting the URL manually' : 'Copy share link'"
           >
             <Check v-if="copyShareState === 'success'" :size="12" aria-hidden="true" />
+            <X v-else-if="copyShareState === 'error'" :size="12" aria-hidden="true" />
             <Copy v-else :size="12" aria-hidden="true" />
-            <span class="text-p-xs">{{ copyShareState === 'success' ? 'Copied' : 'Copy link' }}</span>
+            <span class="text-p-xs">{{ copyShareState === 'success' ? 'Copied' : copyShareState === 'error' ? 'Copy failed' : 'Copy link' }}</span>
           </button>
         </div>
 
