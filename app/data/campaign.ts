@@ -1359,6 +1359,13 @@ export const DATA: Act[] = [
 				name: "Abandoned Prison",
 				pickups: [
 					{
+						id: "chapel-key",
+						tags: ["quest"],
+						item: "Chapel Key",
+						type: "Drop",
+						source: "Kill Necromancers",
+					},
+					{
 						id: "permanent-plus-30-percent-life-mana-flask-recovery",
 						tags: ["permanent", "consumable"],
 						item: "Permanent +30% Life/Mana Flask Recovery",
