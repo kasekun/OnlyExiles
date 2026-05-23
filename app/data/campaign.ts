@@ -1177,7 +1177,6 @@ export const DATA: Act[] = [
 						source:
 							"Sacrifice Sacrificial Heart at the alter",
 					},
-					
 					{
 						id: "uncut-skill-gem-level-11",
 						tags: ["league-currency", "skill-gem"],
