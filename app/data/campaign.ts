@@ -549,7 +549,7 @@ export const DATA: Act[] = [
 					{
 						id: "first-two-ascendancy-points",
 						tags: ["ascendancy", "quest"],
-						item: "First two Ascendancy points",
+						item: "+2 (or First two) Ascendancy points",
 						type: "Hand-In",
 						source: "Complete the Trial",
 					},
@@ -957,19 +957,6 @@ export const DATA: Act[] = [
 				],
 			},
 			{
-				id: "trial-of-chaos",
-				name: "Trial of Chaos",
-				pickups: [
-					{
-						id: "first-four-ascendancy-points",
-						tags: ["ascendancy", "quest"],
-						item: "First four Ascendancy points",
-						type: "Hand-In",
-						source: "Complete the Trial",
-					},
-				],
-			},
-			{
 				id: "chimeral-wetlands",
 				name: "Chimeral Wetlands",
 				pickups: [
@@ -979,13 +966,6 @@ export const DATA: Act[] = [
 						item: "Uncut Skill Gem (Lvl 9) + Inscribed Ultimatum",
 						type: "Drop",
 						source: "Kill Xyclucian",
-					},
-					{
-						id: "2-ascendancy-points",
-						tags: ["ascendancy", "quest"],
-						item: "2 Ascendancy Points",
-						type: "Drop",
-						source: "Complete the Trial of Chaos",
 					},
 					{
 						id: "magic-amulet",
@@ -1000,6 +980,19 @@ export const DATA: Act[] = [
 						item: "Uncut Skill Gem (Lvl 9)",
 						type: "Drop",
 						source: "League event",
+					},
+				],
+			},
+			{
+				id: "trial-of-chaos",
+				name: "Trial of Chaos",
+				pickups: [
+					{
+						id: "first-four-ascendancy-points",
+						tags: ["ascendancy", "quest"],
+						item: "+2 (or First four) Ascendancy points",
+						type: "Hand-In",
+						source: "Complete the Trial",
 					},
 				],
 			},
