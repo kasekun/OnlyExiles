@@ -50,10 +50,12 @@ const SCRATCH_STATE_STORAGE_KEY = "poe2-planner-v1";
 const SCRATCH_NAME_STORAGE_KEY = "poe2-planner-v1-name";
 
 const mounted = ref(false);
+const isMac = ref(false);
 onMounted(() => {
 	mounted.value = true;
 	guideStore.load();
-	document.addEventListener("keydown", onDocumentEscape);
+	isMac.value = /Mac/i.test(navigator.userAgent);
+	document.addEventListener("keydown", onDocumentKeydown);
 });
 
 const skippedPickupCount = computed(() => {
@@ -432,8 +434,17 @@ watch(confirmReset, (open) => {
 	if (open) setTimeout(() => resetCancelRef.value?.focus(), 50);
 });
 
-// Document-level Escape handler: reliable regardless of where focus landed
-function onDocumentEscape(e: KeyboardEvent) {
+function onDocumentKeydown(e: KeyboardEvent) {
+	if (
+		e.key === "s" &&
+		(e.metaKey || e.ctrlKey) &&
+		props.guideId &&
+		!readonly.value
+	) {
+		e.preventDefault();
+		if (!updating.value) updateGuide();
+		return;
+	}
 	if (e.key !== "Escape") return;
 	if (confirmPresetId.value) {
 		confirmPresetId.value = null;
@@ -449,7 +460,7 @@ function onDocumentEscape(e: KeyboardEvent) {
 	}
 }
 
-onUnmounted(() => document.removeEventListener("keydown", onDocumentEscape));
+onUnmounted(() => document.removeEventListener("keydown", onDocumentKeydown));
 
 function requestReset() {
 	confirmReset.value = true;
@@ -656,6 +667,7 @@ function doReset() {
         ref="primaryBtnEl"
         class="planner-btn-act planner-btn-primary"
         :disabled="updating"
+        :title="isMac ? 'Update Guide (⌘S)' : 'Update Guide (Ctrl+S)'"
         :style="primaryBtnStyle"
         :data-tracking="btnTracking ? 'yes' : undefined"
         @click="updateGuide"
