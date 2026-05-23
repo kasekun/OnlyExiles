@@ -173,6 +173,14 @@ async function updateGuide() {
 	updating.value = true;
 	try {
 		await guideStore.updateGuide(props.guideId, context);
+		// Draft successfully pushed to the server — clear the local copy so a
+		// fresh reload fetches the canonical server state instead of the draft.
+		if (context.persistenceKey) {
+			try {
+				localStorage.removeItem(context.persistenceKey);
+				localStorage.removeItem(`${context.persistenceKey}-name`);
+			} catch {}
+		}
 		updateState.value = "success";
 		setTimeout(() => {
 			updateState.value = "idle";

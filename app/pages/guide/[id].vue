@@ -36,10 +36,14 @@ if (error.value || !guideData.value) {
 const guide = computed(() => guideData.value as GuideResponse);
 const normalizedState = normalizePlannerState(guide.value.state);
 
-// Create isolated context - no scratch-pad persistence
+const draftKey = `poe2-guide-draft-${guideId}`;
+
+// Context with a scoped draft key so in-progress edits survive refresh.
+// The watcher only starts when the owner calls hydrateFromStorage() below.
 const context = createPlannerContext({
 	initialState: normalizedState,
 	initialName: guide.value.name,
+	persistenceKey: draftKey,
 	readonly: true, // start readonly; setReadonly(false) after mount if owner
 });
 providePlannerContext(context);
@@ -60,6 +64,9 @@ onMounted(() => {
 	const hasToken = guideStore.hasEditToken(guideId);
 	if (hasToken) {
 		context.setReadonly(false);
+		// Restore any unsaved edits from the last session.
+		// hydrateFromStorage also starts the persistence watcher.
+		context.hydrateFromStorage?.();
 	}
 
 	// Check version mismatch banner dismissal
@@ -78,7 +85,15 @@ function dismissVersionBanner() {
 	} catch {}
 }
 
+function clearDraft() {
+	try {
+		localStorage.removeItem(draftKey);
+		localStorage.removeItem(`${draftKey}-name`);
+	} catch {}
+}
+
 async function discardLocalEditsAndReload() {
+	clearDraft();
 	await refresh();
 	if (!guideData.value) {
 		throw new Error("Guide not found");
