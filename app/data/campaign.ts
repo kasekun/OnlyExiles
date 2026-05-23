@@ -675,9 +675,9 @@ export const DATA: Act[] = [
 						source: "Open the Suspicious Sarcophagus",
 					},
 					{
-						id: "magic-ruby-sapphire-or-topaz-ring",
+						id: "magic-ring-lesser-rune",
 						tags: ["equipment"],
-						item: "Magic Ruby, Sapphire or Topaz Ring",
+						item: "Magic Ring + Lesser Rune",
 						type: "Drop",
 						source: "Choose an Offering at the Elemental Shrine",
 					},
