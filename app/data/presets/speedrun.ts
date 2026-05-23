@@ -126,7 +126,7 @@ export const SPEEDRUN = buildPreset({
 				"mastodon-badlands": {
 					skipPickups: [
 						"uncut-support-gem-lvl-2",
-						"regal-orb-plus-abyss-currency",
+						"regal-orb",
 					],
 				},
 				"the-bone-pits": {
@@ -149,13 +149,13 @@ export const SPEEDRUN = buildPreset({
 				"buried-shrines": {
 					skipPickups: [
 						"uncut-support-gem",
-						"magic-ruby-sapphire-or-topaz-ring",
+						"magic-ring-lesser-rune",
 						"lesser-jeweller-s-orb",
 					],
 				},
 				"valley-of-the-titans": {
 					skipPickups: [
-						"unique-item-plus-abyss-currency",
+						"unique-item",
 					],
 				},
 				"titan-grotto": {

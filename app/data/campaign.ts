@@ -567,7 +567,7 @@ export const DATA: Act[] = [
 						source: "Open the Effigy",
 					},
 					{
-						id: "regal-orb-plus-abyss-currency",
+						id: "regal-orb",
 						tags: ["league-currency", "crafting"],
 						item: "Regal Orb",
 						type: "Drop",
@@ -710,7 +710,7 @@ export const DATA: Act[] = [
 							'Deliver the Sun and Kabala Clan Relics to the Altar ("Ancient Vows" quest)',
 					},
 					{
-						id: "unique-item-plus-abyss-currency",
+						id: "unique-item",
 						tags: ["league-currency", "equipment", "crafting"],
 						item: "Unique Item",
 						type: "Drop",
@@ -1586,7 +1586,7 @@ export const DATA: Act[] = [
 				name: "Stones of Serle",
 				pickups: [
 					{
-						id: "exalted-orb-plus-abyss-currency",
+						id: "exalted-orb",
 						tags: ["league-currency", "crafting"],
 						item: "Exalted Orb",
 						type: "Drop",
@@ -1733,7 +1733,7 @@ export const DATA: Act[] = [
 				name: "The Galai Gates",
 				pickups: [
 					{
-						id: "greater-orb-of-augmentation-plus-abyss-currency",
+						id: "greater-orb-of-augmentation",
 						tags: ["league-currency", "crafting"],
 						item: "Greater Orb of Augmentation",
 						type: "Drop",
@@ -1813,7 +1813,7 @@ export const DATA: Act[] = [
 						source: "Kill Lythara, The Wayward Spear in Kriar Village",
 					},
 					{
-						id: "greater-rune-plus-abyss-currency",
+						id: "greater-rune",
 						tags: ["league-currency", "equipment", "crafting"],
 						item: "Greater Rune",
 						type: "Drop",

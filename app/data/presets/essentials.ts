@@ -116,7 +116,7 @@ export const ESSENTIALS = buildPreset({
 				},
 				"mastodon-badlands": {
 					skipPickups: [
-						"regal-orb-plus-abyss-currency",
+						"regal-orb",
 					],
 				},
 				"the-bone-pits": {
@@ -141,7 +141,7 @@ export const ESSENTIALS = buildPreset({
 				},
 				"valley-of-the-titans": {
 					skipPickups: [
-						"unique-item-plus-abyss-currency",
+						"unique-item",
 					],
 				},
 				"titan-grotto": {
