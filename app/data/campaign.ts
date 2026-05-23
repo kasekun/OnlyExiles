@@ -580,6 +580,13 @@ export const DATA: Act[] = [
 				name: "The Bone Pits",
 				pickups: [
 					{
+						id: "sun-clan-relic",
+						tags: ["quest"],
+						item: "Sun Clan Relic",
+						type: "Drop",
+						source: "Kill Hyena packs",
+					},
+					{
 						id: "uncut-support-gem-lvl-2",
 						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 2)",
@@ -599,6 +606,13 @@ export const DATA: Act[] = [
 				id: "keth",
 				name: "Keth",
 				pickups: [
+					{
+						id: "kabala-clan-relic",
+						tags: ["quest"],
+						item: "Kabala Clan Relic",
+						type: "Drop",
+						source: "Kill Snake packs",
+					},
 					{
 						id: "2-weapon-set-passive-skill-points",
 						tags: ["passive-points", "equipment"],
