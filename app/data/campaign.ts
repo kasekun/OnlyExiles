@@ -1136,6 +1136,13 @@ export const DATA: Act[] = [
 						source: "Interact with the Chaos Statue",
 					},
 					{
+						id: "sacrificial-heart",
+						tags: ["quest"],
+						item: "Sacrificial Heart",
+						type: "Drop",
+						source: "Kill Goliaths",
+					},
+					{
 						id: "golden-idols",
 						tags: ["crafting"],
 						item: "Golden Idols",
@@ -1156,12 +1163,19 @@ export const DATA: Act[] = [
 				name: "Aggorat",
 				pickups: [
 					{
+						id: "sacrificial-heart",
+						tags: ["quest"],
+						item: "Sacrificial Heart",
+						type: "Drop",
+						source: "Kill Goliaths",
+					},
+					{
 						id: "2-weapon-set-passive-skill-points",
 						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source:
-							"Farm a Sacrificial Heart (here or in Utzaal) and complete the Blood Sacrifice at the altar",
+							"Sacrifice Sacrificial Heart at the alter",
 					},
 					{
 						id: "uncut-skill-gem-level-11",
