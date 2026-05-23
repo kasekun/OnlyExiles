@@ -569,7 +569,7 @@ export const DATA: Act[] = [
 					{
 						id: "regal-orb-plus-abyss-currency",
 						tags: ["league-currency", "crafting"],
-						item: "Regal Orb + Abyss Currency",
+						item: "Regal Orb",
 						type: "Drop",
 						source: "League event",
 					},
@@ -698,7 +698,7 @@ export const DATA: Act[] = [
 					{
 						id: "unique-item-plus-abyss-currency",
 						tags: ["league-currency", "equipment", "crafting"],
-						item: "Unique Item + Abyss Currency",
+						item: "Unique Item",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1574,7 +1574,7 @@ export const DATA: Act[] = [
 					{
 						id: "exalted-orb-plus-abyss-currency",
 						tags: ["league-currency", "crafting"],
-						item: "Exalted Orb + Abyss Currency",
+						item: "Exalted Orb",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1721,7 +1721,7 @@ export const DATA: Act[] = [
 					{
 						id: "greater-orb-of-augmentation-plus-abyss-currency",
 						tags: ["league-currency", "crafting"],
-						item: "Greater Orb of Augmentation + Abyss Currency",
+						item: "Greater Orb of Augmentation",
 						type: "Drop",
 						source: "League event",
 					},
@@ -1801,7 +1801,7 @@ export const DATA: Act[] = [
 					{
 						id: "greater-rune-plus-abyss-currency",
 						tags: ["league-currency", "equipment", "crafting"],
-						item: "Greater Rune + Abyss Currency",
+						item: "Greater Rune",
 						type: "Drop",
 						source: "League event",
 					},
