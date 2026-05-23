@@ -55,6 +55,8 @@ function onLevelKeydown(e: KeyboardEvent) {
 	if (e.key === "Escape") levelEditing.value = false;
 }
 
+const NOTES_MAX = 600;
+
 const notesRef = ref<HTMLTextAreaElement | null>(null);
 
 const notesValue = computed({
@@ -66,6 +68,8 @@ const notesValue = computed({
 		state.notes[akey.value] = v.split("\n");
 	},
 });
+
+const notesLength = computed(() => notesValue.value.length);
 
 function autoResize(el: HTMLTextAreaElement) {
 	el.style.height = "auto";
@@ -79,7 +83,9 @@ function onNotesInput(e: Event) {
 }
 
 onMounted(() => {
-	if (notesRef.value) autoResize(notesRef.value);
+	requestAnimationFrame(() => {
+		if (notesRef.value) autoResize(notesRef.value);
+	});
 });
 
 watch(
@@ -87,7 +93,9 @@ watch(
 	async (visible) => {
 		if (visible) {
 			await nextTick();
-			if (notesRef.value) autoResize(notesRef.value);
+			requestAnimationFrame(() => {
+				if (notesRef.value) autoResize(notesRef.value);
+			});
 		}
 	},
 );
@@ -194,17 +202,29 @@ watch(
     <div v-if="!isCollapsed && !isSkipped" class="py-3 px-4 flex flex-col gap-4 max-sm:px-3 max-sm:py-2">
       <div class="flex flex-col gap-1">
         <span class="planner-eyebrow">Notes</span>
-        <textarea
+          <textarea
           ref="notesRef"
           class="planner-textarea"
           placeholder="Add notes for this zone..."
           :value="notesValue"
+          :maxlength="NOTES_MAX"
           :readonly="readonly"
           :class="{ 'cursor-default': readonly }"
           @mousedown="readonly ? $event.preventDefault() : undefined"
           @input="onNotesInput"
           rows="1"
         />
+        <span
+          v-if="notesLength > 0"
+          class="text-p-xs text-right tabular-nums transition-colors duration-120"
+          :class="
+            notesLength >= NOTES_MAX
+              ? 'text-p-error'
+              : notesLength >= NOTES_MAX - 120
+                ? 'text-p-amber-dim'
+                : 'text-p-muted'
+          "
+        >{{ notesLength }} / {{ NOTES_MAX }}</span>
       </div>
       <div class="flex flex-col gap-1">
         <span class="planner-eyebrow">Pickups</span>

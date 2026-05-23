@@ -7,7 +7,7 @@ import {
 	Copy,
 	PackageMinus,
 } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { VueDraggable } from "vue-draggable-plus";
 import {
 	getOrderedAreas,
@@ -57,6 +57,9 @@ const orderedAreas = computed((): Area[] =>
 		.filter((a): a is Area => a !== undefined),
 );
 
+const ACT_NOTE_MAX = 600;
+const REGEX_MAX = 250;
+
 const actNote = computed({
 	get() {
 		return (state.actNotes[props.act.id] ?? []).join("\n");
@@ -67,6 +70,8 @@ const actNote = computed({
 	},
 });
 
+const actNoteLength = computed(() => actNote.value.length);
+
 const actRegex = computed({
 	get() {
 		return state.actRegex[props.act.id] ?? "";
@@ -76,6 +81,8 @@ const actRegex = computed({
 		state.actRegex[props.act.id] = v;
 	},
 });
+
+const actRegexLength = computed(() => actRegex.value.length);
 
 type CopyState = "idle" | "success" | "error";
 const copyRegexState = ref<CopyState>("idle");
@@ -95,10 +102,30 @@ async function copyRegex() {
 	}
 }
 
+const actNoteRef = ref<HTMLTextAreaElement | null>(null);
+
 function autoResize(el: HTMLTextAreaElement) {
 	el.style.height = "auto";
 	el.style.height = `${Math.max(el.scrollHeight, 32)}px`;
 }
+
+onMounted(() => {
+	requestAnimationFrame(() => {
+		if (actNoteRef.value) autoResize(actNoteRef.value);
+	});
+});
+
+watch(
+	() => isCollapsed.value,
+	async (collapsed) => {
+		if (!collapsed) {
+			await nextTick();
+			requestAnimationFrame(() => {
+				if (actNoteRef.value) autoResize(actNoteRef.value);
+			});
+		}
+	},
+);
 </script>
 
 <template>
@@ -153,15 +180,28 @@ function autoResize(el: HTMLTextAreaElement) {
         <div class="flex flex-col gap-1">
           <span class="planner-eyebrow">Act note</span>
           <textarea
+            ref="actNoteRef"
             class="planner-textarea"
             placeholder="Notes for this act..."
             :value="actNote"
+            :maxlength="ACT_NOTE_MAX"
             :readonly="readonly"
             :class="{ 'cursor-default': readonly }"
             @mousedown="readonly ? $event.preventDefault() : undefined"
             @input="actNote = ($event.target as HTMLTextAreaElement).value; autoResize($event.target as HTMLTextAreaElement)"
             rows="2"
           />
+          <span
+            v-if="actNoteLength > 0"
+            class="text-p-xs text-right tabular-nums transition-colors duration-120"
+            :class="
+              actNoteLength >= ACT_NOTE_MAX
+                ? 'text-p-error'
+                : actNoteLength >= ACT_NOTE_MAX - 120
+                  ? 'text-p-amber-dim'
+                  : 'text-p-muted'
+            "
+          >{{ actNoteLength }} / {{ ACT_NOTE_MAX }}</span>
         </div>
         <div class="flex flex-col gap-1">
           <span class="planner-eyebrow">Loot filter regex</span>
@@ -179,6 +219,7 @@ function autoResize(el: HTMLTextAreaElement) {
               class="flex-1 min-w-0 bg-transparent border-0 px-3 py-[0.35rem] text-p-text placeholder:text-p-muted placeholder:not-italic outline-none"
               placeholder='e.g., "\d+% i.+mov|ph.*da|\d cfl.+da"'
               :value="actRegex"
+              :maxlength="REGEX_MAX"
               :readonly="readonly"
               :class="{ 'cursor-default': readonly }"
               @mousedown="readonly ? $event.preventDefault() : undefined"
@@ -203,6 +244,17 @@ function autoResize(el: HTMLTextAreaElement) {
               <Copy v-else :size="13" aria-hidden="true" />
             </button>
           </div>
+          <span
+            v-if="actRegexLength > 0"
+            class="text-p-xs text-right tabular-nums transition-colors duration-120"
+            :class="
+              actRegexLength >= REGEX_MAX
+                ? 'text-p-error'
+                : actRegexLength >= REGEX_MAX - 50
+                  ? 'text-p-amber-dim'
+                  : 'text-p-muted'
+            "
+          >{{ actRegexLength }} / {{ REGEX_MAX }}</span>
         </div>
 
       </div>
