@@ -261,6 +261,7 @@ async function claimEditRights() {
 			guideDisplayName.value,
 		);
 		context.setReadonly(false);
+		context.hydrateFromStorage?.();
 		sessionExpired.value = false;
 		closePanel();
 	} catch (err: unknown) {
