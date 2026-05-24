@@ -1174,8 +1174,7 @@ export const DATA: Act[] = [
 						tags: ["passive-points", "equipment", "quest"],
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
-						source:
-							"Sacrifice Sacrificial Heart at the alter",
+						source: "Sacrifice Sacrificial Heart at the alter",
 					},
 					{
 						id: "uncut-skill-gem-level-11",
@@ -1584,7 +1583,7 @@ export const DATA: Act[] = [
 		areas: [
 			{
 				id: "scorched-farmlands",
-				name: "Scorched Farmlands",
+				name: "I1: Scorched Farmlands",
 				pickups: [
 					{
 						id: "uncut-support-gem-level-4",
@@ -1597,7 +1596,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "stones-of-serle",
-				name: "Stones of Serle",
+				name: "I1: Stones of Serle",
 				pickups: [
 					{
 						id: "exalted-orb",
@@ -1610,7 +1609,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "the-blackwood",
-				name: "The Blackwood",
+				name: "I1: The Blackwood",
 				pickups: [
 					{
 						id: "random-omen",
@@ -1630,7 +1629,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "holten",
-				name: "Holten",
+				name: "I1: Holten",
 				pickups: [
 					{
 						id: "armourer-s-scrap-magic-and-rare-loot",
@@ -1650,7 +1649,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "wolvenhold",
-				name: "Wolvenhold",
+				name: "I1: Wolvenhold",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1670,7 +1669,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "holten-estate",
-				name: "Holten Estate",
+				name: "I1: Holten Estate",
 				pickups: [
 					{
 						id: "artificer-s-orb",
@@ -1683,7 +1682,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "the-khari-crossing",
-				name: "The Khari Crossing",
+				name: "I2: The Khari Crossing",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1691,13 +1690,6 @@ export const DATA: Act[] = [
 						item: "2 Weapon Set Passive Skill Points",
 						type: "Hand-In",
 						source: "Defeat Akthi and Anundr, speak to Risu",
-					},
-					{
-						id: "permanent-plus-5-percent-maximum-life",
-						tags: ["permanent"],
-						item: "Permanent +5% Maximum Life",
-						type: "Drop",
-						source: "Interact with the Molten Shrine in the zone",
 					},
 					{
 						id: "gemcutter-s-prism",
@@ -1709,8 +1701,21 @@ export const DATA: Act[] = [
 				],
 			},
 			{
+				id: "i2-skullmaw-stairway",
+				name: "I2: Skullmaw Stairway",
+				pickups: [
+					{
+						id: "permanent-plus-5-percent-maximum-life",
+						tags: ["permanent"],
+						item: "Permanent +5% Maximum Life",
+						type: "Drop",
+						source: "Grab Molten Gift from Molten Shrine",
+					},
+				],
+			},
+			{
 				id: "pools-of-khatal",
-				name: "Pools of Khatal",
+				name: "I2: Pools of Khatal",
 				pickups: [
 					{
 						id: "orb-of-alchemy",
@@ -1723,7 +1728,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "sel-khari-sanctuary",
-				name: "Sel Khari Sanctuary",
+				name: "I2: Sel Khari Sanctuary",
 				pickups: [
 					{
 						id: "2-out-of-3-reward-rare-ring-rare-amulet-rare-jewel",
@@ -1740,11 +1745,18 @@ export const DATA: Act[] = [
 						type: "Drop",
 						source: "League event",
 					},
+					{
+						id: "sekhema-trial-barya-lvl-60",
+						tags: ["equipment"],
+						item: "Sekhema Trial Barya (Lvl 60)",
+						type: "Drop",
+						source: "Kill Elzarah, The Cobra Lord",
+					},
 				],
 			},
 			{
 				id: "the-galai-gates",
-				name: "The Galai Gates",
+				name: "I2: The Galai Gates",
 				pickups: [
 					{
 						id: "greater-orb-of-augmentation",
@@ -1757,7 +1769,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "qimah",
-				name: "Qimah",
+				name: "I2: Qimah",
 				pickups: [
 					{
 						id: "choice-of-1-of-7-buffs",
@@ -1777,7 +1789,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "qimah-reservoir",
-				name: "Qimah Reservoir",
+				name: "I2: Qimah Reservoir",
 				pickups: [
 					{
 						id: "random-currency-item",
@@ -1797,7 +1809,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "ashen-forest",
-				name: "Ashen Forest",
+				name: "I3: Ashen Forest",
 				pickups: [
 					{
 						id: "uncut-skill-gem-lvl-14",
@@ -1817,7 +1829,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "kriar-village",
-				name: "Kriar Village",
+				name: "I3: Kriar Village",
 				pickups: [
 					{
 						id: "permanent-plus-40-maximum-spirit-plus-uncut-spirit-gem-lvl-14",
@@ -1837,7 +1849,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "glacial-tarn",
-				name: "Glacial Tarn",
+				name: "I3: Glacial Tarn",
 				pickups: [
 					{
 						id: "greater-orb-of-augmentation",
@@ -1850,7 +1862,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "howling-caves",
-				name: "Howling Caves",
+				name: "I3:Howling Caves",
 				pickups: [
 					{
 						id: "2-weapon-set-passive-skill-points",
@@ -1871,7 +1883,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "kriar-peaks",
-				name: "Kriar Peaks",
+				name: "I3: Kriar Peaks",
 				pickups: [
 					{
 						id: "choose-unique-item",
@@ -1891,7 +1903,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "etched-ravine",
-				name: "Etched Ravine",
+				name: "I3: Etched Ravine",
 				pickups: [
 					{
 						id: "exalted-orb",
@@ -1904,7 +1916,7 @@ export const DATA: Act[] = [
 			},
 			{
 				id: "the-cuachic-vault",
-				name: "The Cuachic Vault",
+				name: "I3: The Cuachic Vault",
 				pickups: [
 					{
 						id: "vaal-orb",
