@@ -668,9 +668,9 @@ export const DATA: Act[] = [
 				name: "Buried Shrines",
 				pickups: [
 					{
-						id: "uncut-support-gem",
+						id: "uncut-support-gem-lvl-2",
 						tags: ["support-gem"],
-						item: "Uncut Support Gem",
+						item: "Uncut Support Gem (Lvl 2)",
 						type: "Drop",
 						source: "Open the Suspicious Sarcophagus",
 					},
@@ -682,7 +682,7 @@ export const DATA: Act[] = [
 						source: "Choose an Offering at the Elemental Shrine",
 					},
 					{
-						id: "uncut-support-gem-lvl-2",
+						id: "uncut-support-gem-lvl-2--quest",
 						tags: ["support-gem", "quest"],
 						item: "Uncut Support Gem (Lvl 2)",
 						type: "Hand-In",
